@@ -4,7 +4,7 @@
       <h2 class="loginH2"><strong>Login your</strong> Fightdiabetes</h2>
       <div class="loginCon">
         <div class="titleDiv">
-          <h3>Sign up now</h3>
+          <h3 @click="jump_to_Register">Sign up now</h3>
           <p>Enter your username and password to log on:</p>
           <!-- <p><i class="el-icon-user"></i></p>
           <i class="el-icon-key"></i> -->
@@ -35,11 +35,16 @@ export default {
         password: ''
       }
     }
+  },
+  methods: {
+    jump_to_Register: function () {
+      window.location.href = '/#/register'
+    },
+    send_data: function () {
+      // window.alert('sss')
+    }
   }
 }
-// send_data () {
-
-// }
 var data = {
   username: this.username,
   password: this.password
