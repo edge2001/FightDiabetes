@@ -15,22 +15,25 @@ from rest_framework.response import Response
 from .models import UserInfo
 
 def register(request):
-    body = request.body
-    content = json.loads(body)
-    username = content['username']
-    password = content['password']
-    email = content['email']
-    print(username)
-    newuser = UserInfo(username = username, password = password, email = email)
-    newuser.save()
-    params = {
-        'username' : username,
-        'password' : password,
-        'email' : email
-    }
+    if request.method == 'POST':
+        body = request.body
+        content = json.loads(body)
+        username = content['username']
+        password = content['password']
+        email = content['email']
+        print(username)
+        newuser = UserInfo(username = username, password = password, email = email)
+        newuser.save()
+        params = {
+            'username' : username,
+            'password' : password,
+            'email' : email
+        }
 
 
-    return HttpResponse(json.dumps(params), status = status.HTTP_200_OK)
+        return HttpResponse(json.dumps(params), status = status.HTTP_200_OK)
+    params = {}
+    return HttpResponse(json.dumps(params), status = status.HTTP_401_UNAUTHORIZED)
 
 def login(request):
     body = request.body
@@ -66,3 +69,14 @@ def show_list(request):
         params.append(param)
 
     return HttpResponse(params, status = status.HTTP_200_OK)
+
+def get_user_info(request, id):
+    user = UserInfo.objects.get(id = id)
+    username = user.username
+    email = user.email
+    params = {
+        'uname': username,
+        'email': email
+    }
+    return HttpResponse(params, status = status.HTTP_200_OK)
+

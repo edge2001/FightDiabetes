@@ -20,5 +20,6 @@ from . import views
 urlpatterns = [
     path('register/', views.register, name= 'register'),
     path('login/', views.login, name = 'login'),
+    path('user/<int:id>/profile', views.get_user_info, name = 'user_info'),
     path('show/', views.show_list, name = 'show'), # check the status quo of database
 ]
