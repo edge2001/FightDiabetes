@@ -1,10 +1,10 @@
 <template>
   <div>
-    <el-header style="text-align: left; font-size: 12px">
-      <span style="margin-left: 15px">Fightdiabetes</span>
+    <el-header style="text-align: left; font-size: 12px;">
+      <span style="font: italic 2em Georgia, serif;">Fightdiabetes</span>
     </el-header>
-    <el-container style="height: 500px; border: 1px solid #eee">
-      <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+    <el-container style="height: 700px; border: 1px solid #eee">
+      <el-aside width="200px">
         <el-menu :default-openeds="['1']">
           <el-submenu index="1">
             <template slot="title"><i class="el-icon-message"></i>选项</template>
@@ -29,6 +29,10 @@
 export default {
   mounted () {
     this.drawLine()
+    if (location.href.indexOf('#reloaded') === -1) {
+      location.href = location.href + '#reloaded'
+      location.reload()
+    }
   },
   methods: {
     drawLine () {
@@ -54,11 +58,11 @@ export default {
 </script>
 
 <style>
-  .el-header {
-        background-color: #B3C0D1;
-        color: #333;
-        line-height: 60px;
-      }
+.el-header {
+      background-color: coral;
+      color: #333;
+      line-height: 60px;
+  }
   .el-aside {
     color: #333;
   }
