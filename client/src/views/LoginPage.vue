@@ -5,7 +5,7 @@
       <div class="loginCon">
         <div class="titleDiv">
           <!-- <button class="signup_button" @click="jump_to_Register">Sign up now</button> -->
-          <p>Enter your username and password to log on:</p>
+          <p style="font: italic 2em Georgia, serif;">Enter your username and password to log on:</p>
         </div>
         <el-form ref="loginForm" :rules="rules" :model="ruleForm" class="btn_out">
           <el-form-item prop="user">
@@ -49,7 +49,13 @@ export default {
       window.location.href = '/#/register'
     },
     send_data: function () {
-      // window.alert('sss')
+      axios(config)
+        .then(function (response) {
+          console.log(JSON.stringify(response.data))
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
     }
   }
 }
@@ -59,21 +65,13 @@ var data = {
 }
 var config = {
   method: 'post',
-  url: 'http://127.0.0.1/login',
+  url: 'http://127.0.0.1:8000/login/',
   headers: {
     'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
     'Content-Type': 'application/json'
   },
   data: data
 }
-
-axios(config)
-  .then(function (response) {
-    console.log(JSON.stringify(response.data))
-  })
-  .catch(function (error) {
-    console.log(error)
-  })
 </script>
 
 <style>
@@ -112,10 +110,10 @@ html {
 
     .signup_button {
       position: relative;
-      /* right: 20px; */
-      /* bottom: 20px; */
-      /* top:1%;
-      right: 50%; */
+      right: 20px;
+      bottom: 20px;
+      top:90%;
+      right: 50%;
       border: none;
       box-shadow: none;
       width: 130px;
@@ -144,6 +142,54 @@ html {
       box-sizing: border-box;
       -webkit-transition: all .3s;
       transition: all .3s;
+    }
+    .signup_button {
+      width: 130px;
+      height: 40px;
+      line-height: 42px;
+      padding: 0;
+      border: none;
+      background: rgb(255, 27, 0);
+      background: linear-gradient(0deg, rgba(255, 27, 0, 1) 0%, rgba(251, 75, 2, 1) 100%);
+    }
+    .signup_button:hover {
+      color: #f0094a;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .signup_button:before,
+    .signup_button:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 2px;
+      width: 0;
+      background: #f0094a;
+      box-shadow:
+        -1px -1px 5px 0px #fff,
+        7px 7px 20px 0px #0003,
+        4px 4px 5px 0px #0002;
+      transition: 400ms ease all;
+    }
+    .signup_button:hover:after {
+      left: auto;
+      right: 0;
+      width: 100%;
+    }
+
+    .signup_button:after {
+      right: inherit;
+      top: inherit;
+      left: 0;
+      bottom: 0;
+    }
+
+    .signup_button:hover:before,
+    .signup_button:hover:after {
+      width: 100%;
+      transition: 800ms ease all;
     }
 
     .intro_text {
