@@ -36,7 +36,7 @@ def register(request):
     return HttpResponse(json.dumps(params), status = status.HTTP_401_UNAUTHORIZED)
 
 def login(request):
-    body = request.body
+    body = request.body.decode('UTF-8')
     content = json.loads(body)
     username = content['username']
     password = content['password']
