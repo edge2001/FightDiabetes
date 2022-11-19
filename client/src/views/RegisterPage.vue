@@ -226,6 +226,20 @@ export default {
     }
   }
 }
+// var data = {
+//   'username': this.username,
+//   'password': this.password,
+//   'email': 'test.mail.com'
+// }
+// var config = {
+//   methods: 'post',
+//   url: 'http://127.0.0.1:8000/register',
+//   headers: {
+//     'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
+//     'Content-Type': 'application/json'
+//   },
+//   data: data
+// }
 </script>
 
 <style>

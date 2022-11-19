@@ -5,7 +5,7 @@
       <div class="loginCon">
         <div class="titleDiv">
           <!-- <button class="signup_button" @click="jump_to_Register">Sign up now</button> -->
-          <p style="font: italic 2em Georgia, serif;">Enter your username and password to log on:</p>
+          <p>Enter your username and password to log on:</p>
         </div>
         <el-form ref="loginForm" :rules="rules" :model="ruleForm" class="btn_out">
           <el-form-item prop="user">
@@ -49,37 +49,31 @@ export default {
       window.location.href = '/#/register'
     },
     send_data: function () {
-      var dataobj = {
-        username: this.ruleForm.username,
-        password: this.ruleForm.password
-      }
-      var config = {
-        method: 'post',
-        url: 'http://127.0.0.1:8000/login/',
-        headers: {
-          'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
-          'Content-Type': 'application/json'
-        },
-        data: dataobj
-      }
-      axios(config)
-        .then(function (response) {
-          console.log(JSON.stringify(response.data))
-          if (response.status === 200) {
-            window.location.href = '/#/MainPage'
-          }
-        })
-        .catch(function (error) {
-          console.log(error)
-          if (error.response.status === 401) {
-            window.alert('密码错误')
-          } else if (error.response.status === 404) {
-            window.alert('用户不存在')
-          }
-        })
+      // window.alert('sss')
     }
   }
 }
+var data = {
+  username: this.username,
+  password: this.password
+}
+var config = {
+  method: 'post',
+  url: 'http://127.0.0.1/login',
+  headers: {
+    'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
+    'Content-Type': 'application/json'
+  },
+  data: data
+}
+
+axios(config)
+  .then(function (response) {
+    console.log(JSON.stringify(response.data))
+  })
+  .catch(function (error) {
+    console.log(error)
+  })
 </script>
 
 <style>
@@ -115,41 +109,41 @@ h1 {
   font-family: 'Lobster', cursive;
 }
 
-.signup_button {
-  position: relative;
-  right: 20px;
-  bottom: 20px;
-  top: 90%;
-  right: 50%;
-  border: none;
-  box-shadow: none;
-  width: 130px;
-  height: 40px;
-  line-height: 42px;
-  -webkit-perspective: 230px;
-  perspective: 230px;
-  left: 45%;
-}
+    .signup_button {
+      position: relative;
+      /* right: 20px; */
+      /* bottom: 20px; */
+      /* top:1%;
+      right: 50%; */
+      border: none;
+      box-shadow: none;
+      width: 130px;
+      height: 40px;
+      line-height: 42px;
+      -webkit-perspective: 230px;
+      perspective: 230px;
+      left: 45%;
+    }
 
-.signup_button {
-  background: rgb(0, 172, 238);
-  background: linear-gradient(0deg, rgba(0, 172, 238, 1) 0%, rgba(2, 126, 251, 1) 100%);
-  display: block;
-  position: absolute;
-  width: 130px;
-  height: 40px;
-  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
-    7px 7px 20px 0px rgba(0, 0, 0, .1),
-    4px 4px 5px 0px rgba(0, 0, 0, .1);
-  border-radius: 5px;
-  margin: 0;
-  text-align: center;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  -webkit-transition: all .3s;
-  transition: all .3s;
-}
+    .signup_button {
+      background: rgb(0, 172, 238);
+      background: linear-gradient(0deg, rgba(0, 172, 238, 1) 0%, rgba(2, 126, 251, 1) 100%);
+      display: block;
+      position: absolute;
+      width: 130px;
+      height: 40px;
+      box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+        7px 7px 20px 0px rgba(0, 0, 0, .1),
+        4px 4px 5px 0px rgba(0, 0, 0, .1);
+      border-radius: 5px;
+      margin: 0;
+      text-align: center;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      -webkit-transition: all .3s;
+      transition: all .3s;
+    }
 
 .signup_button {
   width: 130px;
