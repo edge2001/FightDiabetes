@@ -75,6 +75,7 @@ export default {
             window.alert('密码错误')
           } else if (error.response.status === 404) {
             window.alert('用户不存在')
+            this.jump_to_Register()
           }
         })
     }

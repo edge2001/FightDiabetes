@@ -1,10 +1,10 @@
 <template>
   <div class="login">
     <div class="loginBox">
-      <h2 class="loginH2"><strong>Register your</strong> Fightdiabetes</h2>
+      <h2 class="loginH2">Register your Fightdiabetes</h2>
       <div class="loginCon">
         <div class="titleDiv">
-          <p>initialize your username and password:</p>
+          <p class="reminder">initialize your username and password:</p>
         </div>
         <el-form ref="loginForm" :rules="rules" :model="ruleForm">
           <el-form-item prop="user">
@@ -42,10 +42,10 @@ export default {
     }
   },
   mounted () {
-    // if (location.href.indexOf('#reloaded') === -1) {
-    //   location.href = location.href + '#reloaded'
-    //   location.reload()
-    // }
+    if (location.href.indexOf('#reloaded') === -1) {
+      location.href = location.href + '#reloaded'
+      location.reload()
+    }
   },
   methods: {
     back_login () {
@@ -243,5 +243,26 @@ export default {
 </script>
 
 <style>
+html {
+      background-image: url('../images/register.jpeg');
+      background-size: 100% 100%;
+      display: inline-block;
+      height: 100%;
+    }
 
+h2 {
+  font-family: "Lucida Console",
+    "Courier New",
+    monospace;
+  color:crimson;
+  font-size: 40px;
+  text-align: center;
+}
+.reminder {
+  font-family:
+    'Lobster',
+    cursive;
+  color:orange;
+  text-align: center;
+}
 </style>
