@@ -49,31 +49,37 @@ export default {
       window.location.href = '/#/register'
     },
     send_data: function () {
-      // window.alert('sss')
+      var dataobj = {
+        username: this.ruleForm.username,
+        password: this.ruleForm.password
+      }
+      var config = {
+        method: 'post',
+        url: 'http://127.0.0.1:8000/login/',
+        headers: {
+          'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
+          'Content-Type': 'application/json'
+        },
+        data: dataobj
+      }
+      axios(config)
+        .then(function (response) {
+          console.log(JSON.stringify(response.data))
+          if (response.status === 200) {
+            window.location.href = '/#/MainPage'
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+          if (error.response.status === 401) {
+            window.alert('密码错误')
+          } else if (error.response.status === 404) {
+            window.alert('用户不存在')
+          }
+        })
     }
   }
 }
-var data = {
-  username: this.username,
-  password: this.password
-}
-var config = {
-  method: 'post',
-  url: 'http://127.0.0.1/login',
-  headers: {
-    'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
-    'Content-Type': 'application/json'
-  },
-  data: data
-}
-
-axios(config)
-  .then(function (response) {
-    console.log(JSON.stringify(response.data))
-  })
-  .catch(function (error) {
-    console.log(error)
-  })
 </script>
 
 <style>
