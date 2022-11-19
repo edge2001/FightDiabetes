@@ -164,6 +164,32 @@ export default {
       }
       return true
     },
+    is_email_valid (email) {
+      var mLen = email.length
+      var lastLen = 0
+      for (var i = mLen - 1; i >= 0; i--) {
+        if (email[i] === '.') {
+          break
+        }
+        lastLen++
+      }
+      if (lastLen !== 2 && lastLen !== 3) {
+        return false
+      }
+      if (lastLen === 2) {
+        if (email[i + 1] === 'c' && email[i + 2] === 'n') {
+          return true
+        }
+        return false
+      }
+      if (lastLen === 3) {
+        if (email[i + 1] === 'c' && email[i + 2] === 'o' && email[i + 3] === 'm') {
+          return true
+        }
+        return false
+      }
+      return false
+    },
     send_data: function () {
       var dataobj = {
         'username': this.username,
@@ -180,6 +206,10 @@ export default {
       }
       if (this.password !== this.password_confirm) {
         this.$message.error('两次输入的密码不匹配！')
+        return
+      }
+      if (this.is_email_valid(dataobj['email']) === false) {
+        this.$message.error('请输入正确的邮箱地址！')
         return
       }
       const path = 'http://127.0.0.1:8000/register/'
