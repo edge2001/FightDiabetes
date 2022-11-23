@@ -11,7 +11,7 @@ class UserInfo(models.Model):
     email = models.CharField(verbose_name='Email', max_length = 64)
     
     class Meta:
-        ording = ('create_date')
+        ordering = ('create_date',)
 
 
 class PatientInfo(models.Model):
@@ -43,16 +43,16 @@ class datum(models.Model):
         (6, '晚餐后'),
     )
     time_tag = models.SmallIntegerField(verbose_name='录入时段', choices=time_tags)
-    notes = models.CharField(verbose_name='备注')
+    notes = models.CharField(verbose_name='备注',null=True,max_length=64)
     date = models.DateField(verbose_name='日期',auto_now_add=True)
-    user = models.ForeignKey(UserInfo,related_name='user_date')
+    user = models.ForeignKey(UserInfo,related_name='user_date',on_delete=models.CASCADE)
 
 
 class sports_record(models.Model):
     date = models.DateField(verbose_name='日期',auto_now_add=True)
-    sport_type = models.CharField(verbose_name='运动类型', null=True)
-    notes = models.CharField(verbose_name='备注',null=True)
-    user = models.ForeignKey(UserInfo,related_name='user_date')
+    sport_type = models.CharField(verbose_name='运动类型', null=True,max_length=64)
+    notes = models.CharField(verbose_name='备注',null=True,max_length=64)
+    user = models.ForeignKey(UserInfo,related_name='user_sports_record',on_delete=models.CASCADE)
 
 
 
