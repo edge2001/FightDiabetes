@@ -11,7 +11,7 @@ class UserInfo(models.Model):
     email = models.CharField(verbose_name='Email', max_length = 64)
     
     class Meta:
-        ordering = ('create_date',)
+        ordering = ['-create_date',]
 
 
 class PatientInfo(models.Model):
@@ -21,13 +21,13 @@ class PatientInfo(models.Model):
         (1, '男'),
         (2, '女'),
     )
-    gender = models.SmallIntegerField(verbose_name='性别', choices=gender_choices)
+    gender = models.SmallIntegerField(verbose_name='性别', choices=gender_choices, default=1)
     disease_types = (
         (1,'一型糖尿病'),
         (2,'二型糖尿病')
     )
-    disease_type = models.SmallIntegerField(verbose_name='糖尿病类型', choices=disease_types)
-    userinfo = models.OneToOneField(UserInfo,on_delete=models.CASCADE)
+    disease_type = models.SmallIntegerField(verbose_name='糖尿病类型', choices=disease_types, default=1)
+    userinfo = models.OneToOneField(UserInfo,on_delete=models.CASCADE,)
 
 class datum(models.Model):
     blood_glucose = models.FloatField(verbose_name='血糖值',null=True)
@@ -42,7 +42,7 @@ class datum(models.Model):
         (5, '晚餐前'),
         (6, '晚餐后'),
     )
-    time_tag = models.SmallIntegerField(verbose_name='录入时段', choices=time_tags)
+    time_tag = models.SmallIntegerField(verbose_name='录入时段', choices=time_tags, default=1)
     notes = models.CharField(verbose_name='备注',null=True,max_length=64)
     date = models.DateField(verbose_name='日期',auto_now_add=True)
     user = models.ForeignKey(UserInfo,related_name='user_date',on_delete=models.CASCADE)
