@@ -5,7 +5,7 @@
     </el-header>
     <el-container style="height: 700px; border: 1px solid #eee">
       <el-aside width="200px">
-        <el-menu :default-openeds="['1']">
+        <el-menu :default-openeds="['1']" @open="handleOpen" @select="handleSelect" @close="handleClose">
           <el-submenu index="1">
             <template slot="title"><i class="el-icon-message"></i>选项</template>
             <el-menu-item-group>
@@ -19,7 +19,9 @@
         </el-menu>
       </el-aside>
       <el-main>
-        <div id="myChart" :style="{width: '300px', height: '300px'}"></div>
+        <div v-if="1">
+          <div id="myChart" :style="{width: '300px', height: '300px'}"></div>
+        </div>
       </el-main>
     </el-container>
   </div>
@@ -27,19 +29,10 @@
 
 <script>
 export default {
-  mounted () {
-    this.drawLine()
-    if (location.href.indexOf('#reloaded') === -1) {
-      location.href = location.href + '#reloaded'
-      location.reload()
-    }
-  },
-  methods: {
-    drawLine () {
-      // 基于刚刚准备好的 DOM 容器，初始化 EChart 实例
-      let myChart = this.$echarts.init(document.getElementById('myChart'))
-      // 绘制图表
-      myChart.setOption({
+  data () {
+    return {
+      myChart: null,
+      ChartOptions: {
         title: { text: '血糖水平' },
         tooltip: {},
         xAxis: {
@@ -51,7 +44,40 @@ export default {
           type: 'bar',
           data: [0, 0, 1, 2, 79, 82, 27]
         }]
-      })
+      },
+      key: null
+    }
+  },
+  mounted () {
+    // this.drawLine()
+    if (location.href.indexOf('#reloaded') === -1) {
+      location.href = location.href + '#reloaded'
+      location.reload()
+    }
+  },
+  methods: {
+    drawLine () {
+      // 基于刚刚准备好的 DOM 容器，初始化 EChart 实例
+      this.myChart = this.$echarts.init(document.getElementById('myChart'))
+      // 绘制图表
+      this.myChart.setOption(this.ChartOptions)
+    },
+    handleOpen (key, keyPath) {
+      console.log('open', key, keyPath)
+    },
+    handleSelect (key, keyPath) {
+      console.log('select', key, keyPath)
+      if (this.myChart != null) {
+        this.myChart.dispose()
+      }
+      if (key === '1-1') {
+
+      } else if (key === '1-2') {
+        this.drawLine()
+      }
+    },
+    handleClose (key, keyPath) {
+      console.log('close', key, keyPath)
     }
   }
 }
