@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+CORS_ALLOW_CREDENTIALS = True
 ROOT_URLCONF = 'server.urls'
 
 TEMPLATES = [
@@ -133,4 +133,5 @@ STATIC_URL = '/static/'  # should be modified to the path of static file
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
+TIME_ZONE = 'Asia/Shanghai'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

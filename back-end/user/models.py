@@ -11,7 +11,7 @@ class UserInfo(models.Model):
     email = models.CharField(verbose_name='Email', max_length=64)
 
     class Meta:
-        ordering = ('create_date')
+        ordering = ['-create_date', ]
 
 
 class PatientInfo(models.Model):
@@ -22,14 +22,14 @@ class PatientInfo(models.Model):
         (2, '女'),
     )
     gender = models.SmallIntegerField(
-        verbose_name='性别', choices=gender_choices)
+        verbose_name='性别', choices=gender_choices, default=1)
     disease_types = (
         (1, '一型糖尿病'),
         (2, '二型糖尿病')
     )
     disease_type = models.SmallIntegerField(
-        verbose_name='糖尿病类型', choices=disease_types)
-    userinfo = models.OneToOneField(UserInfo, on_delete=models.CASCADE)
+        verbose_name='糖尿病类型', choices=disease_types, default=1)
+    userinfo = models.OneToOneField(UserInfo, on_delete=models.CASCADE,)
 
 
 class datum(models.Model):
@@ -45,8 +45,9 @@ class datum(models.Model):
         (5, '晚餐前'),
         (6, '晚餐后'),
     )
-    time_tag = models.SmallIntegerField(verbose_name='录入时段', choices=time_tags)
-    notes = models.CharField(verbose_name='备注')
+    time_tag = models.SmallIntegerField(
+        verbose_name='录入时段', choices=time_tags, default=1)
+    notes = models.CharField(verbose_name='备注', null=True, max_length=64)
     date = models.DateField(verbose_name='日期', auto_now_add=True)
     user = models.ForeignKey(
         UserInfo, related_name='user_date', on_delete=models.CASCADE)
@@ -54,7 +55,8 @@ class datum(models.Model):
 
 class sports_record(models.Model):
     date = models.DateField(verbose_name='日期', auto_now_add=True)
-    sport_type = models.CharField(verbose_name='运动类型', null=True)
-    notes = models.CharField(verbose_name='备注', null=True)
+    sport_type = models.CharField(
+        verbose_name='运动类型', null=True, max_length=64)
+    notes = models.CharField(verbose_name='备注', null=True, max_length=64)
     user = models.ForeignKey(
-        UserInfo, related_name='user_date', on_delete=models.CASCADE)
+        UserInfo, related_name='user_sports_record', on_delete=models.CASCADE)

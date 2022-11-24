@@ -11,9 +11,8 @@ import datetime
 import threading
 from rest_framework import status
 from rest_framework.response import Response
-
-from .models import UserInfo
-
+from user.models import UserInfo, datum
+from user.utils.encrypt import md5
 
 def register(request):
     if request.method == 'POST':
@@ -21,21 +20,23 @@ def register(request):
         content = json.loads(body)
         username = content['username']
         password = content['password']
+        pwd = md5(password)
         email = content['email']
         users = UserInfo.objects.filter(username=username)
         if users.exists():
             params = {}
             return HttpResponse(json.dumps(params), status=status.HTTP_401_UNAUTHORIZED)
-        newuser = UserInfo(username=username, password=password, email=email)
+        newuser = UserInfo(username=username, password=pwd, email=email)
         newuser.save()
         params = {
             'username': username,
-            'password': password,
+            'password': pwd,
             'email': email
         }
         return HttpResponse(json.dumps(params), status=status.HTTP_200_OK)
-
-    return HttpResponse(json.dumps(params), status=status.HTTP_401_UNAUTHORIZED)
+    else:
+        params = {'username': '', 'password': ''}
+        return HttpResponse(json.dumps(params), status=status.HTTP_401_UNAUTHORIZED)
 
 
 def login(request):
@@ -43,20 +44,33 @@ def login(request):
     content = json.loads(body)
     username = content['username']
     password = content['password']
+    pwd = md5(password)
     users = UserInfo.objects.filter(username=username)
     if users.exists():
         user = users.first()
-        if user.password == password:
+        # match
+        if user.password == pwd:
             params = {}
+            # add to session
+            request.session['info'] = {'username': user.username}
+            #expiry for half an hour
+            request.session.set_expiry(60 * 30)
             return HttpResponse(json.dumps(params), status=status.HTTP_200_OK)
+        #doesn't match
         else:
             params = {}
             return HttpResponse(json.dumps(params), status=status.HTTP_401_UNAUTHORIZED)
+    # user doesn't exist
     else:
         params = {}
         return HttpResponse(json.dumps(params), status=status.HTTP_404_NOT_FOUND)
 
+def logout(request):
+    #clear session data
+    request.session.clear()
+    return HttpResponse(status= status.HTTP_200_OK)
 
+# just used for checking, delete after deploy
 def show_list(request):
     all_users = UserInfo.objects.all()
     params = []
@@ -84,3 +98,4 @@ def get_user_info(request, id):
         'email': email
     }
     return HttpResponse(params, status=status.HTTP_200_OK)
+
