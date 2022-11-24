@@ -45,7 +45,7 @@ class datum(models.Model):
     time_tag = models.SmallIntegerField(verbose_name='录入时段', choices=time_tags, default=1)
     notes = models.CharField(verbose_name='备注',null=True,max_length=64)
     date = models.DateField(verbose_name='日期',auto_now_add=True)
-    user = models.ForeignKey(UserInfo,related_name='user_date',on_delete=models.CASCADE)
+    user = models.ForeignKey(UserInfo,related_name='user_data',on_delete=models.CASCADE)
 
 
 class sports_record(models.Model):

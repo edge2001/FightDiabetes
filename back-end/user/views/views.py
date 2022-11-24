@@ -85,18 +85,3 @@ def get_user_info(request, id):
         'email': email
     }
     return HttpResponse(params, status=status.HTTP_200_OK)
-
-
-# 添加健康数据
-def add_datum(request):
-    if request.method == 'POST':
-        blood_glucose = request.POST.get('blood_glucose')
-        weight = request.POST.get('weight')
-        ketone = request.POST.get('ketone')
-        time_tag = request.POST.get('time_tag')
-        notes = request.POST.get('notes')
-        newdatum = datum(blood_glucose = blood_glucose, weight = weight, ketone = ketone,time_tag = time_tag, notes = notes)
-        # newdatum.user = 当前用户
-        newdatum.save()
-
-        

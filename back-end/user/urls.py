@@ -22,4 +22,10 @@ urlpatterns = [
     path('login/', account.login, name = 'login'),
     path('user/<int:id>/profile', account.get_user_info, name = 'user_info'),
     path('show/', account.show_list, name = 'show'), # check the status quo of database
+    path('add_datum/',health.add_datum,name='add_datum'),
+    path('get_day_glucose/',health.get_day_glucose,name='get_day_glucose'),
+    path('get_week_glucose/',health.get_week_glucose,name='get_week_glucose'),
+    path('get_month_glucose/',health.get_month_glucose,name='get_month_glucose'),
+    path('get_week_statistics/',health.get_week_statistics,name='get_week_statistics'),
+    path('get_month_statistics/',health.get_month_statistics,name='get_month_statistics'),
 ]
