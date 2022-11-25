@@ -196,23 +196,23 @@ export default {
         'password': this.password,
         'email': this.email
       }
-      if (this.is_username_valid(dataobj['username']) === false) {
-        this.$message.error('用户名不合法！')
-        return
-      }
-      if (this.is_password_valid(dataobj['password']) === false) {
-        this.$message.error('密码格式不对！')
-        return
-      }
-      if (this.password !== this.password_confirm) {
-        this.$message.error('两次输入的密码不匹配！')
-        return
-      }
-      if (this.is_email_valid(dataobj['email']) === false) {
-        this.$message.error('请输入正确的邮箱地址！')
-        return
-      }
-      const path = 'http://127.0.0.1:8000/register/'
+      // if (this.is_username_valid(dataobj['username']) === false) {
+      //   this.$message.error('用户名不合法！')
+      //   return
+      // }
+      // if (this.is_password_valid(dataobj['password']) === false) {
+      //   this.$message.error('密码格式不对！')
+      //   return
+      // }
+      // if (this.password !== this.password_confirm) {
+      //   this.$message.error('两次输入的密码不匹配！')
+      //   return
+      // }
+      // if (this.is_email_valid(dataobj['email']) === false) {
+      //   this.$message.error('请输入正确的邮箱地址！')
+      //   return
+      // }
+      const path = 'http://127.0.0.1:8000/login/'
       var configGet = {
         method: 'POST',
         url: path,
