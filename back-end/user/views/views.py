@@ -13,6 +13,7 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from user.models import UserInfo, datum
+import hashlib
 
 
 def register(request):
@@ -40,22 +41,24 @@ def register(request):
 
 
 def login(request):
-    body = request.body
-    content = json.loads(body)
-    username = content['username']
-    password = content['password']
-    users = UserInfo.objects.filter(username=username)
-    if users.exists():
-        user = users.first()
-        if user.password == password:
-            params = {}
-            return HttpResponse(json.dumps(params), status=status.HTTP_200_OK)
+    print(users)
+    if request.method == 'POST':
+        body = request.body.decode('UTF-8')
+        content = json.loads(body)
+        username = content['username']
+        password = content['password']
+        users = UserInfo.objects.filter(username=username)
+        if users.exists():
+            user = users.first()
+            if user.password == password:
+                params = {}
+                return HttpResponse(json.dumps(params), status=status.HTTP_200_OK)
+            else:
+                params = {}
+                return HttpResponse(json.dumps(params), status=status.HTTP_401_UNAUTHORIZED)
         else:
             params = {}
             return HttpResponse(json.dumps(params), status=status.HTTP_401_UNAUTHORIZED)
-    else:
-        params = {}
-        return HttpResponse(json.dumps(params), status=status.HTTP_404_NOT_FOUND)
 
 
 def show_list(request):
@@ -95,8 +98,7 @@ def add_datum(request):
         ketone = request.POST.get('ketone')
         time_tag = request.POST.get('time_tag')
         notes = request.POST.get('notes')
-        newdatum = datum(blood_glucose = blood_glucose, weight = weight, ketone = ketone,time_tag = time_tag, notes = notes)
+        newdatum = datum(blood_glucose=blood_glucose, weight=weight,
+                         ketone=ketone, time_tag=time_tag, notes=notes)
         # newdatum.user = 当前用户
         newdatum.save()
-
-        
