@@ -50,10 +50,10 @@ export default {
   },
   mounted () {
     // this.drawLine()
-    if (location.href.indexOf('#reloaded') === -1) {
-      location.href = location.href + '#reloaded'
-      location.reload()
-    }
+    // if (location.href.indexOf('#reloaded') === -1) {
+    //   location.href = location.href + '#reloaded'
+    //   location.reload()
+    // }
   },
   methods: {
     drawLine () {

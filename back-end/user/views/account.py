@@ -49,8 +49,8 @@ def login(request):
     islogin = content['islogin']
     print(islogin)
     if islogin == True:
-        pwd = password
-        # pwd = md5(password)
+        # pwd = password
+        pwd = md5(password)
         users = UserInfo.objects.filter(username=username)
         if users.exists():
             user = users.first()
@@ -76,8 +76,8 @@ def login(request):
             content = json.loads(body)
             username = content['username']
             password = content['password']
-            # pwd = md5(password)
-            pwd = password
+            pwd = md5(password)
+            # pwd = password
             email = content['email']
             users = UserInfo.objects.filter(username=username)
             if users.exists():

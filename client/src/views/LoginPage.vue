@@ -265,7 +265,7 @@ export default {
           console.log(JSON.stringify(response.data))
           if (response.status === 200) {
             window.alert('注册成功')
-            window.location.href = '/#/MainPage'
+            // window.location.href = '/#/MainPage'
           }
         })
         .catch(function (error) {
