@@ -19,9 +19,12 @@
         </el-menu>
       </el-aside>
       <el-main>
-        <div v-if="1">
+        <div v-if="page1">
           <div id="myChart" :style="{width: '300px', height: '300px'}"></div>
         </div>
+        <!-- <div v-else-if="page1">
+          <div><p>用户名</p><input type="text" class="uname" value="username" disabled></div>
+        </div> -->
       </el-main>
     </el-container>
   </div>
@@ -32,6 +35,7 @@ export default {
   data () {
     return {
       myChart: null,
+      page1: true,
       ChartOptions: {
         title: { text: '血糖水平' },
         tooltip: {},
@@ -62,18 +66,27 @@ export default {
       // 绘制图表
       this.myChart.setOption(this.ChartOptions)
     },
+    sleep (ms) {
+      var start = Date.now()
+      var end = start + ms
+      while (Date.now() < end) {}
+    },
     handleOpen (key, keyPath) {
       console.log('open', key, keyPath)
     },
     handleSelect (key, keyPath) {
       console.log('select', key, keyPath)
       if (this.myChart != null) {
+        this.page1 = false
         this.myChart.dispose()
       }
       if (key === '1-1') {
 
       } else if (key === '1-2') {
-        this.drawLine()
+        this.page1 = true
+        this.$nextTick(() => {
+          this.drawLine()
+        })
       }
     },
     handleClose (key, keyPath) {
