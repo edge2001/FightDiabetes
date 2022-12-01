@@ -19,12 +19,12 @@
         </el-menu>
       </el-aside>
       <el-main>
-        <div v-if="page1">
+        <div v-if="(page=='1-2')">
           <div id="myChart" :style="{width: '300px', height: '300px'}"></div>
         </div>
-        <!-- <div v-else-if="page1">
+        <div v-else-if="(page=='1-1')">
           <div><p>用户名</p><input type="text" class="uname" value="username" disabled></div>
-        </div> -->
+        </div>
       </el-main>
     </el-container>
   </div>
@@ -35,7 +35,7 @@ export default {
   data () {
     return {
       myChart: null,
-      page1: true,
+      page: null,
       ChartOptions: {
         title: { text: '血糖水平' },
         tooltip: {},
@@ -81,9 +81,9 @@ export default {
         this.myChart.dispose()
       }
       if (key === '1-1') {
-
+        this.page = '1-1'
       } else if (key === '1-2') {
-        this.page1 = true
+        this.page = '1-2'
         this.$nextTick(() => {
           this.drawLine()
         })
