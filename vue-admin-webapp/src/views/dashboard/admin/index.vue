@@ -81,7 +81,12 @@
     </el-row> -->
     <!-- end -->
     <!-- lineEcharts -->
-    <line-charts class="lCharts" :lineChartData="lineChartData"></line-charts>
+    <!-- <line-charts class="lCharts" :lineChartData="lineChartData"></line-charts> -->
+    <div
+      class="lineCharts"
+      :style="{ width: width, height: height }"
+      ref="myCharts"
+    ></div>
     <!-- end -->
     <!-- table and pie -->
     <el-row class="tableChart">
@@ -101,10 +106,13 @@
 
 <script>
 import CountTo from 'vue-count-to'
-import LineCharts from './components/LineCharts'
+// import LineCharts from './components/LineCharts'
 import PieCharts from './components/PieCharts'
 import TableShow from './components/TableShow'
 import BarCharts from './components/BarCharts'
+import echarts from 'echarts'
+import resize from '@/mixins/resize'
+require('echarts/theme/macarons')
 import {
   getCardsData,
   getTableData,
@@ -112,6 +120,33 @@ import {
   getBarData
 } from '@/api/dashboard'
 export default {
+  mixins: [resize],
+  props: {
+    width: {
+      type: String,
+      default: '100%'
+    },
+    height: {
+      type: String,
+      default: '350px'
+    },
+    lineChartData: {
+      type: Object,
+      required: true
+    }
+    // isGlucose: {
+    //   type: Boolean
+    // },
+    // isWeight: {
+    //   type: Boolean
+    // },
+    // isKetone: {
+    //   type: Boolean
+    // },
+    // isPressure: {
+    //   type: Boolean
+    // }
+  },
   data() {
     return {
       checked: true,
@@ -121,29 +156,450 @@ export default {
       order: 0,
       profit: 0,
       tableData: [],
-      lineChartData: {},
+      testData: [10000, 20000, 30000, 40000, 50000, 60000],
+      testData2: [60000, 50000, 40000, 30000, 20000, 10000],
+      testData3: [20000, 20000, 20000, 20000, 20000, 20000],
+      testData4: [40000, 40000, 40000, 40000, 40000, 40000],
+      // lineChartData: {},
       barData: {},
       checkAll: false,
       isIndeterminate: true,
-      isGlucose: true,
+      m_series: [],
+      isGlucose: false,
       isWeight: false,
       isKetone: false,
-      isPressure: false
+      isPressure: false,
+      mycharts: null
       // value: true
+    }
+  },
+  watch: {
+    lineChartData: {
+      deep: true,
+      handler(val) {
+        this._setOption(val.inPrice, val.outPrice)
+      }
+    },
+    isWeight: {
+      // deep: true,
+      // eslint-disable-next-line no-unused-vars
+      handler(val) {
+        this.m_series = []
+        var m_glucose = {
+          name: 'glucose(g/L)',
+          type: 'line',
+          itemStyle: {
+            color: '#f4516c'
+          },
+          lineStyle: {
+            color: '#f4516c'
+          },
+          smooth: true,
+          data: this.testData,
+          animationDuration: 2800,
+          animationEasing: 'quadraticOut'
+        }
+        var m_weight = {
+          name: 'kg',
+          type: 'line',
+          // areaStyle: {
+          //   color: '#55a8fd',
+          //   opacity: 0.3
+          // },
+          itemStyle: {
+            color: '#55a8fd'
+          },
+          lineStyle: {
+            color: '#55a8fd'
+          },
+          smooth: true,
+          data: this.testData2,
+          animationDuration: 2800,
+          animationEasing: 'quadraticOut'
+        }
+        var m_ketone = {
+          name: 'ketone(g/L)',
+          type: 'line',
+          itemStyle: {
+            color: '#55a8fd'
+          },
+          lineStyle: {
+            color: '#55a8fd'
+          },
+          smooth: true,
+          data: this.testData3,
+          animationDuration: 2800,
+          animationEasing: 'quadraticOut'
+        }
+        var m_pressure = {
+          name: 'mmHg',
+          type: 'line',
+          itemStyle: {
+            color: '#55a8fd'
+          },
+          lineStyle: {
+            color: '#55a8fd'
+          },
+          smooth: true,
+          data: this.testData4,
+          animationDuration: 2800,
+          animationEasing: 'quadraticOut'
+        }
+        if (this.isGlucose === true) {
+          this.m_series.push(m_glucose)
+        }
+        if (this.isWeight === true) {
+          this.m_series.push(m_weight)
+        }
+        if (this.isKetone === true) {
+          this.m_series.push(m_ketone)
+        }
+        if (this.isPressure === true) {
+          this.m_series.push(m_pressure)
+        }
+        this._setOption(this.m_series)
+      }
+    },
+    isGlucose: {
+      // deep: true,
+      // eslint-disable-next-line no-unused-vars
+      handler(val) {
+        // window.alert(this.m_series.length)
+        this.m_series = []
+        var m_glucose = {
+          name: 'glucose(g/L)',
+          type: 'line',
+          itemStyle: {
+            color: '#f4516c'
+          },
+          lineStyle: {
+            color: '#f4516c'
+          },
+          smooth: true,
+          data: this.testData,
+          animationDuration: 2800,
+          animationEasing: 'quadraticOut'
+        }
+        var m_weight = {
+          name: 'kg',
+          type: 'line',
+          itemStyle: {
+            color: '#55a8fd'
+          },
+          lineStyle: {
+            color: '#55a8fd'
+          },
+          smooth: true,
+          data: this.testData2,
+          animationDuration: 2800,
+          animationEasing: 'quadraticOut'
+        }
+        var m_ketone = {
+          name: 'ketone(g/L)',
+          type: 'line',
+          itemStyle: {
+            color: '#55a8fd'
+          },
+          lineStyle: {
+            color: '#55a8fd'
+          },
+          smooth: true,
+          data: this.testData3,
+          animationDuration: 2800,
+          animationEasing: 'quadraticOut'
+        }
+        var m_pressure = {
+          name: 'mmHg',
+          type: 'line',
+          itemStyle: {
+            color: '#55a8fd'
+          },
+          lineStyle: {
+            color: '#55a8fd'
+          },
+          smooth: true,
+          data: this.testData4,
+          animationDuration: 2800,
+          animationEasing: 'quadraticOut'
+        }
+        if (this.isGlucose === true) {
+          this.m_series.push(m_glucose)
+        }
+        if (this.isWeight === true) {
+          this.m_series.push(m_weight)
+        }
+        if (this.isKetone === true) {
+          this.m_series.push(m_ketone)
+        }
+        if (this.isPressure === true) {
+          this.m_series.push(m_pressure)
+        }
+        // window.alert(this.m_series.length)
+        this._setOption(this.m_series)
+      }
+    },
+    isKetone: {
+      // deep: true,
+      // eslint-disable-next-line no-unused-vars
+      handler(val) {
+        // window.alert(this.m_series.length)
+        this.m_series = []
+        var m_glucose = {
+          name: 'glucose(g/L)',
+          type: 'line',
+          itemStyle: {
+            color: '#f4516c'
+          },
+          lineStyle: {
+            color: '#f4516c'
+          },
+          smooth: true,
+          data: this.testData,
+          animationDuration: 2800,
+          animationEasing: 'quadraticOut'
+        }
+        var m_weight = {
+          name: 'kg',
+          type: 'line',
+          itemStyle: {
+            color: '#55a8fd'
+          },
+          lineStyle: {
+            color: '#55a8fd'
+          },
+          smooth: true,
+          data: this.testData2,
+          animationDuration: 2800,
+          animationEasing: 'quadraticOut'
+        }
+        var m_ketone = {
+          name: 'ketone(g/L)',
+          type: 'line',
+          itemStyle: {
+            color: '#55a8fd'
+          },
+          lineStyle: {
+            color: '#55a8fd'
+          },
+          smooth: true,
+          data: this.testData3,
+          animationDuration: 2800,
+          animationEasing: 'quadraticOut'
+        }
+        var m_pressure = {
+          name: 'mmHg',
+          type: 'line',
+          itemStyle: {
+            color: '#55a8fd'
+          },
+          lineStyle: {
+            color: '#55a8fd'
+          },
+          smooth: true,
+          data: this.testData4,
+          animationDuration: 2800,
+          animationEasing: 'quadraticOut'
+        }
+        if (this.isGlucose === true) {
+          this.m_series.push(m_glucose)
+        }
+        if (this.isWeight === true) {
+          this.m_series.push(m_weight)
+        }
+        if (this.isKetone === true) {
+          this.m_series.push(m_ketone)
+        }
+        if (this.isPressure === true) {
+          this.m_series.push(m_pressure)
+        }
+        // window.alert(this.m_series.length)
+        this._setOption(this.m_series)
+      }
+    },
+    isPressure: {
+      // deep: true,
+      // eslint-disable-next-line no-unused-vars
+      handler(val) {
+        // window.alert(this.m_series.length)
+        this.m_series = []
+        var m_glucose = {
+          name: 'glucose(g/L)',
+          type: 'line',
+          itemStyle: {
+            color: '#f4516c'
+          },
+          lineStyle: {
+            color: '#f4516c'
+          },
+          smooth: true,
+          data: this.testData,
+          animationDuration: 2800,
+          animationEasing: 'quadraticOut'
+        }
+        var m_weight = {
+          name: 'kg',
+          type: 'line',
+          itemStyle: {
+            color: '#55a8fd'
+          },
+          lineStyle: {
+            color: '#55a8fd'
+          },
+          smooth: true,
+          data: this.testData2,
+          animationDuration: 2800,
+          animationEasing: 'quadraticOut'
+        }
+        var m_ketone = {
+          name: 'ketone(g/L)',
+          type: 'line',
+          itemStyle: {
+            color: '#55a8fd'
+          },
+          lineStyle: {
+            color: '#55a8fd'
+          },
+          smooth: true,
+          data: this.testData3,
+          animationDuration: 2800,
+          animationEasing: 'quadraticOut'
+        }
+        var m_pressure = {
+          name: 'mmHg',
+          type: 'line',
+          itemStyle: {
+            color: '#55a8fd'
+          },
+          lineStyle: {
+            color: '#55a8fd'
+          },
+          smooth: true,
+          data: this.testData4,
+          animationDuration: 2800,
+          animationEasing: 'quadraticOut'
+        }
+        if (this.isGlucose === true) {
+          this.m_series.push(m_glucose)
+        }
+        if (this.isWeight === true) {
+          this.m_series.push(m_weight)
+        }
+        if (this.isKetone === true) {
+          this.m_series.push(m_ketone)
+        }
+        if (this.isPressure === true) {
+          this.m_series.push(m_pressure)
+        }
+        // window.alert(this.m_series.length)
+        this._setOption(this.m_series)
+      }
     }
   },
   created() {
     this._getAllData()
   },
+  mounted() {
+    this.$nextTick().then(() => {
+      this.initEcharts()
+    })
+  },
   components: {
     // eslint-disable-next-line vue/no-unused-components
     CountTo,
-    LineCharts,
+    // eslint-disable-next-line vue/no-unused-components
+    // LineCharts,
     PieCharts,
     TableShow,
     BarCharts
   },
   methods: {
+    initEcharts() {
+      this.mycharts = echarts.init(this.$refs.myCharts, 'macarons')
+      if (Object.keys(this.lineChartData).length > 0) {
+        this._setOption(this.lineChartData.inPrice, this.lineChartData.outPrice)
+      }
+    },
+    // eslint-disable-next-line no-unused-vars
+    _setOption(m_series) {
+      this.mycharts.setOption(
+        {
+          title: {
+            text: '健康数据',
+            left: '16'
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'cross',
+              label: {
+                background: '#6a7985'
+              }
+            }
+          },
+          // legend: {
+          //   data: ['血糖', '体重']
+          // },
+          grid: {
+            left: '20',
+            right: '20',
+            bottom: '3',
+            containLabel: true
+          },
+          xAxis: [
+            {
+              type: 'category',
+              boundaryGap: false,
+              data: ['1月', '2月', '3月', '4月', '5月', '6月']
+            }
+          ],
+          yAxis: [
+            {
+              type: 'value'
+            }
+          ],
+          series: m_series
+          // series: [
+          //   {
+          //     name: '收入',
+          //     type: 'line',
+          //     // areaStyle: {
+          //     //   color: '#f4516c',
+          //     //   opacity: 0.3
+          //     // },
+          //     itemStyle: {
+          //       color: '#f4516c'
+          //     },
+          //     lineStyle: {
+          //       color: '#f4516c'
+          //     },
+          //     smooth: true,
+          //     data: inprice,
+          //     animationDuration: 2800,
+          //     animationEasing: 'quadraticOut'
+          //   },
+          //   {
+          //     name: '支出',
+          //     type: 'line',
+          //     // areaStyle: {
+          //     //   color: '#55a8fd',
+          //     //   opacity: 0.3
+          //     // },
+          //     itemStyle: {
+          //       color: '#55a8fd'
+          //     },
+          //     lineStyle: {
+          //       color: '#55a8fd'
+          //     },
+          //     smooth: true,
+          //     data: this.testData,
+          //     animationDuration: 2800,
+          //     animationEasing: 'quadraticOut'
+          //   }
+          // ]
+        },
+        { notMerge: true }
+      )
+    },
     _getAllData() {
       this.$http
         .all([getCardsData(), getLineData(), getTableData(), getBarData()])
