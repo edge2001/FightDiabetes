@@ -1,21 +1,16 @@
 <template>
   <div class="dashbord">
     <!-- <el-row class="chooseitem"> -->
-    <el-checkbox
-      :indeterminate="isIndeterminate"
-      v-model="checkAll"
-      @change="handleCheckAllChange"
-      >全选</el-checkbox
-    >
+    <!-- <el-switch v-model="value" active-color="#13ce66" inactive-color="#ff4949">
+    </el-switch> -->
+    <p class="choosefont">
+      请选择要展示的数据项（这里显示月份平均值，想查询详细数据请移步数据页面～）
+    </p>
     <div style="margin: 15px 0;"></div>
-    <el-checkbox-group
-      v-model="checkedCities"
-      @change="handleCheckedCitiesChange"
-    >
-      <el-checkbox v-for="city in cities" :label="city" :key="city">{{
-        city
-      }}</el-checkbox>
-    </el-checkbox-group>
+    <el-checkbox v-model="isGlucose">血糖</el-checkbox>
+    <el-checkbox v-model="isWeight">体重</el-checkbox>
+    <el-checkbox v-model="isKetone">血酮</el-checkbox>
+    <el-checkbox v-model="isPressure">血压</el-checkbox>
     <!-- </el-row> -->
     <!-- cardlist -->
     <!-- <el-row class="infoCrads">
@@ -116,7 +111,6 @@ import {
   getLineData,
   getBarData
 } from '@/api/dashboard'
-const cityOptions = ['上海', '北京', '广州', '深圳']
 export default {
   data() {
     return {
@@ -130,9 +124,12 @@ export default {
       lineChartData: {},
       barData: {},
       checkAll: false,
-      checkedCities: ['上海', '北京'],
-      cities: cityOptions,
-      isIndeterminate: true
+      isIndeterminate: true,
+      isGlucose: true,
+      isWeight: false,
+      isKetone: false,
+      isPressure: false
+      // value: true
     }
   },
   created() {
@@ -147,16 +144,6 @@ export default {
     BarCharts
   },
   methods: {
-    handleCheckAllChange(val) {
-      this.checkedCities = val ? cityOptions : []
-      this.isIndeterminate = false
-    },
-    handleCheckedCitiesChange(value) {
-      let checkedCount = value.length
-      this.checkAll = checkedCount === this.cities.length
-      this.isIndeterminate =
-        checkedCount > 0 && checkedCount < this.cities.length
-    },
     _getAllData() {
       this.$http
         .all([getCardsData(), getLineData(), getTableData(), getBarData()])
@@ -179,6 +166,11 @@ export default {
 $mgTop: 30px;
 @mixin shadow {
   box-shadow: 0 0 10px #e2e2e2;
+}
+.choosefont {
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+  font-size: large;
 }
 .color-green1 {
   color: #40c9c6 !important;
