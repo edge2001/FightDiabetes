@@ -9,7 +9,7 @@ class UserInfo(models.Model):
     username = models.CharField(verbose_name='用户名', max_length=32)
     password = models.CharField(verbose_name='密码', max_length=64)
     email = models.CharField(verbose_name='Email', max_length=64)
-
+    isActive = models.BooleanField(verbose_name='激活',default=False)
     class Meta:
         ordering = ['-create_date', ]
 
@@ -61,3 +61,15 @@ class Sports_record(models.Model):
     user = models.ForeignKey(
         UserInfo, related_name='user_sports_record', on_delete=models.CASCADE)
 
+
+# 邮箱验证
+class EmailPro(models.Model):
+    code = models.CharField(max_length=20, verbose_name='验证码')
+    email = models.EmailField(max_length=50, verbose_name='邮箱')
+    send_type = models.CharField(max_length=10, choices=(('register', '邮箱注册'), ('forget', '忘记密码')), verbose_name='发送类型')
+    send_time = models.DateTimeField(auto_now_add=True, verbose_name='发送时间')
+
+    class Meta:
+        db_table='emailpro'
+        verbose_name='邮箱验证码'
+        verbose_name_plural=verbose_name

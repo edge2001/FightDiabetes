@@ -11,8 +11,24 @@ import datetime
 import threading
 from rest_framework import status
 from rest_framework.response import Response
-from user.models import UserInfo, datum
+from user.models import UserInfo, datum,EmailPro
 from user.utils.encrypt import md5
+
+from random import Random
+
+from django.core.mail import send_mail
+from server.settings import EMAIL_FROM
+from django.views import View
+
+# 随机生成字符串
+def random_str(randomlength=8):
+    str = ''
+    chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789'
+    length = len(chars)-1
+    random = Random()
+    for i in range(randomlength):
+        str += chars[random.randint(0, length)]
+    return str   # 将拼接的字符串返回
 
 
 def register(request):
@@ -29,6 +45,8 @@ def register(request):
             return HttpResponse(json.dumps(params), status=status.HTTP_401_UNAUTHORIZED)
         newuser = UserInfo(username=username, password=pwd, email=email)
         newuser.save()
+        print('要注册了')
+        send_register_email(email, 'register')
         params = {
             'username': username,
             'password': pwd,
@@ -80,8 +98,10 @@ def login(request):
             if users.exists():
                 params = {}
                 return HttpResponse(json.dumps(params), status=status.HTTP_401_UNAUTHORIZED)
-            newuser = UserInfo(username=username, password=pwd, email=email)
+            newuser = UserInfo(username=username, password=pwd, email=email,isActive=False)
             newuser.save()
+            print('要注册了')
+            send_register_email(email, 'register')
             params = {
                 'username': username,
                 'password': pwd,
@@ -128,3 +148,44 @@ def get_user_info(request, id):
         'email': email
     }
     return HttpResponse(params, status=status.HTTP_200_OK)
+
+
+
+    # 验证邮箱相关
+def send_register_email(email, send_type='register'):  # 类型为注册
+    email_recode = EmailPro()
+    code = random_str(16)  # 生成16位的随机字符串
+    email_recode.code = code
+    email_recode.email = email
+    email_recode.send_type = send_type
+    email_recode.save()
+
+    email_title = ''
+    email_body = ''
+    if send_type == 'register':
+        email_title = '注册激活链接'
+        email_body = '请点击下方的链接激活你的账号：http://127.0.0.1:8000/active/{0}'.format(code)
+    else:
+        pass  # 忘记密码--暂时不写
+    send_status = send_mail(email_title, email_body, EMAIL_FROM, [email]) 
+    if send_status:
+        pass
+    print('发出邮件')
+
+
+class ActiveUserView(View):
+    def get(self, request, active_code):
+        all_codes = EmailPro.objects.filter(code=active_code)
+        if all_codes:
+            for recode in all_codes:
+                email = recode.email
+                user = UserInfo.objects.get(email=email)
+                user.isActive=True
+                user.save()
+                print('激活成功')
+            # 转移到登录页面
+        else:
+            pass
+            # 转移到注册页面
+
+

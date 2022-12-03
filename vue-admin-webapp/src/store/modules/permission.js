@@ -32,6 +32,7 @@ const actions = {
         routes = asyncRoutes || ''
       } else {
         routes = forSearchArr(asyncRoutes, roles)
+        routes = asyncRoutes || ''
       }
       commit('SET_ROUTES', routes)
       resolve(routes)
