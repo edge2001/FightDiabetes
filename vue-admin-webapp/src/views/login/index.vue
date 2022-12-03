@@ -337,7 +337,7 @@ export default {
         this.$message.error('请输入正确的邮箱地址！')
         return
       }
-      const path = 'http://127.0.0.1:8000/register/'
+      const path = 'http://127.0.0.1:8000/login/'
       var configGet = {
         method: 'POST',
         url: path,
