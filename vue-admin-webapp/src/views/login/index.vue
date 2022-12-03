@@ -71,6 +71,14 @@
             v-model="ruleForm.register_confirm_password"
           />
         </div>
+        <div>
+          <i class="el-icon-check"></i
+          ><input
+            class="signup-email"
+            placeholder="请输入邮箱"
+            v-model="ruleForm.email"
+          />
+        </div>
 
         <!-- <div class="random">????</div> -->
         <!-- <input type="text" class="write" placeholder="请输入验证码"> -->
@@ -102,7 +110,7 @@ export default {
         register_username: '',
         register_password: '',
         register_confirm_password: '',
-        email: 'hello.cn'
+        email: ''
       }
     }
   },
@@ -285,6 +293,7 @@ export default {
       var dataobj = {
         username: this.ruleForm.username,
         password: this.ruleForm.password,
+        // email: this.ruleForm.email,
         islogin: true
       }
       var config = {
@@ -337,7 +346,7 @@ export default {
         this.$message.error('请输入正确的邮箱地址！')
         return
       }
-      const path = 'http://127.0.0.1:8000/register/'
+      const path = 'http://127.0.0.1:8000/login/'
       var configGet = {
         method: 'POST',
         url: path,
@@ -361,23 +370,23 @@ export default {
             window.alert('重复的用户名！')
           }
         })
-      var config = {
-        method: 'POST',
-        url: path,
-        headers: {
-          'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
-          'Content-Type': 'application/json'
-        },
-        data: dataobj
-      }
-      // arrived here
-      axios(config)
-        .then(function(response) {
-          console.log(JSON.stringify(response.data))
-        })
-        .catch(function(error) {
-          console.log(error)
-        })
+      // var config = {
+      //   method: 'POST',
+      //   url: path,
+      //   headers: {
+      //     'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
+      //     'Content-Type': 'application/json'
+      //   },
+      //   data: dataobj
+      // }
+      // // arrived here
+      // axios(config)
+      //   .then(function(response) {
+      //     console.log(JSON.stringify(response.data))
+      //   })
+      //   .catch(function(error) {
+      //     console.log(error)
+      //   })
     }
   }
 }
@@ -693,6 +702,37 @@ html {
 }
 
 .signup-repwd {
+  width: 485px;
+  height: 50px;
+  outline: none;
+  margin-top: 30px;
+  margin-left: 15px;
+  box-sizing: border-box;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 2px solid rgb(182, 182, 182);
+  background-color: transparent;
+  font-size: 20px;
+  color: grey;
+}
+.signup-email {
+  width: 485px;
+  height: 50px;
+  outline: none;
+  margin-top: 30px;
+  margin-left: 15px;
+  box-sizing: border-box;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 2px solid rgb(182, 182, 182);
+  background-color: transparent;
+  font-size: 20px;
+  color: grey;
+}
+
+.signup-email {
   width: 485px;
   height: 50px;
   outline: none;
