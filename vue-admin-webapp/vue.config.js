@@ -1,5 +1,6 @@
 const path = require('path')
-const resolve = function(dir) {
+// eslint-disable-next-line prettier/prettier
+const resolve = function (dir) {
   return path.join(__dirname, dir)
 }
 

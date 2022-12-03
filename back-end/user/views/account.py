@@ -76,8 +76,8 @@ def login(request):
             content = json.loads(body)
             username = content['username']
             password = content['password']
-            pwd = md5(password)
-            # pwd = password
+            # pwd = md5(password)
+            pwd = password
             email = content['email']
             users = UserInfo.objects.filter(username=username)
             if users.exists():
