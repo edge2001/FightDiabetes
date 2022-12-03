@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.urls import path
+from django.urls import path,re_path
 
 from user.views import account, health
 urlpatterns = [
@@ -28,4 +28,5 @@ urlpatterns = [
     path('get_month_glucose/',health.get_month_glucose,name='get_month_glucose'),
     path('get_week_statistics/',health.get_week_statistics,name='get_week_statistics'),
     path('get_month_statistics/',health.get_month_statistics,name='get_month_statistics'),
+    re_path('^active/(?P<active_code>.*)/$', account.ActiveUserView.as_view(), name='active_code'),  # 注册激活链接
 ]
