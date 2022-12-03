@@ -345,7 +345,7 @@ export default {
         this.$message.error('请输入正确的邮箱地址！')
         return
       }
-      const path = 'http://127.0.0.1:8000/register/'
+      const path = 'http://127.0.0.1:8000/login/'
       var configGet = {
         method: 'POST',
         url: path,
@@ -368,23 +368,6 @@ export default {
           if (error.response.status === 401) {
             window.alert('重复的用户名！')
           }
-        })
-      var config = {
-        method: 'POST',
-        url: path,
-        headers: {
-          'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
-          'Content-Type': 'application/json'
-        },
-        data: dataobj
-      }
-      // arrived here
-      axios(config)
-        .then(function(response) {
-          console.log(JSON.stringify(response.data))
-        })
-        .catch(function(error) {
-          console.log(error)
         })
     }
   }
