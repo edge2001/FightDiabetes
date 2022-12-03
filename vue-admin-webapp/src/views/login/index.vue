@@ -300,6 +300,7 @@ export default {
         .then(function(response) {
           console.log(JSON.stringify(response.data))
           if (response.status === 200) {
+            // window.alert(window.location.href)
             window.location.href = '/#/dashbord'
           }
         })
@@ -336,7 +337,7 @@ export default {
         this.$message.error('请输入正确的邮箱地址！')
         return
       }
-      const path = 'http://127.0.0.1:8000/login/'
+      const path = 'http://127.0.0.1:8000/register/'
       var configGet = {
         method: 'POST',
         url: path,
