@@ -715,6 +715,7 @@ html {
   font-size: 20px;
   color: grey;
 }
+
 .signup-email {
   width: 485px;
   height: 50px;
