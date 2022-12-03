@@ -85,7 +85,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'user',
         'USER': 'root',
-        'PASSWORD': 'sfy20020708',
+        'PASSWORD': 'TIANjinKAI',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
@@ -135,3 +135,15 @@ STATIC_URL = '/static/'  # should be modified to the path of static file
 
 TIME_ZONE = 'Asia/Shanghai'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+# 邮箱验证码相关
+EMAIL_HOST = "smtp.qq.com"     # 服务器
+EMAIL_PORT = 25                 # 一般情况下都为25
+EMAIL_HOST_USER = "3584381131@qq.com"     # 账号
+EMAIL_HOST_PASSWORD = "xsatzhdhzkcdcjbf"     # 
+EMAIL_USE_TLS = True       # 一般都为False
+EMAIL_FROM = "3584381131@qq.com"      # 邮箱来自
+email_title = '邮箱激活'
+

@@ -715,6 +715,21 @@ html {
   font-size: 20px;
   color: grey;
 }
+.signup-email {
+  width: 485px;
+  height: 50px;
+  outline: none;
+  margin-top: 30px;
+  margin-left: 15px;
+  box-sizing: border-box;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 2px solid rgb(182, 182, 182);
+  background-color: transparent;
+  font-size: 20px;
+  color: grey;
+}
 
 .signup-email {
   width: 485px;
