@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store'
@@ -43,7 +44,7 @@ export const currencyRoutes = [
       {
         path: 'dashbord',
         name: 'Dashbord',
-        component: () => import('@/views/dashboard'),
+        component: () => import('@/views/dashboard/admin'),
         meta: { title: '首页', icon: 'el-icon-s-data' }
       }
     ]

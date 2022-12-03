@@ -16,12 +16,15 @@ Including another URLconf
 
 from django.urls import path,re_path
 
-from user.views import account, health
+from user.views import account, health, sports
 urlpatterns = [
     path('register/', account.register, name= 'register'),
     path('login/', account.login, name = 'login'),
+
+    # user profile
     path('user/<int:id>/profile', account.get_user_info, name = 'user_info'),
-    path('show/', account.show_list, name = 'show'), # check the status quo of database
+
+    # health data
     path('add_datum/',health.add_datum,name='add_datum'),
     path('get_day_glucose/',health.get_day_glucose,name='get_day_glucose'),
     path('get_week_glucose/',health.get_week_glucose,name='get_week_glucose'),
@@ -29,4 +32,11 @@ urlpatterns = [
     path('get_week_statistics/',health.get_week_statistics,name='get_week_statistics'),
     path('get_month_statistics/',health.get_month_statistics,name='get_month_statistics'),
     re_path('^active/(?P<active_code>.*)/$', account.ActiveUserView.as_view(), name='active_code'),  # 注册激活链接
+
+    # sports data
+    path('add_record/', sports.add_record, name = 'add_record'),
+
+
+    # check database
+    path('show/', account.show_list, name = 'show'),
 ]
