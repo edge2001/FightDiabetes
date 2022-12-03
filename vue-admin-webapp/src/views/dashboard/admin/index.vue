@@ -1,9 +1,6 @@
 <template>
   <div class="dashbord">
-    <!-- <el-row class="chooseitem"> -->
-    <!-- <el-switch v-model="value" active-color="#13ce66" inactive-color="#ff4949">
-    </el-switch> -->
-    <p class="choosefont">
+    <!-- <p class="choosefont">
       请选择要展示的数据项（这里显示月份平均值，想查询详细数据请移步数据页面～）
     </p>
     <div style="margin: 15px 0;"></div>
@@ -11,85 +8,12 @@
     <el-checkbox v-model="isWeight">体重</el-checkbox>
     <el-checkbox v-model="isKetone">血酮</el-checkbox>
     <el-checkbox v-model="isPressure">血压</el-checkbox>
-    <!-- </el-row> -->
-    <!-- cardlist -->
-    <!-- <el-row class="infoCrads">
-      <el-col :span="6">
-        <div class="cardItem">
-          <div class="cardItem_txt">
-            <count-to
-              class="cardItem_p0 color-green1"
-              :startVal="startVal"
-              :endVal="vistors"
-              :duration="2000"
-            ></count-to>
-            <p class="cardItem_p1">Total Visitors</p>
-          </div>
-          <div class="cardItem_icon">
-            <i class="el-icon-user color-green1"></i>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="6">
-        <div class="cardItem">
-          <div class="cardItem_txt">
-            <count-to
-              class="cardItem_p0 color-blue"
-              :startVal="startVal"
-              :endVal="message"
-              :duration="2000"
-            ></count-to>
-            <p class="cardItem_p1">Messages</p>
-          </div>
-          <div class="cardItem_icon">
-            <i class="el-icon-s-comment color-blue"></i>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="6">
-        <div class="cardItem">
-          <div class="cardItem_txt">
-            <count-to
-              class="cardItem_p0 color-red"
-              :startVal="startVal"
-              :endVal="order"
-              :duration="2000"
-            ></count-to>
-            <p class="cardItem_p1">Total Order Placeed</p>
-          </div>
-          <div class="cardItem_icon">
-            <i class="el-icon-shopping-cart-2 color-red"></i>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="6">
-        <div class="cardItem">
-          <div class="cardItem_txt">
-            <count-to
-              class="cardItem_p0 color-green2"
-              :startVal="startVal"
-              :endVal="profit"
-              :duration="2000"
-            ></count-to>
-            <p class="cardItem_p1">Total Profit</p>
-          </div>
-          <div class="cardItem_icon">
-            <i class="el-icon-wallet color-green2"></i>
-          </div>
-        </div>
-      </el-col>
-    </el-row> -->
-    <!-- end -->
-    <!-- lineEcharts -->
-    <!-- <line-charts class="lCharts" :lineChartData="lineChartData"></line-charts> -->
     <div
       class="lineCharts"
       :style="{ width: width, height: height }"
       ref="myCharts"
-    ></div>
-    <!-- end -->
-    <!-- table and pie -->
-    <el-row class="tableChart">
+    ></div> -->
+    <!-- <el-row class="tableChart">
       <el-col :span="16">
         <table-show :tableData="tableData" class="tableShow"></table-show>
       </el-col>
@@ -97,10 +21,7 @@
         <pie-charts class="pieCharts"></pie-charts>
       </el-col>
     </el-row>
-    <!-- end -->
-    <!-- bar chart -->
-    <bar-charts class="barCharts" :barData="barData"></bar-charts>
-    <!-- end -->
+    <bar-charts class="barCharts" :barData="barData"></bar-charts> -->
   </div>
 </template>
 
@@ -508,8 +429,11 @@ export default {
     CountTo,
     // eslint-disable-next-line vue/no-unused-components
     // LineCharts,
+    // eslint-disable-next-line vue/no-unused-components
     PieCharts,
+    // eslint-disable-next-line vue/no-unused-components
     TableShow,
+    // eslint-disable-next-line vue/no-unused-components
     BarCharts
   },
   methods: {

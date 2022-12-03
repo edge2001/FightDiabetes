@@ -39,12 +39,12 @@ export const currencyRoutes = [
     path: '/',
     name: 'Home',
     component: Layout,
-    redirect: '/dashbord',
+    redirect: '/login',
     children: [
       {
         path: 'dashbord',
         name: 'Dashbord',
-        component: () => import('@/views/dashboard'),
+        component: () => import('@/views/dashboard/admin'),
         meta: { title: '首页', icon: 'el-icon-s-data' }
       }
     ]
@@ -60,7 +60,8 @@ export const currencyRoutes = [
         path: 'index',
         name: 'Personal-index',
         component: () => import('@/views/personal'),
-        meta: { title: '个人中心' }
+        meta: { title: '个人中心' },
+        hidden: false
       }
     ]
   },
@@ -281,9 +282,12 @@ export function resetRouter() {
 // router.beforeEach(async (to, from, next) => {
 //   document.title = getTitle(to.meta.title)
 //   if (to.path === '/login') {
+//     // window.alert('s')
 //     next()
 //   } else {
+//     // window.alert('s')
 //     if (store.getters.token) {
+//       // window.alert('s')
 //       const hasRoles = store.getters.roles.length > 0
 //       if (hasRoles) {
 //         next()
@@ -295,7 +299,6 @@ export function resetRouter() {
 //             roles
 //           )
 //           router.addRoutes(addRoutes)
-
 //           // hack method to ensure that addRoutes is complete
 //           // set the replace: true, so the navigation will not leave a history record
 //           next({ ...to, replace: true })
@@ -307,7 +310,8 @@ export function resetRouter() {
 //       next({
 //         path: '/login',
 //         query: {
-//           redirect: to.fullPath
+//           // redirect: to.fullPath
+//           redirect: '/#/dashbord'
 //         }
 //       })
 //     }

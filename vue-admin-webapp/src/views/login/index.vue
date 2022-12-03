@@ -71,6 +71,14 @@
             v-model="ruleForm.register_confirm_password"
           />
         </div>
+        <div>
+          <i class="el-icon-check"></i
+          ><input
+            class="signup-email"
+            placeholder="请输入邮箱"
+            v-model="ruleForm.email"
+          />
+        </div>
 
         <!-- <div class="random">????</div> -->
         <!-- <input type="text" class="write" placeholder="请输入验证码"> -->
@@ -102,7 +110,7 @@ export default {
         register_username: '',
         register_password: '',
         register_confirm_password: '',
-        email: 'hello.cn'
+        email: ''
       }
     }
   },
@@ -693,6 +701,21 @@ html {
 }
 
 .signup-repwd {
+  width: 485px;
+  height: 50px;
+  outline: none;
+  margin-top: 30px;
+  margin-left: 15px;
+  box-sizing: border-box;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 2px solid rgb(182, 182, 182);
+  background-color: transparent;
+  font-size: 20px;
+  color: grey;
+}
+.signup-email {
   width: 485px;
   height: 50px;
   outline: none;
