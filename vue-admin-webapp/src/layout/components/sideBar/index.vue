@@ -30,6 +30,12 @@
             <span>打卡</span>
           </template>
         </el-menu-item>
+        <el-menu-item>
+          <template slot="title">
+            <i class="el-icon-check"></i>
+            <span>健康标准</span>
+          </template>
+        </el-menu-item>
         <sidebar-item
           v-for="item in routes"
           :key="item.path"

@@ -1,6 +1,6 @@
 <template>
   <div class="dashbord">
-    <!-- <p class="choosefont">
+    <p class="choosefont">
       请选择要展示的数据项（这里显示月份平均值，想查询详细数据请移步数据页面～）
     </p>
     <div style="margin: 15px 0;"></div>
@@ -12,7 +12,7 @@
       class="lineCharts"
       :style="{ width: width, height: height }"
       ref="myCharts"
-    ></div> -->
+    ></div>
     <!-- <el-row class="tableChart">
       <el-col :span="16">
         <table-show :tableData="tableData" class="tableShow"></table-show>
