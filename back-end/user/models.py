@@ -53,10 +53,11 @@ class datum(models.Model):
         UserInfo, related_name='user_date', on_delete=models.CASCADE)
 
 
-class sports_record(models.Model):
+class Sports_record(models.Model):
     date = models.DateField(verbose_name='日期', auto_now_add=True)
     sport_type = models.CharField(
         verbose_name='运动类型', null=True, max_length=64)
     notes = models.CharField(verbose_name='备注', null=True, max_length=64)
     user = models.ForeignKey(
         UserInfo, related_name='user_sports_record', on_delete=models.CASCADE)
+
