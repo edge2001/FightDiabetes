@@ -20,7 +20,12 @@ export default {
   },
   data() {
     return {
-      mycharts: null
+      mycharts: null,
+      normal_time: null,
+      above_time: null,
+      below_time: null,
+      not_time: null,
+      time: null
     }
   },
   mounted() {
@@ -46,18 +51,18 @@ export default {
         },
         series: [
           {
-            name: 'technology stack',
+            name: '统计数据',
             type: 'pie',
             roseType: 'radius',
             radius: [15, 120],
             center: ['50%', '42%'],
             data: [
-              { value: 40, name: 'Vue' },
-              { value: 35, name: 'js' },
-              { value: 20, name: 'html' },
-              { value: 10, name: 'css' },
-              { value: 8, name: 'webpack' },
-              { value: 5, name: 'node' }
+              { value: 40, name: '偏高天数' },
+              { value: 35, name: '偏低天数' },
+              { value: 20, name: '正常天数' },
+              { value: 10, name: '未测天数' }
+              // { value: 8, name: 'webpack' },
+              // { value: 5, name: 'node' }
             ],
             animationEasing: 'cubicInOut',
             animationDuration: 2600

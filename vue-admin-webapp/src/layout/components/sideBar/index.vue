@@ -66,7 +66,7 @@ export default {
       window.alert('shit')
     },
     jumpTomain() {
-      window.location.href = '/#/login'
+      // window.location.href = '/#/login'
     }
   }
 }

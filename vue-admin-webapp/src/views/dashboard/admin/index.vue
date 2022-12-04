@@ -1,18 +1,31 @@
 <template>
   <div class="dashbord">
-    <p class="choosefont">
-      请选择要展示的数据项（这里显示月份平均值，想查询详细数据请移步数据页面～）
-    </p>
-    <div style="margin: 15px 0;"></div>
-    <el-checkbox v-model="isGlucose">血糖</el-checkbox>
-    <el-checkbox v-model="isWeight">体重</el-checkbox>
-    <el-checkbox v-model="isKetone">血酮</el-checkbox>
-    <el-checkbox v-model="isPressure">血压</el-checkbox>
-    <div
-      class="lineCharts"
-      :style="{ width: width, height: height }"
-      ref="myCharts"
-    ></div>
+    <div v-if="this.isMainPage === true">
+      <el-row class="tableChart">
+        <!-- <el-col :span="16">
+          <table-show :tableData="tableData" class="tableShow"></table-show>
+        </el-col> -->
+        <el-col :span="8">
+          <pie-charts class="pieCharts"></pie-charts>
+        </el-col>
+        <el-col :span="16">
+          <bar-charts class="barCharts" :barData="barData"></bar-charts>
+        </el-col>
+      </el-row>
+      <!-- <p class="choosefont">
+        请选择要展示的数据项（这里显示月份平均值，想查询详细数据请移步数据页面～）
+      </p>
+      <div style="margin: 15px 0;"></div>
+      <el-checkbox v-model="isGlucose">血糖</el-checkbox>
+      <el-checkbox v-model="isWeight">体重</el-checkbox>
+      <el-checkbox v-model="isKetone">血酮</el-checkbox>
+      <el-checkbox v-model="isPressure">血压</el-checkbox>
+      <div
+        class="lineCharts"
+        :style="{ width: width, height: height }"
+        ref="myCharts"
+      ></div> -->
+    </div>
     <!-- <el-row class="tableChart">
       <el-col :span="16">
         <table-show :tableData="tableData" class="tableShow"></table-show>
@@ -90,7 +103,11 @@ export default {
       isWeight: false,
       isKetone: false,
       isPressure: false,
-      mycharts: null
+      mycharts: null,
+      isMainPage: true,
+      isUserInfo: false,
+      isClockIn: false,
+      isHealthStandard: false
       // value: true
     }
   },
