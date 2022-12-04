@@ -64,7 +64,7 @@ def login(request):
     username = content['username']
     password = content['password']
     islogin = content['islogin']
-    print(islogin)
+    print('login:', islogin)
     if islogin == True:
         pwd = md5(password)
         users = UserInfo.objects.filter(username=username)
