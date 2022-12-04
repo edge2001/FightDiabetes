@@ -1,5 +1,6 @@
 <template>
   <div class="dashbord">
+    <button class="test" @click="testfunc()">get statistics data</button>
     <div v-if="this.isMainPage === true">
       <el-row class="tableChart">
         <!-- <el-col :span="16">
@@ -46,6 +47,7 @@ import TableShow from './components/TableShow'
 import BarCharts from './components/BarCharts'
 import echarts from 'echarts'
 import resize from '@/mixins/resize'
+import axios from 'axios'
 require('echarts/theme/macarons')
 import {
   getCardsData,
@@ -454,6 +456,40 @@ export default {
     BarCharts
   },
   methods: {
+    testfunc() {
+      var dataobj = {
+        username: this.ruleForm.username,
+        password: this.ruleForm.password,
+        // email: this.ruleForm.email,
+        islogin: true
+      }
+      var config = {
+        method: 'post',
+        url: 'http://127.0.0.1:8000/get_month_statistics',
+        headers: {
+          'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
+          'Content-Type': 'application/json'
+        },
+        data: dataobj
+      }
+      axios(config)
+        .then(function(response) {
+          console.log(JSON.stringify(response.data))
+          if (response.status === 200) {
+            // window.alert(window.location.href)
+            window.location.href = '/#/dashbord'
+          }
+        })
+        .catch(function(error) {
+          console.log(error)
+          if (error.response.status === 401) {
+            window.alert('密码错误')
+          } else if (error.response.status === 404) {
+            window.alert('用户不存在')
+            this.jump_to_Register()
+          }
+        })
+    },
     initEcharts() {
       this.mycharts = echarts.init(this.$refs.myCharts, 'macarons')
       if (Object.keys(this.lineChartData).length > 0) {
