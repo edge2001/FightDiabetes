@@ -8,19 +8,22 @@
       <notificat-bar v-show="msgIsShow"></notificat-bar>
     </transition>
     <div class="wrapper_con">
-      <side-bar></side-bar>
-      <page-main></page-main>
+      <el-container style="height: 100%">
+        <el-container>
+          <el-aside width="201px"><main-page></main-page></el-aside>
+          <el-main><router-view></router-view></el-main>
+        </el-container>
+      </el-container>
     </div>
   </div>
 </template>
 
 <script>
-import SideBar from './components/sideBar'
 import MHeader from './components/header'
 import NotificatBar from '@/components/NotificatBar'
-import PageMain from './components/PageMain'
 import { mapGetters } from 'vuex'
 import driver from '@/mixins/useDriver'
+import MainPage from "@/layout/components/MainPage";
 export default {
   name: 'layout',
   mixins: [driver],
@@ -34,10 +37,9 @@ export default {
     ...mapGetters(['opened', 'msgIsShow', 'showDriver'])
   },
   components: {
-    SideBar,
     MHeader,
     NotificatBar,
-    PageMain
+    MainPage
   }
 }
 </script>
