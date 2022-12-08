@@ -23,7 +23,7 @@ import MHeader from './components/header'
 import NotificatBar from '@/components/NotificatBar'
 import { mapGetters } from 'vuex'
 import driver from '@/mixins/useDriver'
-import MainPage from "@/layout/components/MainPage";
+import MainPage from '@/layout/components/MainPage'
 export default {
   name: 'layout',
   mixins: [driver],

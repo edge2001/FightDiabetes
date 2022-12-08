@@ -40,13 +40,20 @@ export const currencyRoutes = [
     name: 'Home',
     component: Layout,
     children: [
-      {path: '/dashbord/admin', component: () => import ('views/dashboard/admin/index.vue')},
-      {path: '/dashbord/sports', component: () => import ('views/sports/index.vue')},
-      {path: '/dashbord/user', component: () => import("views/userprofile/index")}
-
+      {
+        path: '/dashbord/admin',
+        component: () => import('views/dashboard/admin/index.vue')
+      },
+      {
+        path: '/dashbord/sports',
+        component: () => import('views/sports/index.vue')
+      },
+      {
+        path: '/dashbord/user',
+        component: () => import('views/userprofile/index')
+      }
     ]
-  },
-
+  }
 ]
 /*动态添加routers*/
 // export const asyncRoutes = [
