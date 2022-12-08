@@ -11,6 +11,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from user.utils.token import get_username
 from user.models import UserInfo, datum
+import json
 
 
 # 添加单条健康数据
@@ -236,18 +237,14 @@ def get_week_statistics(request):
 # 血糖最值max,min,分六个时段的平均值av1,av2...
 def get_month_statistics(request):
     if request.method == 'GET':
-        print(request.session.items())
         # 获取当前用户信息
-
         token = request.META.get('HTTP_TOKEN')
         username = get_username(token)
-        print(username)
         user = UserInfo.objects.get(username=username)
-
         # 获取过去七天date的列表
         dates = []
         today = datetime.date.today()
-        for i in range(29, 0, -1):
+        for i in range(6, 0, -1):
             date = today - datetime.timedelta(days=i)
             dates.append(date)
         dates.append(today)
@@ -280,7 +277,7 @@ def get_month_statistics(request):
                 if blood_glucose < min:
                     min = blood_glucose
                 t = datum.time_tag
-                if t == 1:
+                if t == 1:  # currently all t are 1
                     av1 += blood_glucose
                     num1 += 1
                     time += 1
@@ -319,12 +316,18 @@ def get_month_statistics(request):
                 elif t == 6:
                     av6 += blood_glucose
                     num6 += 1
-        av1 = av1 / num1
-        av2 = av2 / num2
-        av3 = av3 / num3
-        av4 = av4 / num4
-        av5 = av5 / num5
-        av6 = av6 / num6
+        if (num1 != 0):
+            av1 = av1 / num1
+        if (num2 != 0):
+            av2 = av2 / num2
+        if (num3 != 0):
+            av3 = av3 / num3
+        if (num4 != 0):
+            av4 = av4 / num4
+        if (num5 != 0):
+            av5 = av5 / num5
+        if (num6 != 0):
+            av6 = av6 / num6
         dict = {
             'min': min,
             'max': max,
@@ -339,5 +342,6 @@ def get_month_statistics(request):
             'normal_time': normal_time,
             'above_time': above_time,
             'below_time': below_time,
+            'user_name': username
         }
-        return HttpResponse(dict, status=status.HTTP_200_OK)
+        return HttpResponse(json.dumps(dict), status=status.HTTP_200_OK)

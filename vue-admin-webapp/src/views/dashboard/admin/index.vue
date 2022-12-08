@@ -1,17 +1,27 @@
 <template>
   <div class="dashbord">
-    <button class="test" @click="testfunc()">get statistics data</button>
+    <!-- <button @click="testfunc()"></button> -->
+    <el-select v-model="value" placeholder="请选择展示时间">
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      >
+      </el-option>
+    </el-select>
     <div v-if="this.isMainPage === true">
       <el-row class="tableChart">
         <!-- <el-col :span="16">
           <table-show :tableData="tableData" class="tableShow"></table-show>
         </el-col> -->
         <el-col :span="8">
-          <pie-charts class="pieCharts"></pie-charts>
+          <!-- <pie-charts class="pieCharts"></pie-charts> -->
+          <div ref="myCharts" :style="{ width: width, height: height }"></div>
         </el-col>
-        <el-col :span="16">
+        <!-- <el-col :span="16">
           <bar-charts class="barCharts" :barData="barData"></bar-charts>
-        </el-col>
+        </el-col> -->
       </el-row>
       <!-- <p class="choosefont">
         请选择要展示的数据项（这里显示月份平均值，想查询详细数据请移步数据页面～）
@@ -85,6 +95,22 @@ export default {
   },
   data() {
     return {
+      options: [
+        {
+          value: '7Days',
+          label: '7days'
+        },
+        {
+          value: '30Days',
+          label: '30days'
+        }
+      ],
+      normal_time: 0,
+      above_time: 0,
+      below_time: 0,
+      value: '',
+      not_time: 0,
+      time: 0,
       checked: true,
       startVal: 0,
       vistors: 0,
@@ -114,6 +140,17 @@ export default {
     }
   },
   watch: {
+    value: {
+      deep: true,
+      // eslint-disable-next-line no-unused-vars
+      handler(val) {
+        if (this.value == '7Days') {
+          this.initEcharts()
+          this.getPersonalData()
+        }
+      }
+    },
+    // value is the choice of 7 days or 30 days of show
     lineChartData: {
       deep: true,
       handler(val) {
@@ -442,6 +479,7 @@ export default {
     this.$nextTick().then(() => {
       this.initEcharts()
     })
+    this.getPersonalData()
   },
   components: {
     // eslint-disable-next-line vue/no-unused-components
@@ -456,127 +494,93 @@ export default {
     BarCharts
   },
   methods: {
+    initEcharts() {
+      // window.alert(chart_data['above_time'])
+      this.mycharts = echarts.init(this.$refs.myCharts, 'macarons')
+      this._setOption()
+    },
+    _setOption() {
+      this.mycharts.setOption({
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        legend: {
+          left: 'center',
+          bottom: '10',
+          data: ['Vue', 'js', 'html', 'css', 'webpack', 'node']
+        },
+        series: [
+          {
+            name: '统计数据',
+            type: 'pie',
+            roseType: 'radius',
+            radius: [15, 120],
+            center: ['50%', '42%'],
+            data: [
+              { value: this.above_time, name: '偏高天数' },
+              { value: this.below_time, name: '偏低天数' },
+              { value: this.normal_time, name: '正常天数' },
+              {
+                value: 7 - this.above_time - this.below_time - this.normal_time,
+                name: '未测天数'
+              }
+            ],
+            animationEasing: 'cubicInOut',
+            animationDuration: 2600
+          }
+        ]
+      })
+    },
     testfunc() {
-      // window.alert('hithere')
+      this.getPersonalData()
+    },
+    getPersonalData: function() {
       var dataobj = {
-        // username: this.ruleForm.username,
-        // password: this.ruleForm.password,
-        // // email: this.ruleForm.email,
-        // islogin: true
+        min: 0,
+        max: 0,
+        time: 0,
+        av1: 0,
+        av2: 0,
+        av3: 0,
+        av4: 0,
+        av5: 0,
+        av6: 0,
+        normal_time: 0,
+        above_time: 0,
+        below_time: 0
       }
-      var config = {
-        method: 'get',
-        url: 'http://127.0.0.1:8000/get_month_statistics',
+      const path = 'http://127.0.0.1:8000/get_month_statistics'
+      var configGet = {
+        method: 'GET',
+        url: path,
         headers: {
           'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
           'Content-Type': 'application/json'
         },
         data: dataobj
       }
-      axios(config)
+      var self = this
+      axios(configGet)
         .then(function(response) {
-          console.log(JSON.stringify(response.data))
+          console.log(response.data)
           if (response.status === 200) {
-            // window.alert(window.location.href)
-            window.location.href = '/#/dashbord'
+            // if successfully transfer data to front-end
+            var abv_time = response.data['above_time']
+            var blw_time = response.data['below_time']
+            var nor_time = response.data['normal_time']
+            self.above_time = abv_time
+            self.below_time = blw_time
+            self.normal_time = nor_time
+            // window.alert(self.above_time)
           }
         })
         .catch(function(error) {
           console.log(error)
           if (error.response.status === 401) {
-            window.alert('密码错误')
-          } else if (error.response.status === 404) {
-            window.alert('用户不存在')
-            this.jump_to_Register()
+            window.alert('重复的用户名！')
           }
         })
-    },
-    initEcharts() {
-      this.mycharts = echarts.init(this.$refs.myCharts, 'macarons')
-      if (Object.keys(this.lineChartData).length > 0) {
-        this._setOption(this.lineChartData.inPrice, this.lineChartData.outPrice)
-      }
-    },
-    // eslint-disable-next-line no-unused-vars
-    _setOption(m_series) {
-      this.mycharts.setOption(
-        {
-          title: {
-            text: '健康数据',
-            left: '16'
-          },
-          tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-              type: 'cross',
-              label: {
-                background: '#6a7985'
-              }
-            }
-          },
-          // legend: {
-          //   data: ['血糖', '体重']
-          // },
-          grid: {
-            left: '20',
-            right: '20',
-            bottom: '3',
-            containLabel: true
-          },
-          xAxis: [
-            {
-              type: 'category',
-              boundaryGap: false,
-              data: ['1月', '2月', '3月', '4月', '5月', '6月']
-            }
-          ],
-          yAxis: [
-            {
-              type: 'value'
-            }
-          ],
-          series: m_series
-          // series: [
-          //   {
-          //     name: '收入',
-          //     type: 'line',
-          //     // areaStyle: {
-          //     //   color: '#f4516c',
-          //     //   opacity: 0.3
-          //     // },
-          //     itemStyle: {
-          //       color: '#f4516c'
-          //     },
-          //     lineStyle: {
-          //       color: '#f4516c'
-          //     },
-          //     smooth: true,
-          //     data: inprice,
-          //     animationDuration: 2800,
-          //     animationEasing: 'quadraticOut'
-          //   },
-          //   {
-          //     name: '支出',
-          //     type: 'line',
-          //     // areaStyle: {
-          //     //   color: '#55a8fd',
-          //     //   opacity: 0.3
-          //     // },
-          //     itemStyle: {
-          //       color: '#55a8fd'
-          //     },
-          //     lineStyle: {
-          //       color: '#55a8fd'
-          //     },
-          //     smooth: true,
-          //     data: this.testData,
-          //     animationDuration: 2800,
-          //     animationEasing: 'quadraticOut'
-          //   }
-          // ]
-        },
-        { notMerge: true }
-      )
     },
     _getAllData() {
       this.$http
