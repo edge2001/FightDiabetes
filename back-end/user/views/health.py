@@ -9,7 +9,7 @@ import datetime
 import threading
 from rest_framework import status
 from rest_framework.response import Response
-
+from user.utils.token import get_username
 from user.models import UserInfo, datum
 
 
@@ -23,8 +23,8 @@ def add_datum(request):
         notes = request.POST.get('notes')
         newdatum = datum(blood_glucose=blood_glucose, weight=weight,
                          ketone=ketone, time_tag=time_tag, notes=notes)
-        dict = request.session['info']
-        username = dict['username']
+        token = request.META.get('HTTP_TOKEN')
+        username = get_username(token)
         user = UserInfo.objects.get(username=username)
         newdatum.user = user
         newdatum.save()
@@ -35,8 +35,8 @@ def add_datum(request):
 def get_day_glucose(request):
     if request.method == 'POST':
         # 获取当前用户信息
-        dict = request.session['info']
-        username = dict['username']
+        token = request.META.get('HTTP_TOKEN')
+        username = get_username(token)
         user = UserInfo.objects.get(username=username)
         # 获取所需日期，days为返回的据今天的天数，0为今天
         days = request.POST.get('days')
@@ -63,8 +63,8 @@ def get_day_glucose(request):
 def get_week_glucose(request):
     if request.method == 'POST':
         # 获取当前用户信息
-        dict = request.session['info']
-        username = dict['username']
+        token = request.META.get('HTTP_TOKEN')
+        username = get_username(token)
         user = UserInfo.objects.get(username=username)
         # 获取需要查询的时段
         time_tag = request.POST.get('time_tag')
@@ -95,8 +95,8 @@ def get_week_glucose(request):
 def get_month_glucose(request):
     if request.method == 'POST':
         # 获取当前用户信息
-        dict = request.session['info']
-        username = dict['username']
+        token = request.META.get('HTTP_TOKEN')
+        username = get_username(token)
         user = UserInfo.objects.get(username=username)
         # 获取需要查询的时段
         time_tag = request.POST.get('time_tag')
@@ -128,8 +128,8 @@ def get_month_glucose(request):
 def get_week_statistics(request):
     if request.method == 'GET':
         # 获取当前用户信息
-        dict = request.session['info']
-        username = dict['username']
+        token = request.META.get('HTTP_TOKEN')
+        username = get_username(token)
         user = UserInfo.objects.get(username=username)
 
         # 获取过去七天date的列表
@@ -238,8 +238,10 @@ def get_month_statistics(request):
     if request.method == 'GET':
         print(request.session.items())
         # 获取当前用户信息
-        dict = request.session['info']
-        username = dict['username']
+
+        token = request.META.get('HTTP_TOKEN')
+        username = get_username(token)
+        print(username)
         user = UserInfo.objects.get(username=username)
 
         # 获取过去七天date的列表

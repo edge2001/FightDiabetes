@@ -82,9 +82,9 @@ def login(request):
                 #request.session.set_expiry(60 * 30)
 
                 token = create_token(username)
-                params = {'token': token}
-                # print(token)
-                # print(md5('1'))
+                params = {'token': token,
+                          'username': username
+                          }
                 return HttpResponse(json.dumps(params), status=status.HTTP_200_OK)
             # doesn't match
             else:
