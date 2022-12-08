@@ -311,9 +311,17 @@ export default {
         .then(function(response) {
           console.log(JSON.stringify(response.data))
           if (response.status === 200) {
+            // window.alert(window.location.href)
+
+            // localStorage.setItem("username", response.data.username);
+            // localStorage.setItem("authorization", authorization);
             localStorage.setItem('username', response.data['username'])
+            localStorage.setItem('email', response.data['email'])
+
             // 将用户token保存到localStorage中  备注：先将token存入状态管理中，登陆成功跳转到首页要用到token进行验证
+            //this.CHANGE_LOGIN({ token : response.data['token'] });
             localStorage.setItem('token', response.data['token'])
+
             window.location.href = '/#/dashbord'
             this.$message({
               message: '登录成功',
