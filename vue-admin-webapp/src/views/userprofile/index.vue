@@ -1,13 +1,11 @@
 <template>
-<div>This is user profile page</div>
+  <div>This is user profile page</div>
 </template>
 
 <script>
 export default {
-  name: "index.vue"
+  name: 'index.vue'
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

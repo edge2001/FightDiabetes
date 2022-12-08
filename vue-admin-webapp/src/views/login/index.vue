@@ -101,6 +101,7 @@
 <script>
 import axios from 'axios'
 import $ from 'jquery'
+import CHANGE_LOGIN from '../../store/index'
 export default {
   data() {
     return {
@@ -111,7 +112,8 @@ export default {
         register_password: '',
         register_confirm_password: '',
         email: ''
-      }
+      },
+      userToken: ''
     }
   },
   methods: {
@@ -310,7 +312,20 @@ export default {
           console.log(JSON.stringify(response.data))
           if (response.status === 200) {
             // window.alert(window.location.href)
-            window.location.href = '/#/dashbord'
+            window.alert(this.userToken)
+            // localStorage.setItem("username", response.data.username);
+            // localStorage.setItem("authorization", authorization);
+            localStorage.setItem('username', this.ruleForm.username)
+            this.userToken = response.token
+            // 将用户token保存到localStorage中  备注：先将token存入状态管理中，登陆成功跳转到首页要用到token进行验证
+            CHANGE_LOGIN({ token: this.userToken })
+            this.$router.push('/#/dashbord')
+            this.$message({
+              message: '登录成功',
+              type: 'success'
+            })
+
+            // window.location.href = '/#/dashbord'
           }
         })
         .catch(function(error) {
@@ -716,6 +731,7 @@ html {
   font-size: 20px;
   color: grey;
 }
+
 .signup-email {
   width: 485px;
   height: 50px;

@@ -48,6 +48,7 @@ import BarCharts from './components/BarCharts'
 import echarts from 'echarts'
 import resize from '@/mixins/resize'
 import axios from 'axios'
+import active_user from '../../login/global'
 require('echarts/theme/macarons')
 import {
   getCardsData,
@@ -457,14 +458,15 @@ export default {
   },
   methods: {
     testfunc() {
+      window.alert(active_user['active_user'])
       var dataobj = {
-        username: this.ruleForm.username,
-        password: this.ruleForm.password,
-        // email: this.ruleForm.email,
-        islogin: true
+        // username: this.ruleForm.username,
+        // password: this.ruleForm.password,
+        // // email: this.ruleForm.email,
+        // islogin: true
       }
       var config = {
-        method: 'post',
+        method: 'get',
         url: 'http://127.0.0.1:8000/get_month_statistics',
         headers: {
           'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
