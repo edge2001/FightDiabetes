@@ -15,20 +15,35 @@ Vue.prototype.$http = axios // 并发请求
 // 在全局请求和响应拦截器中添加请求状态
 let loading = null
 
-// 请求拦截器
-$axios.interceptors.request.use(
-  config => {
-    loading = Loading.service({ text: '拼命加载中。。。' })
-    const token = store.getters.token
-    if (token) {
-      config.headers.Authorization = token // 请求头部添加token
+// 请求拦截器 by ours
+axios.interceptors.request.use(
+    config => {
+        if(localStorage.getItem('token')){
+            config.headers['token'] = localStorage.getItem('token');
+        }
+        return config;
+    },
+    error => {
+        return Promise.reject(error);
     }
-    return config
-  },
-  error => {
-    return Promise.reject(error)
-  }
 )
+
+// axios.interceptors.request.use(
+//     config => {
+//         var username = localStorage.getItem('username');
+//         var authorization = localStorage.getItem('authorization');
+//         // 若 localStorage 中含有这两个字段，则添加入请求头
+//         if (username & authorization) {
+//             config.headers.authorization = authorization;
+//             config.headers.username = username;
+//         }
+//         return config;
+//     },
+//     error => {
+//         return Promise.reject(error);
+//     }
+// )
+
 // 响应拦截器
 $axios.interceptors.response.use(
   response => {

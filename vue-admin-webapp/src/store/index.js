@@ -13,6 +13,15 @@ files.keys().forEach(key => {
 })
 const store = new Vuex.Store({
   modules,
-  getters
+  getters,
+    state: {
+          HOST: `http://127.0.0.1:8000`,
+          Authorization: localStorage.getItem('token') ? localStorage.getItem('token') : ''
+      },
 })
+
+// export const CHANGE_LOGIN = (state, user) => {
+//         state.token = user.token;
+//         localStorage.setItem('token', user.token);
+//       };
 export default store

@@ -1,18 +1,32 @@
 <template>
   <div class="dashbord">
-    <p class="choosefont">
-      请选择要展示的数据项（这里显示月份平均值，想查询详细数据请移步数据页面～）
-    </p>
-    <div style="margin: 15px 0;"></div>
-    <el-checkbox v-model="isGlucose">血糖</el-checkbox>
-    <el-checkbox v-model="isWeight">体重</el-checkbox>
-    <el-checkbox v-model="isKetone">血酮</el-checkbox>
-    <el-checkbox v-model="isPressure">血压</el-checkbox>
-    <div
-      class="lineCharts"
-      :style="{ width: width, height: height }"
-      ref="myCharts"
-    ></div>
+    <button class="test" @click="testfunc()">get statistics data</button>
+    <div v-if="this.isMainPage === true">
+      <el-row class="tableChart">
+        <!-- <el-col :span="16">
+          <table-show :tableData="tableData" class="tableShow"></table-show>
+        </el-col> -->
+        <el-col :span="8">
+          <pie-charts class="pieCharts"></pie-charts>
+        </el-col>
+        <el-col :span="16">
+          <bar-charts class="barCharts" :barData="barData"></bar-charts>
+        </el-col>
+      </el-row>
+      <!-- <p class="choosefont">
+        请选择要展示的数据项（这里显示月份平均值，想查询详细数据请移步数据页面～）
+      </p>
+      <div style="margin: 15px 0;"></div>
+      <el-checkbox v-model="isGlucose">血糖</el-checkbox>
+      <el-checkbox v-model="isWeight">体重</el-checkbox>
+      <el-checkbox v-model="isKetone">血酮</el-checkbox>
+      <el-checkbox v-model="isPressure">血压</el-checkbox>
+      <div
+        class="lineCharts"
+        :style="{ width: width, height: height }"
+        ref="myCharts"
+      ></div> -->
+    </div>
     <!-- <el-row class="tableChart">
       <el-col :span="16">
         <table-show :tableData="tableData" class="tableShow"></table-show>
@@ -33,6 +47,7 @@ import TableShow from './components/TableShow'
 import BarCharts from './components/BarCharts'
 import echarts from 'echarts'
 import resize from '@/mixins/resize'
+import axios from 'axios'
 require('echarts/theme/macarons')
 import {
   getCardsData,
@@ -90,7 +105,11 @@ export default {
       isWeight: false,
       isKetone: false,
       isPressure: false,
-      mycharts: null
+      mycharts: null,
+      isMainPage: true,
+      isUserInfo: false,
+      isClockIn: false,
+      isHealthStandard: false
       // value: true
     }
   },
@@ -437,6 +456,41 @@ export default {
     BarCharts
   },
   methods: {
+    testfunc() {
+      // window.alert('hithere')
+      var dataobj = {
+        // username: this.ruleForm.username,
+        // password: this.ruleForm.password,
+        // // email: this.ruleForm.email,
+        // islogin: true
+      }
+      var config = {
+        method: 'get',
+        url: 'http://127.0.0.1:8000/get_month_statistics',
+        headers: {
+          'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
+          'Content-Type': 'application/json'
+        },
+        data: dataobj
+      }
+      axios(config)
+        .then(function(response) {
+          console.log(JSON.stringify(response.data))
+          if (response.status === 200) {
+            // window.alert(window.location.href)
+            window.location.href = '/#/dashbord'
+          }
+        })
+        .catch(function(error) {
+          console.log(error)
+          if (error.response.status === 401) {
+            window.alert('密码错误')
+          } else if (error.response.status === 404) {
+            window.alert('用户不存在')
+            this.jump_to_Register()
+          }
+        })
+    },
     initEcharts() {
       this.mycharts = echarts.init(this.$refs.myCharts, 'macarons')
       if (Object.keys(this.lineChartData).length > 0) {
