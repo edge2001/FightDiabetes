@@ -100,6 +100,7 @@
 
 <script>
 import axios from 'axios'
+import CHANGE_LOGIN from "../../store/index"
 import $ from 'jquery'
 export default {
   data() {
@@ -111,7 +112,7 @@ export default {
         register_password: '',
         register_confirm_password: '',
         email: ''
-      }
+      },
     }
   },
   methods: {
@@ -294,7 +295,7 @@ export default {
         username: this.ruleForm.username,
         password: this.ruleForm.password,
         // email: this.ruleForm.email,
-        islogin: true
+        islogin: true,
       }
       var config = {
         method: 'post',
@@ -309,8 +310,27 @@ export default {
         .then(function(response) {
           console.log(JSON.stringify(response.data))
           if (response.status === 200) {
+
             // window.alert(window.location.href)
+
+            // localStorage.setItem("username", response.data.username);
+            // localStorage.setItem("authorization", authorization);
+            localStorage.setItem("username", response.data['username'])
+
+
+             // 将用户token保存到localStorage中  备注：先将token存入状态管理中，登陆成功跳转到首页要用到token进行验证
+            //this.CHANGE_LOGIN({ token : response.data['token'] });
+            localStorage.setItem("token", response.data['token'])
+
             window.location.href = '/#/dashbord'
+
+            //this.$router.push('/dashbord/admin');
+            this.$message({
+              message: '登录成功',
+              type: 'success'
+            })
+
+            // window.location.href = '/#/dashbord'
           }
         })
         .catch(function(error) {

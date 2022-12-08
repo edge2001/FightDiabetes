@@ -6,9 +6,11 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.template import loader
-
+from django.middleware.csrf import get_token
 import datetime
 import threading
+
+from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import status
 from rest_framework.response import Response
 from user.models import UserInfo, datum,EmailPro
@@ -19,7 +21,7 @@ from random import Random
 from django.core.mail import send_mail
 from server.settings import EMAIL_FROM
 from django.views import View
-
+from user.utils.token import create_token
 # 随机生成字符串
 def random_str(randomlength=8):
     str = ''
@@ -72,11 +74,15 @@ def login(request):
             user = users.first()
             # match
             if user.password == pwd:
-                params = {}
                 # add to session
-                request.session['info'] = {'username': user.username}
+                #request.session['info'] = {'username': user.username}
                 # expiry for half an hour
-                request.session.set_expiry(60 * 30)
+                #request.session.set_expiry(60 * 30)
+
+                token = create_token(username)
+                params = {'token' : token,
+                          'username' : username
+                          }
                 return HttpResponse(json.dumps(params), status=status.HTTP_200_OK)
             # doesn't match
             else:
