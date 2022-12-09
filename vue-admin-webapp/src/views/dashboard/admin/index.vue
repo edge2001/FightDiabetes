@@ -15,9 +15,13 @@
         <!-- <el-col :span="16">
           <table-show :tableData="tableData" class="tableShow"></table-show>
         </el-col> -->
-        <el-col :span="8">
+        <el-col :span="12">
           <!-- <pie-charts class="pieCharts"></pie-charts> -->
-          <div ref="myCharts" :style="{ width: width, height: height }"></div>
+          <div ref="PieCharts" :style="{ width: width, height: height }"></div>
+        </el-col>
+        <el-col :span="12">
+          <!-- <bar-charts class="barCharts" :barData="barData"></bar-charts> -->
+          <div ref="Barcharts" :style="{ width: width, height: height }"></div>
         </el-col>
         <!-- <el-col :span="16">
           <bar-charts class="barCharts" :barData="barData"></bar-charts>
@@ -34,7 +38,7 @@
       <div
         class="lineCharts"
         :style="{ width: width, height: height }"
-        ref="myCharts"
+        ref="PieCharts"
       ></div> -->
     </div>
     <!-- <el-row class="tableChart">
@@ -79,19 +83,11 @@ export default {
     lineChartData: {
       type: Object,
       required: true
+    },
+    barData: {
+      type: Object,
+      required: true
     }
-    // isGlucose: {
-    //   type: Boolean
-    // },
-    // isWeight: {
-    //   type: Boolean
-    // },
-    // isKetone: {
-    //   type: Boolean
-    // },
-    // isPressure: {
-    //   type: Boolean
-    // }
   },
   data() {
     return {
@@ -105,6 +101,13 @@ export default {
           label: '30days'
         }
       ],
+      max_glucose: 0,
+      min_glucose: 0,
+      emp_glucose: 0,
+      before_glucose: 0,
+      after_glucose: 0,
+      sleep_glucose: 0,
+      Barcharts: null,
       normal_time: 0,
       above_time: 0,
       below_time: 0,
@@ -118,12 +121,6 @@ export default {
       order: 0,
       profit: 0,
       tableData: [],
-      testData: [10000, 20000, 30000, 40000, 50000, 60000],
-      testData2: [60000, 50000, 40000, 30000, 20000, 10000],
-      testData3: [20000, 20000, 20000, 20000, 20000, 20000],
-      testData4: [40000, 40000, 40000, 40000, 40000, 40000],
-      // lineChartData: {},
-      barData: {},
       checkAll: false,
       isIndeterminate: true,
       m_series: [],
@@ -131,7 +128,7 @@ export default {
       isWeight: false,
       isKetone: false,
       isPressure: false,
-      mycharts: null,
+      PieCharts: null,
       isMainPage: true,
       isUserInfo: false,
       isClockIn: false,
@@ -145,8 +142,10 @@ export default {
       // eslint-disable-next-line no-unused-vars
       handler(val) {
         if (this.value == '7Days') {
+          this.getPieData()
+          this.getBarChartData()
+          this.initBarChart()
           this.initEcharts()
-          this.getPersonalData()
         }
       }
     },
@@ -477,9 +476,13 @@ export default {
   },
   mounted() {
     this.$nextTick().then(() => {
-      this.initEcharts()
+      // this.initEcharts()
+      // this.initBarChart()
     })
-    this.getPersonalData()
+    this.getPieData()
+    this.getBarChartData()
+    this.initEcharts()
+    this.initBarChart()
   },
   components: {
     // eslint-disable-next-line vue/no-unused-components
@@ -494,13 +497,79 @@ export default {
     BarCharts
   },
   methods: {
+    initBarChart() {
+      this.Barcharts = echarts.init(this.$refs.Barcharts, 'macarons')
+      this._setBarOption()
+    },
+    _setBarOption() {
+      this.Barcharts.setOption({
+        title: {
+          text: '血糖数据',
+          left: '16'
+        },
+        legend: {
+          data: ['']
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        grid: {
+          left: '20',
+          right: '20',
+          bottom: '3',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'category',
+          data: [
+            '血糖最高值',
+            '血糖最低值',
+            '空腹平均值',
+            '餐前平均值',
+            '餐后平均值',
+            '睡前平均值'
+          ]
+        },
+        yAxis: {},
+        // Declare several bar series, each will be mapped
+        // to a column of dataset.source by default.
+        series: [
+          {
+            type: 'bar',
+            name: 'mmol/L',
+            data: [this.max_glucose, this.min_glucose],
+            itemStyle: {
+              normal: {
+                //这里是重点
+                color: function(params) {
+                  //注意，如果颜色太少的话，后面颜色不会自动循环，最好多定义几个颜色
+                  var colorList = [
+                    '#c23531',
+                    '#2f4554',
+                    '#61a0a8',
+                    '#d48265',
+                    '#91c7ae',
+                    '#749f83',
+                    '#ca8622'
+                  ]
+                  return colorList[params.dataIndex]
+                }
+              }
+            }
+          }
+        ]
+      })
+    },
     initEcharts() {
-      // window.alert(chart_data['above_time'])
-      this.mycharts = echarts.init(this.$refs.myCharts, 'macarons')
+      this.PieCharts = echarts.init(this.$refs.PieCharts, 'macarons')
       this._setOption()
     },
     _setOption() {
-      this.mycharts.setOption({
+      this.PieCharts.setOption({
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b} : {c} ({d}%)'
@@ -533,9 +602,46 @@ export default {
       })
     },
     testfunc() {
-      this.getPersonalData()
+      this.getPieData()
     },
-    getPersonalData: function() {
+    getBarChartData: function() {
+      var dataobj = {
+        max: 0,
+        min: 0,
+        empty: 0,
+        before: 0,
+        after: 0,
+        sleep: 0
+      }
+      const path = 'http://127.0.0.1:8000/get_month_statistics'
+      var configGet = {
+        method: 'GET',
+        url: path,
+        headers: {
+          'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
+          'Content-Type': 'application/json'
+        },
+        data: dataobj
+      }
+      var self = this
+      axios(configGet)
+        .then(function(response) {
+          console.log(response.data)
+          if (response.status === 200) {
+            // if successfully transfer data to front-end
+            var m_max = response.data['max']
+            self.min_glucose = response.data['min']
+            self.max_glucose = m_max
+          }
+        })
+        .catch(function(error) {
+          console.log(error)
+          if (error.response.status === 401) {
+            window.alert('重复的用户名！')
+          }
+        })
+    },
+    getPieData: function() {
       var dataobj = {
         min: 0,
         max: 0,
@@ -577,8 +683,8 @@ export default {
         })
         .catch(function(error) {
           console.log(error)
+          // eslint-disable-next-line no-empty
           if (error.response.status === 401) {
-            window.alert('重复的用户名！')
           }
         })
     },
