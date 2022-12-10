@@ -81,7 +81,8 @@ def login(request):
 
                 token = create_token(username)
                 params = {'token' : token,
-                          'username' : username
+                          'username' : username,
+                          'email': user.email
                           }
                 return HttpResponse(json.dumps(params), status=status.HTTP_200_OK)
             # doesn't match
