@@ -51,6 +51,14 @@ export const currencyRoutes = [
       {
         path: '/dashbord/user',
         component: () => import('views/userprofile/index')
+      },
+      {
+        path: '/dashbord/health',
+        component: () => import('views/health/index')
+      },
+      {
+        path: '/dashbord/food',
+        component: () => import('views/food/index')
       }
     ]
   }
