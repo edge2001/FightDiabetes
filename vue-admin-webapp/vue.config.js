@@ -27,12 +27,11 @@ module.exports = {
       error: true
     },
     proxy: {
-      [process.env.VUE_APP_BASE_API]: {
-        target: process.env.VUE_APP_BASE_API,
+      '/api': {
+        target: 'https://www.mxnzp.com/api/',
         changeOrigin: true,
-        secure: false,
         pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_API]: ''
+          '^/api': ''
         }
       }
     }
