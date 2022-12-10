@@ -25,8 +25,8 @@
             <a href="#" class="icon ticker"> </a>
             <div class="clear"></div>
           </li>
-          <h3>gender</h3>
-          <li>
+          <!-- <h3>gender</h3> -->
+          <!-- <li>
             <el-date-picker
               :disabled="profile"
               v-model="birth"
@@ -35,7 +35,7 @@
               placeholder="选择时间"
             />
             <div class="clear"></div>
-          </li>
+          </li> -->
           <!-- <label class="checkbox"
             ><input type="checkbox" name="checkbox" checked="" /><i> </i>Please
             inform me of upcoming w3layouts, Promotions and news</label
@@ -44,8 +44,10 @@
           <div class="clear"></div>
         </ul>
         <ul class="right-form">
-          <li>
-            <input type="password" placeholder="password" required />
+          <h2>gender</h2>
+          <!-- <h3>gender</h3> -->
+          <li class="gender">
+            <!-- <input type="password" placeholder="password" required /> -->
             <a href="#" class="icon into"> </a>
             <input
               :disabled="profile"
@@ -61,14 +63,17 @@
             />女
             <div class="clear"></div>
           </li>
-          <el-date-picker
-            :disabled="profile"
-            v-model="birth"
-            :picker-options="date_limit"
-            type="month"
-            class="profile_input"
-            placeholder="选择时间"
-          />
+          <h2>birthday</h2>
+          <li>
+            <el-date-picker
+              :disabled="profile"
+              v-model="birth"
+              :picker-options="date_limit"
+              type="month"
+              class="profile_input"
+              placeholder="选择时间"
+            />
+          </li>
           <div class="clear"></div>
         </ul>
         <div class="clear"></div>
@@ -115,8 +120,11 @@ export default {
 </script>
 
 <style>
+.gender {
+  margin-bottom: 100px;
+}
 .profile_input {
-  margin: 5px;
+  margin-top: 100px;
   font-size: 1.5em;
   text-align: right;
 }
@@ -361,6 +369,7 @@ body {
 }
 
 .right-form {
+  margin-top: 60px;
   float: right;
 }
 
