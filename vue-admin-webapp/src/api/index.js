@@ -3,6 +3,7 @@ import Qs from 'qs'
 import store from '@/store'
 import router from '@/router'
 import Vue from 'vue'
+// eslint-disable-next-line no-unused-vars
 import { Loading, Message } from 'element-ui' // 引用element-ui的加载和消息提示组件
 
 const $axios = axios.create({

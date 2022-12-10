@@ -1,3 +1,4 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div>
       <div class="profile_div">

@@ -5,6 +5,7 @@
 <script>
 import echarts from 'echarts'
 import resize from '@/mixins/resize'
+import chart_data from '../index.vue'
 require('echarts/theme/macarons') // echarts theme
 export default {
   mixins: [resize],
@@ -20,7 +21,12 @@ export default {
   },
   data() {
     return {
-      mycharts: null
+      mycharts: null,
+      nor_time: 0,
+      abv_time: 0,
+      blw_time: 0,
+      not_time: 0,
+      time: 0
     }
   },
   mounted() {
@@ -30,10 +36,11 @@ export default {
   },
   methods: {
     initEcharts() {
+      // window.alert(chart_data['above_time'])
       this.mycharts = echarts.init(this.$refs.myCharts, 'macarons')
-      this._setOtion()
+      this._setOption()
     },
-    _setOtion() {
+    _setOption() {
       this.mycharts.setOption({
         tooltip: {
           trigger: 'item',
@@ -46,18 +53,16 @@ export default {
         },
         series: [
           {
-            name: 'technology stack',
+            name: '统计数据',
             type: 'pie',
             roseType: 'radius',
             radius: [15, 120],
             center: ['50%', '42%'],
             data: [
-              { value: 40, name: 'Vue' },
-              { value: 35, name: 'js' },
-              { value: 20, name: 'html' },
-              { value: 10, name: 'css' },
-              { value: 8, name: 'webpack' },
-              { value: 5, name: 'node' }
+              { value: chart_data['above_time'], name: '偏高天数' },
+              { value: 35, name: '偏低天数' },
+              { value: 20, name: '正常天数' },
+              { value: 10, name: '未测天数' }
             ],
             animationEasing: 'cubicInOut',
             animationDuration: 2600

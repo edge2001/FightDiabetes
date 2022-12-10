@@ -16,6 +16,12 @@
       <el-menu-item index="/dashbord/sports"
         ><i class="el-icon-basketball"></i>运动</el-menu-item
       >
+      <el-menu-item index="/dashbord/health"
+        ><i class="el-icon-check"></i>健康数据录入</el-menu-item
+      >
+      <el-menu-item index="/dashbord/food"
+        ><i class="el-icon-food"></i>饮食查询</el-menu-item
+      >
     </el-menu>
   </div>
 </template>

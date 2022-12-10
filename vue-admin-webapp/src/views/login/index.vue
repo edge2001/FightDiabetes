@@ -100,8 +100,9 @@
 
 <script>
 import axios from 'axios'
-import CHANGE_LOGIN from '../../store/index'
 import $ from 'jquery'
+// eslint-disable-next-line no-unused-vars
+import CHANGE_LOGIN from '../../store/index'
 export default {
   data() {
     return {
@@ -322,14 +323,10 @@ export default {
             localStorage.setItem('token', response.data['token'])
 
             window.location.href = '/#/dashbord'
-
-            //this.$router.push('/dashbord/admin');
             this.$message({
               message: '登录成功',
               type: 'success'
             })
-
-            // window.location.href = '/#/dashbord'
           }
         })
         .catch(function(error) {
@@ -735,6 +732,7 @@ html {
   font-size: 20px;
   color: grey;
 }
+
 .signup-email {
   width: 485px;
   height: 50px;
