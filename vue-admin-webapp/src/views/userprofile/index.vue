@@ -11,6 +11,7 @@
           <h3>username</h3>
           <li>
             <input
+              :disabled="profile"
               type="text"
               placeholder="Username"
               v-model="username"
@@ -21,7 +22,13 @@
           </li>
           <h3>email</h3>
           <li>
-            <input type="text" placeholder="Email" v-model="email" required />
+            <input
+              :disabled="profile"
+              type="text"
+              placeholder="Email"
+              v-model="email"
+              required
+            />
             <a href="#" class="icon ticker"> </a>
             <div class="clear"></div>
           </li>
@@ -40,7 +47,10 @@
             ><input type="checkbox" name="checkbox" checked="" /><i> </i>Please
             inform me of upcoming w3layouts, Promotions and news</label
           > -->
-          <input type="submit" onClick="myFunction()" value="保存" />
+          <!-- <button type="submit" @click="modify()" text="modifyOrSave"></button> -->
+          <el-button type="primary" @click="modify()" text="modifyOrSave">
+            {{ this.modifyOrSave }}</el-button
+          >
           <div class="clear"></div>
         </ul>
         <ul class="right-form">
@@ -94,7 +104,7 @@ export default {
       },
       username: null,
       email: null,
-      modifyOrSave: '修改',
+      modifyOrSave: '保存',
       profile: false
     }
   },
