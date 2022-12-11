@@ -63,7 +63,7 @@ export const currencyRoutes = [
     ]
   },
   {
-    path: '/article/',
+    path: '/article/:id',
     name:'article',
     component: Layout,
     children:[
