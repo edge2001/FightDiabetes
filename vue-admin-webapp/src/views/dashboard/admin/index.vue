@@ -202,6 +202,8 @@ export default {
           this.initBarChart()
           this.initEcharts()
         }
+        // else {
+        // }
       }
     },
     // value is the choice of 7 days or 30 days of show
