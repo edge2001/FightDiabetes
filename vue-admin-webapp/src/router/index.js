@@ -61,6 +61,17 @@ export const currencyRoutes = [
         component: () => import('views/food/index')
       }
     ]
+  },
+  {
+    path: '/article/',
+    name:'article',
+    component: Layout,
+    children:[
+      {
+        path:'/',
+        component: ()=>import('views/article/index')
+      }
+    ]
   }
 ]
 /*动态添加routers*/
