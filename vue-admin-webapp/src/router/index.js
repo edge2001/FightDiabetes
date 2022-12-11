@@ -64,12 +64,12 @@ export const currencyRoutes = [
   },
   {
     path: '/article/',
-    name:'article',
+    name: 'article',
     component: Layout,
-    children:[
+    children: [
       {
-        path:'/',
-        component: ()=>import('views/article/index')
+        path: '/',
+        component: () => import('views/article/index')
       }
     ]
   }
