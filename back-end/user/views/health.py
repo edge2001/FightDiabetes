@@ -17,18 +17,23 @@ import json
 # 添加单条健康数据
 def add_datum(request):
     if request.method == 'POST':
-        blood_glucose = request.POST.get('blood_glucose')
-        weight = request.POST.get('weight')
-        ketone = request.POST.get('ketone')
-        time_tag = request.POST.get('time_tag')
-        notes = request.POST.get('notes')
+        body = request.body.decode('UTF-8')
+        content = json.loads(body)
+        blood_glucose = content['blood_glucose']
+        weight = content['weight']
+        ketone = content['ketone']
+        time_tag = content['time_tag']
+        notes = content['notes']
         newdatum = datum(blood_glucose=blood_glucose, weight=weight,
                          ketone=ketone, time_tag=time_tag, notes=notes)
         token = request.META.get('HTTP_TOKEN')
         username = get_username(token)
         user = UserInfo.objects.get(username=username)
         newdatum.user = user
+        newdatum.date = datetime.date.today()
         newdatum.save()
+        dict = {}
+        return HttpResponse(dict, status=status.HTTP_200_OK)
 
 # 返回某天的血糖数据
 
