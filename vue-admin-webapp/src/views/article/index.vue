@@ -14,6 +14,7 @@
 export default {
     data() {
         return {
+            name:'article',
             title:null,
             updateTime:null,
             content:null,
