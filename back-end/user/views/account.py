@@ -15,7 +15,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from user.models import UserInfo, datum, EmailPro
 from user.utils.encrypt import md5
-
+from user.utils.token import get_username
 from random import Random
 
 from django.core.mail import send_mail
@@ -182,6 +182,19 @@ def send_register_email(email, send_type='register'):  # 类型为注册
         pass
     print('发出邮件')
 
+def check_user_info(request):
+    if request.method == 'GET':
+        token = request.META.get('HTTP_TOKEN')
+        username = get_username(token)
+        user = UserInfo.objects.get(username=username)
+    return HttpResponse(status=status.HTTP_200_OK)
+
+
+
+
+
+
+
 
 class ActiveUserView(View):
     def get(self, request, active_code):
@@ -197,3 +210,4 @@ class ActiveUserView(View):
         else:
             pass
             # 转移到注册页面
+
