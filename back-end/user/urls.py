@@ -23,6 +23,7 @@ urlpatterns = [
 
     # user profile
     path('user/<int:id>/profile', account.get_user_info, name = 'user_info'),
+    path('saveinfo/', account.save_user_info, name = 'save_info'),
 
     # health data
     path('add_datum/',health.add_datum,name='add_datum'),

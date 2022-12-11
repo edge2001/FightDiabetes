@@ -7,7 +7,9 @@
                 <div class="content">{{content}}</div>
             </article>
         </div>
+      </article>
     </div>
+  </div>
 </template>
 
 <script>
@@ -57,18 +59,30 @@ export default {
             this.content=xhr.responseText;
         }
     }
-
+  },
+  mounted() {
+    this.getText()
+  },
+  methods: {
+    getText() {
+      let xhr = new XMLHttpRequest()
+      xhr.open('GET', 'test.txt', false)
+      xhr.overrideMimeType('text/html;charset=utf-8')
+      xhr.send(null)
+      this.content = xhr.responseText
+    }
+  }
 }
 </script>
 
 <style scoped>
 .main_div {
-    position:relative;
-    margin-left: 10%;
-    margin-right: 10%;
-    background-color: #Cfcfcf;
-    border-radius: 0.5rem;
-    overflow: hidden;
+  position: relative;
+  margin-left: 10%;
+  margin-right: 10%;
+  background-color: #cfcfcf;
+  border-radius: 0.5rem;
+  overflow: hidden;
 }
 .title {
     font-size: 3em;

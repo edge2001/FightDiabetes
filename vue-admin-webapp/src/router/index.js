@@ -66,10 +66,10 @@ export const currencyRoutes = [
     path: '/article/:id',
     name:'article',
     component: Layout,
-    children:[
+    children: [
       {
-        path:'/',
-        component: ()=>import('views/article/index')
+        path: '/',
+        component: () => import('views/article/index')
       }
     ]
   }
