@@ -15,7 +15,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from user.models import UserInfo, datum, EmailPro
 from user.utils.encrypt import md5
-
+from user.utils.token import get_username
 from random import Random
 
 from django.core.mail import send_mail
@@ -183,6 +183,30 @@ def send_register_email(email, send_type='register'):  # 类型为注册
         pass
     print('发出邮件')
 
+def save_user_info(request):
+    if request.method == 'GET':
+        token = request.META.get('HTTP_TOKEN')
+        username = get_username(token)
+
+        user = UserInfo.objects.get(username=username)
+        params = {
+            'name' : user.patientinfo.name,
+            'age' : user.patientinfo.age,
+            'gender' : user.patientinfo.gender,
+            'disease_type' : user.patientinfo.disease_type,
+            # 'create_date' : user.create_date,
+            'username' : user.username,
+            'email' : user.email,
+        }
+        print(params)
+    return HttpResponse(json.dumps(params), status=status.HTTP_200_OK)
+
+
+
+
+
+
+
 
 class ActiveUserView(View):
     def get(self, request, active_code):
@@ -198,3 +222,4 @@ class ActiveUserView(View):
         else:
             pass
             # 转移到注册页面
+

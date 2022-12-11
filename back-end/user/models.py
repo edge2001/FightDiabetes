@@ -30,7 +30,7 @@ class PatientInfo(models.Model):
     )
     disease_type = models.SmallIntegerField(
         verbose_name='糖尿病类型', choices=disease_types, default=1)
-    userinfo = models.OneToOneField(UserInfo, on_delete=models.CASCADE,)
+    userinfo = models.OneToOneField('UserInfo', on_delete=models.CASCADE, to_field='id', null=True)
 
 
 class datum(models.Model):
