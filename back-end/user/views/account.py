@@ -182,12 +182,23 @@ def send_register_email(email, send_type='register'):  # 类型为注册
         pass
     print('发出邮件')
 
-def check_user_info(request):
+def save_user_info(request):
     if request.method == 'GET':
         token = request.META.get('HTTP_TOKEN')
         username = get_username(token)
+
         user = UserInfo.objects.get(username=username)
-    return HttpResponse(status=status.HTTP_200_OK)
+        params = {
+            'name' : user.patientinfo.name,
+            'age' : user.patientinfo.age,
+            'gender' : user.patientinfo.gender,
+            'disease_type' : user.patientinfo.disease_type,
+            # 'create_date' : user.create_date,
+            'username' : user.username,
+            'email' : user.email,
+        }
+        print(params)
+    return HttpResponse(json.dumps(params), status=status.HTTP_200_OK)
 
 
 
