@@ -76,7 +76,7 @@ $axios.interceptors.response.use(
           })
           break
         case 404:
-          Message.error('网络请求不存在')
+          // Message.error('网络请求不存在')
           break
         default:
           Message.error(error.response.data.message)
