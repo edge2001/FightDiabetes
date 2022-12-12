@@ -31,7 +31,10 @@
           ></li>
         </ul>
       </div>
+
     </div>
+    
+    <div class="mfont" style="text-align:center;margin-top:-100px;margin-bottom:100px">{{title}}</div>
     <h1 class="mfont">这里是您近期血糖数据</h1>
     <div class="dashbord">
       <!-- <button @click="testfunc()"></button> -->
@@ -135,7 +138,10 @@ export default {
       currentIndex: 0, //当前所在图片下标
       timer: null, //定时轮询
       imgArr: [
-        { id: 0, url: require('../../images/1.jpg') },
+        { 
+          id: 0, 
+          url: require('../../images/1.jpg') 
+        },
         {
           id: 1,
           url: require('../../images/2.jpg')
@@ -191,8 +197,9 @@ export default {
       isUserInfo: false,
       isClockIn: false,
       isHealthStandard: false,
-      showDays: 0
+      showDays: 0,
       // value: true
+      title:'1145141919810'
     }
   },
   watch: {
@@ -213,7 +220,7 @@ export default {
           this.initBarChart()
           this.initEcharts()
         }
-      }
+      },
     },
     // value is the choice of 7 days or 30 days of show
     isWeight: {
@@ -544,6 +551,7 @@ export default {
     this.initEcharts()
     this.initBarChart()
     this.startInterval()
+    this.getTitle()
   },
   components: {
     // eslint-disable-next-line vue/no-unused-components
@@ -792,6 +800,8 @@ export default {
         if (this.currentIndex > this.imgArr.length - 1) {
           this.currentIndex = 0
         }
+        
+      this.getTitle()
       }, 3000)
     },
 
@@ -814,6 +824,8 @@ export default {
         }
         this.currentIndex--
       }
+      
+      this.getTitle()
     },
     // 点击控制圆点
     changeImg(index) {
@@ -835,6 +847,21 @@ export default {
         }
       })
       window.location.reload()
+    },
+    getTitle() {
+      var id=this.currentIndex+1;
+      if(id==1){
+                this.title='糖尿病患者空腹血糖升高的8种常见原因及对策，糖友必学技能'
+            }
+            else if(id==2){
+                this.title='糖友朋友们，今天按这个顺序吃饭，看看你的餐后血糖可以降多少'
+            }
+            else if(id==3){
+                this.title='哪种水果糖分低？糖尿病友聪明控糖'
+            }
+            else if(id==4){
+                this.title='四招预防糖尿病肾病'
+            }
     }
   }
 }
