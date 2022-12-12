@@ -164,7 +164,7 @@ export default {
         .then(function(response) {
           console.log(JSON.stringify(response.data))
           if (response.status === 200) {
-            window.alert('注册成功')
+            window.alert('录入成功')
             // window.location.href = '/#/MainPage'
           }
         })

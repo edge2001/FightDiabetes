@@ -141,116 +141,6 @@ def get_week_statistics(request):
         token = request.META.get('HTTP_TOKEN')
         username = get_username(token)
         user = UserInfo.objects.get(username=username)
-
-        # 获取过去七天date的列表
-        dates = []
-        today = datetime.date.today()
-        for i in range(6, 0, -1):
-            date = today - datetime.timedelta(days=i)
-            dates.append(date)
-        dates.append(today)
-
-        # 初始化需返回的数据
-        min = 10000
-        max = -1
-        time = 0
-        above_time = 0
-        below_time = 0
-        normal_time = 0
-        av1 = 0
-        num1 = 0
-        av2 = 0
-        num2 = 0
-        av3 = 0
-        num3 = 0
-        av4 = 0
-        num4 = 0
-        av5 = 0
-        num5 = 0
-        av6 = 0
-        num6 = 0
-        for date in dates:
-            data = user.user_data.filter(date=date)
-            for datum in data:
-                print(blood_glucose)
-                blood_glucose = datum.blood_glucose
-                if blood_glucose > max:
-                    max = blood_glucose
-                if blood_glucose < min:
-                    min = blood_glucose
-                t = datum.time_tag
-                if t == 1:
-                    av1 += blood_glucose
-                    num1 += 1
-                    time += 1
-                    if blood_glucose < 3.9:
-                        below_time += 1
-                    elif blood_glucose > 6.1:
-                        above_time += 1
-                    else:
-                        normal_time += 1
-                elif t == 2:
-                    av2 += blood_glucose
-                    num2 += 1
-                elif t == 3:
-                    av3 += blood_glucose
-                    num3 += 1
-                    time += 1
-                    if blood_glucose < 3.9:
-                        below_time += 1
-                    elif blood_glucose > 6.1:
-                        above_time += 1
-                    else:
-                        normal_time += 1
-                elif t == 4:
-                    av4 += blood_glucose
-                    num4 += 1
-                elif t == 5:
-                    av5 += blood_glucose
-                    num5 += 1
-                    time += 1
-                    if blood_glucose < 3.9:
-                        below_time += 1
-                    elif blood_glucose > 6.1:
-                        above_time += 1
-                    else:
-                        normal_time += 1
-                elif t == 6:
-                    av6 += blood_glucose
-                    num6 += 1
-        av1 = av1 / num1
-        av2 = av2 / num2
-        av3 = av3 / num3
-        av4 = av4 / num4
-        av5 = av5 / num5
-        av6 = av6 / num6
-        dict = {
-            'min': min,
-            'max': max,
-            'time': time,
-            'av1': av1,
-            'av2': av2,
-            'av3': av3,
-            'av4': av4,
-            'av5': av5,
-            'av6': av6,
-            'time': time,
-            'normal_time': normal_time,
-            'above_time': above_time,
-            'below_time': below_time,
-        }
-        return HttpResponse(dict, status=status.HTTP_200_OK)
-
-
-# 获取最近一月的统计数据
-# 返回值：总测试次数time, 正常次数normal_time,偏高次数above_time,偏低次数below_time(目前仅统计空腹时)
-# 血糖最值max,min,分六个时段的平均值av1,av2...
-def get_month_statistics(request):
-    if request.method == 'GET':
-        # 获取当前用户信息
-        token = request.META.get('HTTP_TOKEN')
-        username = get_username(token)
-        user = UserInfo.objects.get(username=username)
         # 获取过去七天date的列表
         dates = []
         today = datetime.date.today()
@@ -282,7 +172,7 @@ def get_month_statistics(request):
             data = user.user_data.filter(date=date)
             for datum in data:
                 blood_glucose = datum.blood_glucose
-                print(blood_glucose)
+                print(datum.date)
                 if blood_glucose > max:
                     max = blood_glucose
                 if blood_glucose < min:
@@ -339,6 +229,122 @@ def get_month_statistics(request):
             av5 = av5 / num5
         if (num6 != 0):
             av6 = av6 / num6
+        dict = {
+            'min': min,
+            'max': max,
+            'time': time,
+            'av1': av1,
+            'av2': av2,
+            'av3': av3,
+            'av4': av4,
+            'av5': av5,
+            'av6': av6,
+            'time': time,
+            'normal_time': normal_time,
+            'above_time': above_time,
+            'below_time': below_time,
+            'user_name': username
+        }
+        return HttpResponse(json.dumps(dict), status=status.HTTP_200_OK)
+
+
+# 获取最近一月的统计数据
+# 返回值：总测试次数time, 正常次数normal_time,偏高次数above_time,偏低次数below_time(目前仅统计空腹时)
+# 血糖最值max,min,分六个时段的平均值av1,av2...
+def get_month_statistics(request):
+    if request.method == 'GET':
+        # 获取当前用户信息
+        token = request.META.get('HTTP_TOKEN')
+        username = get_username(token)
+        user = UserInfo.objects.get(username=username)
+        # 获取过去七天date的列表
+        dates = []
+        today = datetime.date.today()
+        for i in range(29, 0, -1):
+            date = today - datetime.timedelta(days=i)
+            dates.append(date)
+        dates.append(today)
+
+        # 初始化需返回的数据
+        min = 10000
+        max = -1
+        time = 0
+        above_time = 0
+        below_time = 0
+        normal_time = 0
+        av1 = 0
+        num1 = 0
+        av2 = 0
+        num2 = 0
+        av3 = 0
+        num3 = 0
+        av4 = 0
+        num4 = 0
+        av5 = 0
+        num5 = 0
+        av6 = 0
+        num6 = 0
+        for date in dates:
+            data = user.user_data.filter(date=date)
+            for datum in data:
+                blood_glucose = datum.blood_glucose
+                if blood_glucose > max:
+                    max = blood_glucose
+                if blood_glucose < min:
+                    min = blood_glucose
+                t = datum.time_tag
+                if t == 1:  # currently all t are 1
+                    av1 += blood_glucose
+                    num1 += 1
+                    time += 1
+                    if blood_glucose < 3.9:
+                        below_time += 1
+                    elif blood_glucose > 6.1:
+                        above_time += 1
+                    else:
+                        normal_time += 1
+                elif t == 2:
+                    av2 += blood_glucose
+                    num2 += 1
+                elif t == 3:
+                    av3 += blood_glucose
+                    num3 += 1
+                    time += 1
+                    if blood_glucose < 3.9:
+                        below_time += 1
+                    elif blood_glucose > 6.1:
+                        above_time += 1
+                    else:
+                        normal_time += 1
+                elif t == 4:
+                    av4 += blood_glucose
+                    num4 += 1
+                elif t == 5:
+                    av5 += blood_glucose
+                    num5 += 1
+                    time += 1
+                    if blood_glucose < 3.9:
+                        below_time += 1
+                    elif blood_glucose > 6.1:
+                        above_time += 1
+                    else:
+                        normal_time += 1
+                elif t == 6:
+                    av6 += blood_glucose
+                    num6 += 1
+        if (num1 != 0):
+            av1 = av1 / num1
+        if (num2 != 0):
+            av2 = av2 / num2
+        if (num3 != 0):
+            av3 = av3 / num3
+        if (num4 != 0):
+            av4 = av4 / num4
+        if (num5 != 0):
+            av5 = av5 / num5
+        if (num6 != 0):
+            av6 = av6 / num6
+        print(above_time)
         dict = {
             'min': min,
             'max': max,

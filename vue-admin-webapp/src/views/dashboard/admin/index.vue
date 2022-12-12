@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1 class="mfont">欢迎加入fightDiabetes!在这里，和我们一起战胜糖尿病吧</h1>
     <div class="showImg">
       <img
         @mouseover="changeInterval(true)"
@@ -31,6 +32,7 @@
         </ul>
       </div>
     </div>
+    <h1 class="mfont">这里是您近期血糖数据</h1>
     <div class="dashbord">
       <!-- <button @click="testfunc()"></button> -->
       <el-select v-model="value" placeholder="请选择展示时间">
@@ -188,7 +190,8 @@ export default {
       isMainPage: true,
       isUserInfo: false,
       isClockIn: false,
-      isHealthStandard: false
+      isHealthStandard: false,
+      showDays: 0
       // value: true
     }
   },
@@ -198,22 +201,21 @@ export default {
       // eslint-disable-next-line no-unused-vars
       handler(val) {
         if (this.value == '7Days') {
-          this.getPieData()
-          this.getBarChartData()
+          this.showDays = 7
+          this.getPieData(30)
+          this.getBarChartData(30)
+          this.initBarChart()
+          this.initEcharts()
+        } else {
+          this.showDays = 30
+          this.getPieData(7)
+          this.getBarChartData(7)
           this.initBarChart()
           this.initEcharts()
         }
-        // else {
-        // }
       }
     },
     // value is the choice of 7 days or 30 days of show
-    lineChartData: {
-      deep: true,
-      handler(val) {
-        this._setOption(val.inPrice, val.outPrice)
-      }
-    },
     isWeight: {
       // deep: true,
       // eslint-disable-next-line no-unused-vars
@@ -537,8 +539,8 @@ export default {
       // this.initEcharts()
       // this.initBarChart()
     })
-    this.getPieData()
-    this.getBarChartData()
+    this.getPieData(7)
+    this.getBarChartData(7)
     this.initEcharts()
     this.initBarChart()
     this.startInterval()
@@ -650,7 +652,11 @@ export default {
               { value: this.below_time, name: '偏低天数' },
               { value: this.normal_time, name: '正常天数' },
               {
-                value: 7 - this.above_time - this.below_time - this.normal_time,
+                value:
+                  this.showDays -
+                  this.above_time -
+                  this.below_time -
+                  this.normal_time,
                 name: '未测天数'
               }
             ],
@@ -663,7 +669,7 @@ export default {
     testfunc() {
       window.alert(this.value)
     },
-    getBarChartData: function() {
+    getBarChartData: function(days) {
       var dataobj = {
         max: 0,
         min: 0,
@@ -672,7 +678,13 @@ export default {
         after: 0,
         sleep: 0
       }
-      const path = 'http://127.0.0.1:8000/get_month_statistics'
+      var path = ''
+      if (days === 7) {
+        path = 'http://127.0.0.1:8000/get_week_statistics'
+      }
+      if (days === 30) {
+        path = 'http://127.0.0.1:8000/get_month_statistics'
+      }
       var configGet = {
         method: 'GET',
         url: path,
@@ -700,7 +712,7 @@ export default {
           }
         })
     },
-    getPieData: function() {
+    getPieData: function(days) {
       var dataobj = {
         min: 0,
         max: 0,
@@ -715,7 +727,13 @@ export default {
         above_time: 0,
         below_time: 0
       }
-      const path = 'http://127.0.0.1:8000/get_month_statistics'
+      var path = ''
+      if (days === 7) {
+        path = 'http://127.0.0.1:8000/get_week_statistics'
+      }
+      if (days === 30) {
+        path = 'http://127.0.0.1:8000/get_month_statistics'
+      }
       var configGet = {
         method: 'GET',
         url: path,
@@ -731,13 +749,17 @@ export default {
           console.log(response.data)
           if (response.status === 200) {
             // if successfully transfer data to front-end
+            // if (days === 7) {
+            //   self.showDays = 7
+            // } else {
+            //   self.showDays = 30
+            // }
             var abv_time = response.data['above_time']
             var blw_time = response.data['below_time']
             var nor_time = response.data['normal_time']
             self.above_time = abv_time
             self.below_time = blw_time
             self.normal_time = nor_time
-            // window.alert(self.above_time)
           }
         })
         .catch(function(error) {
@@ -805,12 +827,13 @@ export default {
         this.startInterval()
       }
     },
-    jumpToArticle(){
-      var id=String(this.currentIndex)
+    jumpToArticle() {
+      var id = String(this.currentIndex)
+      alert(id)
       this.$router.push({
-        name:'article',
-        params:{
-          id:this.currentIndex+1
+        name: 'article',
+        params: {
+          id: this.currentIndex + 1
         }
       })
       window.location.reload()
@@ -822,11 +845,6 @@ export default {
 $mgTop: 30px;
 @mixin shadow {
   box-shadow: 0 0 10px #e2e2e2;
-}
-.choosefont {
-  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
-    'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
-  font-size: large;
 }
 .color-green1 {
   color: #40c9c6 !important;
@@ -850,28 +868,6 @@ $mgTop: 30px;
     .cardItem {
       height: 108px;
       background: #fff;
-    }
-  }
-}
-.cardItem {
-  color: #666;
-  @include shadow();
-  .cardItem_txt {
-    float: left;
-    margin: 26px 0 0 20px;
-    .cardItem_p0 {
-      font-size: 20px;
-      font-weight: bold;
-    }
-    .cardItem_p1 {
-      font-size: 16px;
-    }
-  }
-  .cardItem_icon {
-    float: right;
-    margin: 24px 20px 0 0;
-    i {
-      font-size: 55px;
     }
   }
 }
@@ -965,5 +961,11 @@ li {
 }
 .active {
   background-color: black !important;
+}
+
+.mfont {
+  font-size: large;
+  font-family: Tahoma, sans-serif;
+  color: #36a3f7;
 }
 </style>

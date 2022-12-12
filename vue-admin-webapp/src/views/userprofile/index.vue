@@ -222,7 +222,7 @@ video {
   padding: 0;
   border: 0;
   font-size: 100%;
-  font: inherit;
+  /* font: inherit; */
   vertical-align: baseline;
 }
 
@@ -333,9 +333,10 @@ body {
 }
 
 .header h1 {
-  color: #272727;
+  color: #669a16;
   font-weight: 700;
-  font-size: 22px;
+  font-size: 40px;
+  font-family: 'HelveticaNeue', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 .main p {
