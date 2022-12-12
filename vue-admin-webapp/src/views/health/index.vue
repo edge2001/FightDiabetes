@@ -16,12 +16,13 @@
         label-width="90px"
         style="width: 400px; margin-left:50px;"
       >
-        <el-form-item label="血糖含量" prop="glucose">
+        <el-form-item label="血糖含量" prop="glucose" required="true">
           <el-input
             type="textarea"
             :rows="1"
             v-model="questionForm.glucose"
             placeholder="mmol/L"
+            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
           ></el-input>
         </el-form-item>
         <el-form-item label="体重" prop="weight">
@@ -30,6 +31,7 @@
             :rows="1"
             v-model="questionForm.weight"
             placeholder="kg"
+            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
           ></el-input>
         </el-form-item>
         <el-form-item label="血酮" prop="ketone">
@@ -37,12 +39,14 @@
             type="textarea"
             :rows="1"
             v-model="questionForm.ketone"
-            placeholder="kg"
+            placeholder="mmol/L"
+            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
           ></el-input>
         </el-form-item>
         <el-form-item label="备注" prop="note">
           <el-input
             type="textarea"
+            clearable
             :rows="1"
             v-model="questionForm.note"
             placeholder="记录此刻感受……"
@@ -73,7 +77,7 @@
         <el-form-item label="其他答案3" prop="otherAnswer3">
           <el-input v-model="questionForm.otherAnswer3" />
         </el-form-item> -->
-        <el-form-item label="测量时段">
+        <el-form-item label="测量时段" required="true">
           <el-select
             v-model="questionForm.measureTime"
             class="filter-item"

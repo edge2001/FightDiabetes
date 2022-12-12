@@ -21,7 +21,11 @@ def add_datum(request):
         content = json.loads(body)
         blood_glucose = content['blood_glucose']
         weight = content['weight']
+        if (weight == ''):
+            weight = 0
         ketone = content['ketone']
+        if (ketone == ''):
+            ketone = 0
         time_tag = content['time_tag']
         notes = content['notes']
         newdatum = datum(blood_glucose=blood_glucose, weight=weight,
@@ -168,6 +172,7 @@ def get_week_statistics(request):
         for date in dates:
             data = user.user_data.filter(date=date)
             for datum in data:
+                print(blood_glucose)
                 blood_glucose = datum.blood_glucose
                 if blood_glucose > max:
                     max = blood_glucose
@@ -277,6 +282,7 @@ def get_month_statistics(request):
             data = user.user_data.filter(date=date)
             for datum in data:
                 blood_glucose = datum.blood_glucose
+                print(blood_glucose)
                 if blood_glucose > max:
                     max = blood_glucose
                 if blood_glucose < min:
