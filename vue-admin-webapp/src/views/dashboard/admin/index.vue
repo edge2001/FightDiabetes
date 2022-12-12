@@ -806,7 +806,6 @@ export default {
       }
     },
     jumpToArticle(){
-      var id=String(this.currentIndex)
       this.$router.push({
         name:'article',
         params:{
