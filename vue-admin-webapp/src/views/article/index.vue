@@ -7,9 +7,7 @@
                 <div class="content">{{content}}</div>
             </article>
         </div>
-      </article>
     </div>
-  </div>
 </template>
 
 <script>
@@ -58,20 +56,8 @@ export default {
             xhr.send(null);
             this.content=xhr.responseText;
         }
-    }
-  },
-  mounted() {
-    this.getText()
-  },
-  methods: {
-    getText() {
-      let xhr = new XMLHttpRequest()
-      xhr.open('GET', 'test.txt', false)
-      xhr.overrideMimeType('text/html;charset=utf-8')
-      xhr.send(null)
-      this.content = xhr.responseText
-    }
-  }
+    
+    },
 }
 </script>
 

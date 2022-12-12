@@ -828,8 +828,6 @@ export default {
       }
     },
     jumpToArticle() {
-      var id = String(this.currentIndex)
-      alert(id)
       this.$router.push({
         name: 'article',
         params: {
