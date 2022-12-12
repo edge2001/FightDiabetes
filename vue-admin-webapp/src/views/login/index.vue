@@ -319,7 +319,11 @@ export default {
             localStorage.setItem('email', response.data['email'])
 
             // 将用户token保存到localStorage中  备注：先将token存入状态管理中，登陆成功跳转到首页要用到token进行验证
+<<<<<<< HEAD
+            //this.CHANGE_LOGIN({ token : response.data['token'] });
+=======
             // this.CHANGE_LOGIN({ token : response.data['token'] });
+>>>>>>> fd0fb287c66ae6a3684fd11f4e156ec2ef152407
             localStorage.setItem('token', response.data['token'])
 
             window.location.href = '/#/dashbord'

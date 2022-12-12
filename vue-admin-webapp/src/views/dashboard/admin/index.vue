@@ -4,6 +4,7 @@
       <img
         @mouseover="changeInterval(true)"
         @mouseleave="changeInterval(false)"
+        @click="jumpToArticle()"
         v-for="item in imgArr"
         :key="item.id"
         :src="item.url"
@@ -132,18 +133,18 @@ export default {
       currentIndex: 0, //当前所在图片下标
       timer: null, //定时轮询
       imgArr: [
-        { id: 0, url: require('../../images/register.jpeg') },
+        { id: 0, url: require('../../images/1.jpg') },
         {
           id: 1,
-          url: '../../images/logo.png'
+          url: require('../../images/2.jpg')
         },
         {
           id: 2,
-          url: './img/banner03.jpg'
+          url: require('../../images/3.jpg')
         },
         {
           id: 3,
-          url: './img/banner04.jpg'
+          url: require('../../images/4.jpg')
         }
       ],
       options: [
@@ -803,6 +804,16 @@ export default {
       } else {
         this.startInterval()
       }
+    },
+    jumpToArticle(){
+      var id=String(this.currentIndex)
+      this.$router.push({
+        name:'article',
+        params:{
+          id:this.currentIndex+1
+        }
+      })
+      window.location.reload()
     }
   }
 }
