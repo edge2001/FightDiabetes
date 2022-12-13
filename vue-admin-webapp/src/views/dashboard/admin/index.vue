@@ -2,46 +2,57 @@
   <div>
     <h1 class="mfont">欢迎加入fightDiabetes!在这里，和我们一起战胜糖尿病吧</h1>
     <div>
-    <div class="showImg">
-      <img
-        @mouseover="changeInterval(true)"
-        @mouseleave="changeInterval(false)"
-        @click="jumpToArticle(null)"
-        v-for="item in imgArr"
-        :key="item.id"
-        :src="item.url"
-        alt="暂无图片"
-        v-show="item.id === currentIndex"
-      />
+      <div class="showImg">
+        <img
+          @mouseover="changeInterval(true)"
+          @mouseleave="changeInterval(false)"
+          @click="jumpToArticle(null)"
+          v-for="item in imgArr"
+          :key="item.id"
+          :src="item.url"
+          alt="暂无图片"
+          v-show="item.id === currentIndex"
+        />
 
-      <div @click="clickIcon('up')" class="iconDiv icon-left">
-        <i class="el-icon-caret-left"></i>
+        <div @click="clickIcon('up')" class="iconDiv icon-left">
+          <i class="el-icon-caret-left"></i>
+        </div>
+
+        <div @click="clickIcon('down')" class="iconDiv icon-right">
+          <i class="el-icon-caret-right"></i>
+        </div>
+
+        <div class="banner-circle">
+          <ul>
+            <li
+              @click="changeImg(item.id)"
+              v-for="item in imgArr"
+              :key="item.id"
+              :class="item.id === currentIndex ? 'active' : ''"
+            ></li>
+          </ul>
+        </div>
+        <div
+          class="mfont"
+          style="text-align:left;position: absolute;top:300px;left:0px;background: rgba(10,10,10,0.5);"
+        >
+          {{ title }}
+        </div>
       </div>
-
-      <div @click="clickIcon('down')" class="iconDiv icon-right">
-        <i class="el-icon-caret-right"></i>
-      </div>
-
-      <div class="banner-circle">
+      <div class="articleBar">
+        <h4 style="font-size:28px">其他文章</h4>
         <ul>
           <li
-            @click="changeImg(item.id)"
-            v-for="item in imgArr"
-            :key="item.id"
-            :class="item.id === currentIndex ? 'active' : ''"
-          ></li>
+            class="articleTitles"
+            v-for="titles in titleList"
+            @click="jumpToArticle(titles.id)"
+          >
+            {{ titles.title }}
+          </li>
         </ul>
       </div>
-
     </div>
-    <div class="articleBar">
-        <h4 style="font-size:28px">其他文章</h4>
-      <ul>
-        <li class="articleTitles" v-for="titles in titleList" @click="jumpToArticle(titles.id)">{{titles.title}}</li>
-      </ul>
-    </div>
-    </div>
-    <div class="mfont" style="text-align:left;margin-top:-100px;margin-bottom:100px;margin-left: 100px;">{{title}}</div>
+    
     <h1 class="mfont">这里是您近期血糖数据</h1>
     <div class="dashbord">
       <!-- <button @click="testfunc()"></button> -->
@@ -145,9 +156,9 @@ export default {
       currentIndex: 0, //当前所在图片下标
       timer: null, //定时轮询
       imgArr: [
-        { 
-          id: 0, 
-          url: require('../../images/1.jpg') 
+        {
+          id: 0,
+          url: require('../../images/1.jpg')
         },
         {
           id: 1,
@@ -206,12 +217,12 @@ export default {
       isHealthStandard: false,
       showDays: 0,
       // value: true
-      title:'1145141919810',
-      titleList:[
+      title: '1145141919810',
+      titleList: [
         {
-          title:'用知识点亮寒冬心灯用行动助力糖尿病之友',
-          id:5
-        },
+          title: '用知识点亮寒冬心灯用行动助力糖尿病之友',
+          id: 5
+        }
       ]
     }
   },
@@ -233,7 +244,7 @@ export default {
           this.initBarChart()
           this.initEcharts()
         }
-      },
+      }
     },
     // value is the choice of 7 days or 30 days of show
     isWeight: {
@@ -813,8 +824,8 @@ export default {
         if (this.currentIndex > this.imgArr.length - 1) {
           this.currentIndex = 0
         }
-        
-      this.getTitle()
+
+        this.getTitle()
       }, 3000)
     },
 
@@ -837,7 +848,7 @@ export default {
         }
         this.currentIndex--
       }
-      
+
       this.getTitle()
     },
     // 点击控制圆点
@@ -853,15 +864,14 @@ export default {
       }
     },
     jumpToArticle(a) {
-      if(a==null){
+      if (a == null) {
         this.$router.push({
           name: 'article',
           params: {
             id: this.currentIndex + 1
           }
         })
-      }
-      else{
+      } else {
         this.$router.push({
           name: 'article',
           params: {
@@ -872,19 +882,17 @@ export default {
       window.location.reload()
     },
     getTitle() {
-      var id=this.currentIndex+1;
-      if(id==1){
-                this.title='糖尿病患者空腹血糖升高的8种常见原因及对策，糖友必学技能'
-            }
-            else if(id==2){
-                this.title='糖友朋友们，今天按这个顺序吃饭，看看你的餐后血糖可以降多少'
-            }
-            else if(id==3){
-                this.title='哪种水果糖分低？糖尿病友聪明控糖'
-            }
-            else if(id==4){
-                this.title='四招预防糖尿病肾病'
-            }
+      var id = this.currentIndex + 1
+      if (id == 1) {
+        this.title = '糖尿病患者空腹血糖升高的8种常见原因及对策，糖友必学技能'
+      } else if (id == 2) {
+        this.title =
+          '糖友朋友们，今天按这个顺序吃饭，看看你的餐后血糖可以降多少'
+      } else if (id == 3) {
+        this.title = '哪种水果糖分低？糖尿病友聪明控糖'
+      } else if (id == 4) {
+        this.title = '四招预防糖尿病肾病'
+      }
     }
   }
 }
@@ -950,7 +958,7 @@ li {
 }
 .showImg {
   position: relative;
-  width: 60%;
+  width: 600px;
   height: 350px;
   margin: 100px;
   overflow: hidden;
@@ -971,10 +979,10 @@ li {
   display: inline-block;
   vertical-align: top;
 }
-.articleTitles{
-  font-size:16px
+.articleTitles {
+  font-size: 16px;
 }
-.articleTitles:hover{
+.articleTitles:hover {
   background-color: rgb(241, 195, 109);
 }
 
