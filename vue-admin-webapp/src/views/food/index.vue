@@ -68,6 +68,43 @@ export default {
       test: ''
     }
   },
+  watch: {
+    nlist: {
+      deep: true,
+      // eslint-disable-next-line no-unused-vars
+      handler(val) {
+        for (var i = 0; i < this.nlist.length; i++) {
+          var tmpID = this.nlist[i]['foodId']
+          this.url =
+            '/api/food_heat/food/details?foodId=' +
+            tmpID +
+            '&page=1&app_id=kjngvptstfopqhpk&app_secret=TnZTSkVuOUpsOERFMndoMnNvQ3pNUT09'
+          // console.log(this.url)
+          axios
+            .get(this.url)
+            .then(response => {
+              console.log(response.data)
+              if (
+                response.data['data']['sugar'] == '' ||
+                response.data['data']['sugar'] == 0.0
+              ) {
+                alert(this.nlist[i]['name'])
+              }
+              var p = {
+                name: response.data['data']['name'],
+                calory: response.data['data']['calory'],
+                sugar: response.data['data']['sugar']
+              }
+
+              this.tableData.push(p)
+            })
+            .catch(error => {
+              console.log(error)
+            })
+        }
+      }
+    }
+  },
   methods: {
     // eslint-disable-next-line no-unused-vars
     testfunc(event, item) {
@@ -142,7 +179,7 @@ export default {
           this.flag = true
           this.tmpDataList = this.nlist
           for (var k = 0; k < this.nlist.length; k++) {
-            console.log(this.nlist[k])
+            // console.log(this.nlist[k])
           }
         })
         .catch(error => {

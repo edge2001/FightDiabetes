@@ -33,11 +33,22 @@ def add_datum(request):
         token = request.META.get('HTTP_TOKEN')
         username = get_username(token)
         user = UserInfo.objects.get(username=username)
+
+        isrepeated = 0
+        data = user.user_data.filter(date=datetime.date.today())
+        for m_datum in data:
+            if m_datum.time_tag == int(time_tag):
+                # change the existing data
+                isrepeated = 1
+                m_datum.delete()
+
         newdatum.user = user
         newdatum.date = datetime.date.today()
         newdatum.save()
-        dict = {}
-        return HttpResponse(dict, status=status.HTTP_200_OK)
+        dict = {
+            'isrepeated': isrepeated
+        }
+        return HttpResponse(json.dumps(dict), status=status.HTTP_200_OK)
 
 # 返回某天的血糖数据
 
@@ -170,14 +181,19 @@ def get_week_statistics(request):
         num6 = 0
         for date in dates:
             data = user.user_data.filter(date=date)
+            date_used_tag = []
             for datum in data:
                 blood_glucose = datum.blood_glucose
-                print(datum.date)
                 if blood_glucose > max:
                     max = blood_glucose
                 if blood_glucose < min:
                     min = blood_glucose
                 t = datum.time_tag
+                m_time = datum.date
+                for element in date_used_tag:
+                    if element == [m_time, t]:
+                        pass
+                date_used_tag.append([m_time, t])  # used_date_tag
                 if t == 1:  # currently all t are 1
                     av1 += blood_glucose
                     num1 += 1
