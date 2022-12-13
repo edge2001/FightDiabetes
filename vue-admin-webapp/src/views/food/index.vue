@@ -53,6 +53,8 @@
 
 <script>
 import axios from 'axios'
+// eslint-disable-next-line no-unused-vars
+import { registerPostUpdate } from 'echarts/lib/echarts'
 export default {
   name: 'index.vue',
   data() {
@@ -137,8 +139,17 @@ export default {
             calory: response.data['data']['calory'],
             sugar: response.data['data']['sugar']
           }
-
-          this.tableData.push(p)
+          var repeated = 0
+          for (var i = 0; i < this.tableData.length; i++) {
+            console.log(this.tableData[i])
+            if (this.tableData[i]['name'] === p.name) {
+              repeated = 1
+              break
+            }
+          }
+          if (repeated == 0) {
+            this.tableData.push(p)
+          }
         })
         .catch(error => {
           console.log(error)

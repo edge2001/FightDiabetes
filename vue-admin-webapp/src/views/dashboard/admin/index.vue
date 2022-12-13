@@ -52,7 +52,7 @@
         </ul>
       </div>
     </div>
-    
+
     <h1 class="mfont">这里是您近期血糖数据</h1>
     <div class="dashbord">
       <!-- <button @click="testfunc()"></button> -->
