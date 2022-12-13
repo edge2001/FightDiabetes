@@ -42,8 +42,6 @@
       <div class="articleBar">
         <h4 style="font-size:28px">其他文章</h4>
         <ul>
-          // eslint-disable-next-line vue/require-v-for-key,
-          vue/require-v-for-key
           <li
             class="articleTitles"
             v-for="titles in titleList"
