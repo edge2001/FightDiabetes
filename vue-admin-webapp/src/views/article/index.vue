@@ -45,6 +45,9 @@ export default {
       } else if (id == 4) {
         this.title = '四招预防糖尿病肾病'
         this.updateTime = '2019-11-07'
+      } else if (id == 5) {
+        this.title = '用知识点亮寒冬心灯用行动助力糖尿病之友'
+        this.updateTime = '2021-01-11'
       }
       id = String(id)
       let xhr = new XMLHttpRequest()
@@ -69,6 +72,7 @@ export default {
 .title {
   font-size: 3em;
   margin: 1%;
+  text-align: center;
 }
 .meta {
   font-size: 1.5em;
