@@ -42,6 +42,8 @@
       <div class="articleBar">
         <h4 style="font-size:28px">其他文章</h4>
         <ul>
+          // eslint-disable-next-line vue/require-v-for-key,
+          vue/require-v-for-key
           <li
             class="articleTitles"
             v-for="titles in titleList"
@@ -623,8 +625,7 @@ export default {
             '血糖最低值',
             '空腹平均值',
             '餐前平均值',
-            '餐后平均值',
-            '睡前平均值'
+            '餐后平均值'
           ]
         },
         yAxis: {},
@@ -634,7 +635,14 @@ export default {
           {
             type: 'bar',
             name: 'mmol/L',
-            data: [this.max_glucose, this.min_glucose],
+            data: [
+              this.max_glucose,
+              this.min_glucose,
+              this.emp_glucose,
+              this.before_glucose,
+              this.after_glucose
+              // this.sleep_glucose
+            ],
             itemStyle: {
               normal: {
                 //这里是重点
@@ -731,10 +739,19 @@ export default {
         .then(function(response) {
           console.log(response.data)
           if (response.status === 200) {
+            console.log(response)
             // if successfully transfer data to front-end
-            var m_max = response.data['max']
             self.min_glucose = response.data['min']
-            self.max_glucose = m_max
+            self.max_glucose = response.data['max']
+            self.emp_glucose = response.data['av1']
+            self.before_glucose =
+              (response.data['av3'] + response.data['av5']) / 2
+            self.after_glucose =
+              (response.data['av2'] +
+                response.data['av4'] +
+                response.data['av6']) /
+              3
+            // self.sleep_glucose
           }
         })
         .catch(function(error) {

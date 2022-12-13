@@ -32,22 +32,17 @@
             <a href="#" class="icon ticker"> </a>
             <div class="clear"></div>
           </li>
-          <!-- <h3>gender</h3> -->
-          <!-- <li>
-            <el-date-picker
+          <h3>nickname</h3>
+          <li>
+            <input
               :disabled="profile"
-              v-model="birth"
-              :picker-options="date_limit"
-              type="month"
-              placeholder="选择时间"
+              type="text"
+              placeholder="Nickname"
+              v-model="nickname"
             />
-            <div class="clear"></div>
-          </li> -->
-          <!-- <label class="checkbox"
-            ><input type="checkbox" name="checkbox" checked="" /><i> </i>Please
-            inform me of upcoming w3layouts, Promotions and news</label
-          > -->
-          <!-- <button type="submit" @click="modify()" text="modifyOrSave"></button> -->
+          </li>
+          <a href="#" class="icon ticker"> </a>
+          <div class="clear"></div>
           <el-button type="primary" @click="modify()" text="modifyOrSave">
             {{ this.modifyOrSave }}</el-button
           >
@@ -104,6 +99,7 @@ export default {
       },
       username: null,
       email: null,
+      nickname: null,
       modifyOrSave: '保存',
       profile: false
     }

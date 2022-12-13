@@ -164,7 +164,9 @@ export default {
         .then(function(response) {
           console.log(JSON.stringify(response.data))
           if (response.status === 200) {
-            window.alert('录入成功')
+            if (response.data['isrepeated'] == 1) {
+              alert('你已覆盖此前填写过的数据')
+            }
             // window.location.href = '/#/MainPage'
           }
         })
