@@ -31,10 +31,14 @@
           ></li>
         </ul>
       </div>
-
     </div>
-    
-    <div class="mfont" style="text-align:center;margin-top:-100px;margin-bottom:100px">{{title}}</div>
+
+    <div
+      class="mfont"
+      style="text-align:center;margin-top:-100px;margin-bottom:100px"
+    >
+      {{ title }}
+    </div>
     <h1 class="mfont">这里是您近期血糖数据</h1>
     <div class="dashbord">
       <!-- <button @click="testfunc()"></button> -->
@@ -138,9 +142,9 @@ export default {
       currentIndex: 0, //当前所在图片下标
       timer: null, //定时轮询
       imgArr: [
-        { 
-          id: 0, 
-          url: require('../../images/1.jpg') 
+        {
+          id: 0,
+          url: require('../../images/1.jpg')
         },
         {
           id: 1,
@@ -199,7 +203,7 @@ export default {
       isHealthStandard: false,
       showDays: 0,
       // value: true
-      title:'1145141919810'
+      title: '1145141919810'
     }
   },
   watch: {
@@ -220,7 +224,7 @@ export default {
           this.initBarChart()
           this.initEcharts()
         }
-      },
+      }
     },
     // value is the choice of 7 days or 30 days of show
     isWeight: {
@@ -599,8 +603,7 @@ export default {
             '血糖最低值',
             '空腹平均值',
             '餐前平均值',
-            '餐后平均值',
-            '睡前平均值'
+            '餐后平均值'
           ]
         },
         yAxis: {},
@@ -610,7 +613,14 @@ export default {
           {
             type: 'bar',
             name: 'mmol/L',
-            data: [this.max_glucose, this.min_glucose],
+            data: [
+              this.max_glucose,
+              this.min_glucose,
+              this.emp_glucose,
+              this.before_glucose,
+              this.after_glucose
+              // this.sleep_glucose
+            ],
             itemStyle: {
               normal: {
                 //这里是重点
@@ -707,10 +717,19 @@ export default {
         .then(function(response) {
           console.log(response.data)
           if (response.status === 200) {
+            console.log(response)
             // if successfully transfer data to front-end
-            var m_max = response.data['max']
             self.min_glucose = response.data['min']
-            self.max_glucose = m_max
+            self.max_glucose = response.data['max']
+            self.emp_glucose = response.data['av1']
+            self.before_glucose =
+              (response.data['av3'] + response.data['av5']) / 2
+            self.after_glucose =
+              (response.data['av2'] +
+                response.data['av4'] +
+                response.data['av6']) /
+              3
+            // self.sleep_glucose
           }
         })
         .catch(function(error) {
@@ -800,8 +819,8 @@ export default {
         if (this.currentIndex > this.imgArr.length - 1) {
           this.currentIndex = 0
         }
-        
-      this.getTitle()
+
+        this.getTitle()
       }, 3000)
     },
 
@@ -824,7 +843,7 @@ export default {
         }
         this.currentIndex--
       }
-      
+
       this.getTitle()
     },
     // 点击控制圆点
@@ -849,19 +868,17 @@ export default {
       window.location.reload()
     },
     getTitle() {
-      var id=this.currentIndex+1;
-      if(id==1){
-                this.title='糖尿病患者空腹血糖升高的8种常见原因及对策，糖友必学技能'
-            }
-            else if(id==2){
-                this.title='糖友朋友们，今天按这个顺序吃饭，看看你的餐后血糖可以降多少'
-            }
-            else if(id==3){
-                this.title='哪种水果糖分低？糖尿病友聪明控糖'
-            }
-            else if(id==4){
-                this.title='四招预防糖尿病肾病'
-            }
+      var id = this.currentIndex + 1
+      if (id == 1) {
+        this.title = '糖尿病患者空腹血糖升高的8种常见原因及对策，糖友必学技能'
+      } else if (id == 2) {
+        this.title =
+          '糖友朋友们，今天按这个顺序吃饭，看看你的餐后血糖可以降多少'
+      } else if (id == 3) {
+        this.title = '哪种水果糖分低？糖尿病友聪明控糖'
+      } else if (id == 4) {
+        this.title = '四招预防糖尿病肾病'
+      }
     }
   }
 }
