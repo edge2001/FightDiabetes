@@ -24,7 +24,6 @@ export default {
     this.getText()
   },
   watch: {
-    // eslint-disable-next-line no-unused-vars
     $route(to, from) {
       this.getText()
     }

@@ -32,6 +32,12 @@
             ></li>
           </ul>
         </div>
+        <div
+          class="mfont"
+          style="text-align:left;position: absolute;top:300px;left:0px;background: rgba(10,10,10,0.5);"
+        >
+          {{ title }}
+        </div>
       </div>
       <div class="articleBar">
         <h4 style="font-size:28px">其他文章</h4>
@@ -46,12 +52,7 @@
         </ul>
       </div>
     </div>
-    <div
-      class="mfont"
-      style="text-align:left;margin-top:-100px;margin-bottom:100px;margin-left: 100px;"
-    >
-      {{ title }}
-    </div>
+    
     <h1 class="mfont">这里是您近期血糖数据</h1>
     <div class="dashbord">
       <!-- <button @click="testfunc()"></button> -->
@@ -972,7 +973,7 @@ li {
 }
 .showImg {
   position: relative;
-  width: 60%;
+  width: 600px;
   height: 350px;
   margin: 100px;
   overflow: hidden;
@@ -992,6 +993,7 @@ li {
   overflow: hidden;
   display: inline-block;
   vertical-align: top;
+  margin-bottom: 100px;
 }
 .articleTitles {
   font-size: 16px;
