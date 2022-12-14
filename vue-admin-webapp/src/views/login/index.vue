@@ -473,9 +473,9 @@ $(function() {
 
 <style>
 html {
-  background-color: antiquewhite;
-  background-image: url('../images/logo.png');
-  background-size: 12% 20%;
+  background-color: azure;
+  background-image: url('../images/newlogos.png');
+  background-size: 8% 20%;
   display: inline-block;
   height: 100%;
   background-repeat: no-repeat;
@@ -522,7 +522,7 @@ html {
   background-color: rgb(249, 249, 249);
   z-index: 10;
   box-shadow: 0 0 12px 0.6px rgb(106, 106, 106);
-  background-color: azure;
+  background-color: antiquewhite;
   /* display: none; */
 }
 
