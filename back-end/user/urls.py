@@ -36,7 +36,7 @@ urlpatterns = [
 
     # sports data
     path('add_record/', sports.add_record, name = 'add_record'),
-
+    path('getMedicineTime/',sports.getMedicineTime,name='getMedicineTime'),
 
     # check database
     path('show/', account.show_list, name = 'show'),
