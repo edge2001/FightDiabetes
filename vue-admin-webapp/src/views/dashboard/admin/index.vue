@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="mfont">欢迎加入fightDiabetes!在这里，和我们一起战胜糖尿病吧</h1>
+    <h1 class="mfont">welcome to fightDiabetes!</h1>
     <div>
       <div class="showImg">
         <img
@@ -33,7 +33,6 @@
           </ul>
         </div>
         <div
-          class="mfont"
           style="text-align:left;position: absolute;top:300px;left:0px;background: rgba(10,10,10,0.5);"
         >
           {{ title }}
@@ -53,7 +52,7 @@
       </div>
     </div>
 
-    <h1 class="mfont">这里是您近期血糖数据</h1>
+    <h1 class="showWord">近期血糖数据</h1>
     <div class="dashbord">
       <!-- <button @click="testfunc()"></button> -->
       <el-select v-model="value" placeholder="请选择展示时间">
@@ -67,9 +66,6 @@
       </el-select>
       <div v-if="this.isMainPage === true">
         <el-row class="tableChart">
-          <!-- <el-col :span="16">
-          <table-show :tableData="tableData" class="tableShow"></table-show>
-        </el-col> -->
           <el-col :span="12">
             <!-- <pie-charts class="pieCharts"></pie-charts> -->
             <div
@@ -1054,7 +1050,22 @@ li {
 
 .mfont {
   font-size: large;
-  font-family: Tahoma, sans-serif;
+  // font-family: Tahoma, sans-serif;
+  font-family: 'DynaPuff', cursive;
+  font-size: 1.6rem;
+  letter-spacing: 0.2rem;
+  // position: absolute;
+  // top: 50%;
+  // left: 50%;
+  // transform: translate(-50%, -50%);
+  text-shadow: 7px 7px orange;
+  -webkit-text-fill-color: transparent;
+  // -webkit-text-stroke-width: 4px;
+  // -webkit-text-stroke-color: white;
   color: #36a3f7;
+}
+
+.showWord {
+  font-family: 'Roboto', sans-serif;
 }
 </style>

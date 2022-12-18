@@ -87,28 +87,33 @@ def get_week_glucose(request):
         token = request.META.get('HTTP_TOKEN')
         username = get_username(token)
         user = UserInfo.objects.get(username=username)
-        # 获取需要查询的时段
-        time_tag = request.POST.get('time_tag')
-
+        # # 获取需要查询的时段
+        # time_tag = request.POST.get('time_tag')
+        body = request.body.decode('UTF-8')
+        content = json.loads(body)
+        time_tag = content['time_tag']
         glucose = []
-        for i in range(0, 7):
-            glucose[i] = 0
+        dates = []
         today = datetime.date.today()
-        for i in range(0, 6):
-            date = today - datetime.timedelta(days=(6-i))
-            try:
-                datum = user.user_data.get(date=date, time_tag=time_tag)
-                glu = datum.blood_glucose
-                glucose[i] = glu
-            except:
-                pass
-            continue
+        for i in range(6, 0, -1):
+            date = today - datetime.timedelta(days=i)
+            dates.append(date)
+        dates.append(today)
+        for date in dates:
+            data = user.user_data.filter(date=date)
+            for datum in data:  # data is the set of this date
+                if (time_tag != datum.time_tag):  # we want to find proper glucose tag
+                    continue
+                print(datum)
+                blood_glucose = datum.blood_glucose
+                glucose.append([date.month, date.day, blood_glucose])
+        print(glucose)
 
         # 初始化要返回的dict
         dict = {
             'glucose': glucose,
         }
-        return HttpResponse(dict, status=status.HTTP_200_OK)
+        return HttpResponse(json.dumps(dict), status=status.HTTP_200_OK)
 
 
 # 返回过去一个月某个time_tag的血糖值

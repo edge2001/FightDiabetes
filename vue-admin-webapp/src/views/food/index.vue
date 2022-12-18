@@ -1,5 +1,6 @@
 <template>
   <div>
+    <p>您可以在这里查询想摄入的食物</p>
     <div class="item">
       <input
         type="text"
@@ -71,6 +72,13 @@ export default {
     }
   },
   watch: {
+    // tableData: {
+    //   deep: true,
+    //   // eslint-disable-next-line no-unused-vars
+    //   handler(val) {
+    //     alert(this.tableData.length)
+    //   }
+    // },
     nlist: {
       deep: true,
       // eslint-disable-next-line no-unused-vars
@@ -86,19 +94,20 @@ export default {
             .get(this.url)
             .then(response => {
               console.log(response.data)
-              if (
-                response.data['data']['sugar'] == '' ||
-                response.data['data']['sugar'] == 0.0
-              ) {
-                alert(this.nlist[i]['name'])
-              }
               var p = {
                 name: response.data['data']['name'],
                 calory: response.data['data']['calory'],
                 sugar: response.data['data']['sugar']
               }
-
-              this.tableData.push(p)
+              for (var i = 0; i < this.tableData.length; i++) {
+                if (
+                  response.data['data']['sugar'] == '' ||
+                  response.data['data']['sugar'] == 0.0
+                ) {
+                  // alert(this.nlist[i]['name'])
+                }
+              }
+              // this.tableData.push(p)
             })
             .catch(error => {
               console.log(error)

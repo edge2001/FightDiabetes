@@ -52,31 +52,6 @@
             placeholder="记录此刻感受……"
           ></el-input>
         </el-form-item>
-        <!-- <el-form-item label="分类">
-          <el-radio-group
-            v-model="questionForm.questionCategory"
-            style="margin-right:12px;"
-          >
-            <el-radio
-              v-for="(radio, index) in subjectList"
-              :key="index"
-              :label="radio"
-              >{{ radio }}</el-radio
-            >
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="正确答案" prop="correctAnswer">
-          <el-input v-model="questionForm.correctAnswer" />
-        </el-form-item>
-        <el-form-item label="其他答案1" prop="otherAnswer1">
-          <el-input v-model="questionForm.otherAnswer1" />
-        </el-form-item>
-        <el-form-item label="其他答案2" prop="otherAnswer2">
-          <el-input v-model="questionForm.otherAnswer2" />
-        </el-form-item>
-        <el-form-item label="其他答案3" prop="otherAnswer3">
-          <el-input v-model="questionForm.otherAnswer3" />
-        </el-form-item> -->
         <el-form-item label="测量时段" required="true">
           <el-select
             v-model="questionForm.measureTime"
@@ -97,13 +72,42 @@
         <el-button type="primary" @click="createData()">确定</el-button>
       </div>
     </el-dialog>
+    <div
+      class="lineCharts"
+      :style="{ width: width, height: height }"
+      ref="myCharts"
+    ></div>
   </div>
 </template>
 <script>
 import axios from 'axios'
+import echarts from 'echarts'
+require('echarts/theme/macarons')
 export default {
+  props: {
+    width: {
+      type: String,
+      default: '100%'
+    },
+    height: {
+      type: String,
+      default: '350px'
+    },
+    isGlucose: {
+      type: Boolean
+    }
+  },
   data() {
     return {
+      timeTag: 1,
+      xAxisData: ['1', '2', '3'],
+      lineChartData: {
+        inPrice: [1, 2, 3],
+        outPrice: [1, 2, 4],
+        emptyGlucose: [],
+        emptyGlucoseStandard: [6.1, 6.1, 6.1, 6.1, 6.1, 6.1, 6.1]
+      },
+      mycharts: null,
       subjectList: ['黄金', '白银', '钻石'],
       input: '',
       tabMapOptions: [
@@ -114,7 +118,6 @@ export default {
         { label: '晚餐前', key: '5' },
         { label: '晚餐后', key: '6' }
       ],
-
       questionForm: {
         glucose: '',
         weight: '',
@@ -127,8 +130,181 @@ export default {
       dialogFormVisible: false
     }
   },
+  watch: {
+    lineChartData: {
+      deep: true,
+      handler(val) {
+        this._setOption(val.emptyGlucose, val.emptyGlucoseStandard)
+      }
+    }
+  },
+  mounted() {
+    this.initEcharts()
+    this.get7DaysData()
+  },
   methods: {
+    initEcharts() {
+      this.mycharts = echarts.init(this.$refs.myCharts, 'macarons')
+      this._setOption(
+        this.lineChartData.emptyGlucose,
+        this.lineChartData.outPrice
+      )
+    },
+    // eslint-disable-next-line no-unused-vars
+    _setOption(inprice = [], outprice = []) {
+      this.mycharts.setOption({
+        title: {
+          text: '近期血糖数据',
+          left: '16'
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              background: '#6a7985'
+            }
+          }
+        },
+        legend: {
+          data: ['血糖', '体重']
+        },
+        grid: {
+          left: '20',
+          right: '20',
+          bottom: '3',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'category',
+            boundaryGap: false,
+            data: this.xAxisData
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value'
+          }
+        ],
+        series: [
+          {
+            name: '测量值',
+            type: 'line',
+            // areaStyle: {
+            //   color: '#f4516c',
+            //   opacity: 0.3
+            // },
+            itemStyle: {
+              color: '#f4516c'
+            },
+            lineStyle: {
+              color: '#f4516c'
+            },
+            smooth: true,
+            data: inprice,
+            animationDuration: 2800,
+            animationEasing: 'quadraticOut'
+          },
+          {
+            name: '标准值',
+            type: 'line',
+            areaStyle: {
+              color: '#55a8fd',
+              opacity: 0.3
+            },
+            itemStyle: {
+              color: '#55a8fd'
+            },
+            lineStyle: {
+              color: '#55a8fd'
+            },
+            smooth: true,
+            data: outprice,
+            animationDuration: 2800,
+            animationEasing: 'quadraticOut'
+          }
+        ]
+      })
+    },
+    set7DaysAxis() {
+      // var year = date.getFullYear() //返回指定日期的年份
+      let oneDay = 24 * 60 * 60 * 1000
+      // alert(new Date(Date.now() - oneDay))
+      // var month = date.getMonth() + 1
+      // var day = date.getDate()
+      // day = day - 6
+      this.xAxisData = []
+      for (var i = 0; i < 7; i++) {
+        var cur_datetime = new Date(Date.now() - oneDay * (6 - i))
+        var month = cur_datetime.getMonth() + 1
+        var day = cur_datetime.getDate()
+        var cur_datetime_str = month + '.' + day
+        this.xAxisData.push(cur_datetime_str)
+      }
+    },
+    get7DaysData() {
+      // this.set7DaysAxis()
+      var dataobj = {
+        time_tag: this.timeTag
+      }
+      var path = 'http://127.0.0.1:8000/get_week_glucose/'
+      var configGet = {
+        method: 'POST',
+        url: path,
+        headers: {
+          'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
+          'Content-Type': 'application/json'
+        },
+        data: dataobj
+      }
+      var self = this
+      axios(configGet)
+        .then(function(response) {
+          if (response.status === 200) {
+            let oneDay = 24 * 60 * 60 * 1000
+            self.xAxisData = []
+            var cnt2 = 0
+            var cntdays = 0
+            var m_glucose_data = response.data['glucose']
+            while (cnt2 < 90 && cntdays < 7) {
+              var cur_datetime = new Date(Date.now() - oneDay * cnt2)
+              var month = cur_datetime.getMonth() + 1
+              var day = cur_datetime.getDate()
+              var cur_datetime_str = month + '.' + day
+              var isSelected = 0
+              for (var j = 0; j < m_glucose_data.length; j++) {
+                if (
+                  m_glucose_data[j][0] == month &&
+                  m_glucose_data[j][1] == day
+                ) {
+                  self.xAxisData.push(cur_datetime_str)
+                  isSelected = 1
+                }
+              }
+              if (isSelected == 1) {
+                cntdays++
+              }
+              cnt2++
+            }
+            console.log(response.data)
+            for (var k = 0; k < response.data['glucose'].length; k++) {
+              self.lineChartData.emptyGlucose.push(
+                response.data['glucose'][k][2]
+              )
+            }
+          }
+        })
+        .catch(function(error) {
+          console.log(error)
+          if (error.response.status === 401) {
+            window.alert('重复的用户名！')
+          }
+        })
+    },
     handleCreate() {
+      alert(this.lineChartData['inPrice'])
+      this.lineChartData['inPrice'] = [4, 5, 6]
       this.questionForm = {
         glucose: '',
         weight: '',
@@ -162,12 +338,9 @@ export default {
       }
       axios(configGet)
         .then(function(response) {
-          console.log(JSON.stringify(response.data))
           if (response.status === 200) {
-            if (response.data['isrepeated'] == 1) {
-              alert('你已覆盖此前填写过的数据')
-            }
-            // window.location.href = '/#/MainPage'
+            this.xAxisData = response.data['glucose']
+            this.initEcharts()
           }
         })
         .catch(function(error) {
@@ -182,4 +355,8 @@ export default {
   }
 }
 </script>
-<style scoped></style>
+<style scoped>
+.lineCharts {
+  margin-top: 100px;
+}
+</style>
