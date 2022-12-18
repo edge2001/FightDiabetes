@@ -33,7 +33,7 @@
           </ul>
         </div>
         <div
-          style="text-align:left;position: absolute;top:300px;left:0px;background: rgba(10,10,10,0.5);"
+          style="text-align:left;position: absolute;top:300px;left:0px;background: rgba(0,0,0,0.3);font-size: 18px;color:aqua;"
         >
           {{ title }}
         </div>
@@ -218,6 +218,10 @@ export default {
         {
           title: '用知识点亮寒冬心灯用行动助力糖尿病之友',
           id: 5
+        },
+        {
+          title: '18年坚守磨一剑科普创新洞见未来',
+          id: 6
         }
       ]
     }
@@ -897,8 +901,7 @@ export default {
       if (id == 1) {
         this.title = '糖尿病患者空腹血糖升高的8种常见原因及对策，糖友必学技能'
       } else if (id == 2) {
-        this.title =
-          '糖友朋友们，今天按这个顺序吃饭，看看你的餐后血糖可以降多少'
+        this.title ='糖友朋友们，今天按这个顺序吃饭，看看你的餐后血糖可以降多少'
       } else if (id == 3) {
         this.title = '哪种水果糖分低？糖尿病友聪明控糖'
       } else if (id == 4) {
