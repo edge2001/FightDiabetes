@@ -2,7 +2,7 @@
   <div class="header">
     <div class="header_l">
       <a href="javascript:;" class="logoLink"
-        ><img src="./logo_copy.png" alt="logo" />fightdiabetes</a
+        ><img src="./newlogo.png" alt="logo" />fightdiabetes</a
       >
     </div>
     <div class="header_r">
@@ -13,7 +13,12 @@
       <div class="headr_d2">
         <ul class="headrUl clearFixed">
           <li id="domMessage">
-            <el-badge is-dot @click.native="toggleMsgShow">
+            <el-badge
+              id="reddot"
+              :hidden="hiddens"
+              is-dot
+              @click.native="toggleMsgShow"
+            >
               <i class="el-icon-message-solid iconFont"></i>
             </el-badge>
           </li>
@@ -35,6 +40,11 @@ import BreadCrumb from '@/components/BreadCrumb'
 import UserDropdown from '@/components/UserDropdown'
 import FullScreen from '@/components/FullScreen'
 export default {
+  data() {
+    return {
+      hiddens: true
+    }
+  },
   components: {
     SideCollapse,
     BreadCrumb,
@@ -43,8 +53,16 @@ export default {
   },
   methods: {
     toggleMsgShow() {
+      this.hiddens = this.hiddens
       this.$store.commit('app/SET_MSGISOPEN')
+    },
+    red() {
+      this.hiddens = false
+      var e = document.createEvent('MouseEvents')
+      e.initEvent('click', true, true)
+      document.getElementById('reddot').dispatchEvent(e)
     }
   }
 }
 </script>
+<style></style>

@@ -307,14 +307,11 @@ export default {
         },
         data: dataobj
       }
+      var self = this
       axios(config)
         .then(function(response) {
           console.log(JSON.stringify(response.data))
           if (response.status === 200) {
-            // window.alert(window.location.href)
-
-            // localStorage.setItem("username", response.data.username);
-            // localStorage.setItem("authorization", authorization);
             localStorage.setItem('username', response.data['username'])
             localStorage.setItem('email', response.data['email'])
 
@@ -323,7 +320,7 @@ export default {
             localStorage.setItem('token', response.data['token'])
 
             window.location.href = '/#/dashbord'
-            this.$message({
+            self.$message({
               message: '登录成功',
               type: 'success'
             })
@@ -332,14 +329,16 @@ export default {
         .catch(function(error) {
           console.log(error)
           if (error.response.status === 401) {
-            window.alert('密码错误')
+            // window.alert('密码错误')
+            self.$message.error('密码错误，请重新输入')
           } else if (error.response.status === 404) {
-            window.alert('用户不存在')
+            self.$message.error('用户不存在')
             this.jump_to_Register()
           }
         })
     },
     send_data_register: function() {
+      var self = this
       var dataobj = {
         username: this.ruleForm.register_username,
         password: this.ruleForm.register_password,
@@ -347,19 +346,26 @@ export default {
         islogin: false
       }
       if (this.is_username_valid(dataobj['username']) === false) {
-        this.$message.error('用户名不合法！')
+        self.$message.error(
+          '用户名不合法！请输入长度在8-20个字符之间，且含有字母、数字和特殊符号的用户名'
+        )
         return
       }
       if (this.is_password_valid(dataobj['password']) === false) {
-        this.$message.error('密码格式不对！')
+        self.$message.error(
+          '密码格式不对！请输入长度在8-20个字符之间，且含有大小写字母、数字和特殊符号的密码'
+        )
         return
       }
-      if (this.password !== this.password_confirm) {
-        this.$message.error('两次输入的密码不匹配！')
+      if (
+        this.ruleForm.register_password !==
+        this.ruleForm.register_confirm_password
+      ) {
+        self.$message.error('两次输入的密码不匹配！请检查')
         return
       }
       if (this.is_email_valid(dataobj['email']) === false) {
-        this.$message.error('请输入正确的邮箱地址！')
+        self.$message.error('请输入正确的邮箱地址！')
         return
       }
       const path = 'http://127.0.0.1:8000/login/'
@@ -376,14 +382,16 @@ export default {
         .then(function(response) {
           console.log(JSON.stringify(response.data))
           if (response.status === 200) {
-            window.alert('注册成功')
-            // window.location.href = '/#/MainPage'
+            self.$message({
+              message: '注册成功',
+              type: 'success'
+            })
           }
         })
         .catch(function(error) {
           console.log(error)
           if (error.response.status === 401) {
-            window.alert('重复的用户名！')
+            self.$message.error('重复的用户名')
           }
         })
       // var config = {
@@ -473,9 +481,9 @@ $(function() {
 
 <style>
 html {
-  background-color: antiquewhite;
-  background-image: url('../images/logo.png');
-  background-size: 12% 20%;
+  background-color: azure;
+  background-image: url('../images/newlogos.png');
+  background-size: 8% 20%;
   display: inline-block;
   height: 100%;
   background-repeat: no-repeat;
@@ -522,7 +530,7 @@ html {
   background-color: rgb(249, 249, 249);
   z-index: 10;
   box-shadow: 0 0 12px 0.6px rgb(106, 106, 106);
-  background-color: azure;
+  background-color: antiquewhite;
   /* display: none; */
 }
 

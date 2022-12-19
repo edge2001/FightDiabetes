@@ -8,7 +8,7 @@
       <form>
         <ul class="left-form">
           <h2>个人基本信息:</h2>
-          <h3>username</h3>
+          <h3>用户名</h3>
           <li>
             <input
               :disabled="profile"
@@ -17,10 +17,10 @@
               v-model="username"
               required
             />
-            <a href="#" class="icon ticker"> </a>
+            <!-- <a href="#" class="icon ticker"> </a> -->
             <div class="clear"></div>
           </li>
-          <h3>email</h3>
+          <h3>邮箱</h3>
           <li>
             <input
               :disabled="profile"
@@ -29,10 +29,10 @@
               v-model="email"
               required
             />
-            <a href="#" class="icon ticker"> </a>
+            <!-- <a href="#" class="icon ticker"> </a> -->
             <div class="clear"></div>
           </li>
-          <h3>nickname</h3>
+          <h3>昵称</h3>
           <li>
             <input
               :disabled="profile"
@@ -41,41 +41,49 @@
               v-model="nickname"
             />
           </li>
-          <a href="#" class="icon ticker"> </a>
+          <!-- <a href="#" class="icon ticker"> </a> -->
           <div class="clear"></div>
-          <el-button type="primary" @click="modify()" text="modifyOrSave">
+          <el-button
+            type="primary"
+            @click="modify()"
+            text="modifyOrSave"
+            class="modifyButton"
+          >
             {{ this.modifyOrSave }}</el-button
           >
           <div class="clear"></div>
         </ul>
         <ul class="right-form">
-          <h2>gender</h2>
+          <h2>性别</h2>
           <!-- <h3>gender</h3> -->
-          <li class="gender">
+          <li class="gender" style="font-size:20px">
             <!-- <input type="password" placeholder="password" required /> -->
-            <a href="#" class="icon into"> </a>
+            <!-- <a href="#" class="icon into"> </a> -->
             <input
               :disabled="profile"
               type="radio"
+              style="zoom:1.5"
               name="gender"
               value="man"
-            />男
+            />男&nbsp;&nbsp;
             <input
               :disabled="profile"
+              style="zoom:1.5;"
               type="radio"
               name="gender"
               value="woman"
             />女
             <div class="clear"></div>
           </li>
-          <h2>birthday</h2>
+          <h2>出生年月</h2>
           <li>
             <el-date-picker
               :disabled="profile"
               v-model="birth"
               :picker-options="date_limit"
               type="month"
-              class="profile_input"
+              id="birthday"
+              style="width:100%"
               placeholder="选择时间"
             />
           </li>
@@ -100,8 +108,8 @@ export default {
       username: null,
       email: null,
       nickname: null,
-      modifyOrSave: '保存',
-      profile: false
+      modifyOrSave: '修改',
+      profile: true
     }
   },
   name: 'index.vue',
@@ -129,10 +137,9 @@ export default {
 .gender {
   margin-bottom: 100px;
 }
-.profile_input {
-  margin-top: 100px;
-  font-size: 1.5em;
-  text-align: right;
+#birthday {
+  text-align: center;
+  width: 100%;
 }
 html,
 body,
@@ -368,11 +375,18 @@ body {
   font-family: 'HelveticaNeue', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   width: 80%;
   padding: 0.7em 2em 0.7em 1em;
-  border: none;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #000;
+  border-radius: 0.5em;
   color: #000;
   font-size: 15px;
   float: left;
   outline: none;
+}
+
+input:disabled {
+  background-color: #c5c3c3;
 }
 
 .right-form {
@@ -387,7 +401,9 @@ form {
 .right-form li {
   display: block;
   color: #4d4949;
-  border: 1px solid #ebebeb;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #000;
   border-radius: 0.3em;
   -webkit-border-radius: 0.3em;
   -moz-border-radius: 0.3em;
@@ -409,11 +425,11 @@ input[type='password'] {
 .left-form li {
   display: block;
   color: #4d4949;
-  border: 1px solid #ebebeb;
+  /* border: 1px solid #ebebeb;
   border-radius: 0.3em;
   -webkit-border-radius: 0.3em;
   -moz-border-radius: 0.3em;
-  -o-border-radius: 0.3em;
+  -o-border-radius: 0.3em; */
   margin-bottom: 10px;
 }
 
@@ -457,7 +473,7 @@ input[type='password'] {
   -o-border-radius: 0.3em;
   color: #4d4949;
   background: #f3f3f3;
-  border: 1px solid #ebebeb;
+  /* border: 1px solid #b0b0b0; */
   font-weight: bold;
   font-size: 15px;
   outline: none;
@@ -586,6 +602,10 @@ input[type='checkbox'].css-checkbox10:checked + label i.css-label10 {
 
 .copy-right a:hover {
   color: #000;
+}
+
+.modifyButton {
+  margin-top: 10px;
 }
 
 @media only screen and (max-width: 1680px) and (min-width: 1440px) {

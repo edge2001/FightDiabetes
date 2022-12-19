@@ -60,4 +60,22 @@ def get_sports_data(request):
 
 
 
+#获取吃药时间
+def getMedicineTime(request):
+    if request.method == 'GET':
+        dict = {
+            'list':[
+                {
+                    'hour' : '12',
+                    'minute':'12'
+                },
+                {
+                    'hour' : '20',
+                    'minute':'47'
+                }
+            ]
+        }
+        return HttpResponse(json.dumps(dict), status=status.HTTP_200_OK)
+
+
 
