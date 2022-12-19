@@ -7,6 +7,14 @@
         <div class="content">{{ content }}</div>
       </article>
     </div>
+    <div class="article_list">
+      <h3 style="font-size:28px;text-align: center;">其他文章</h3>
+      <ul>
+        <li v-for="title in titleList" @click="jumpToArticle(title.id)">
+          {{ title.title }}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -17,7 +25,44 @@ export default {
       name: 'article',
       title: null,
       updateTime: null,
-      content: null
+      content: null,
+      titleList: [
+        {
+          title: '糖尿病患者空腹血糖升高的8种常见原因及对策，糖友必学技能',
+          id: 1,
+          updateTime: '2020-01-01'
+        },
+        {
+          title: '糖友朋友们，今天按这个顺序吃饭，看看你的餐后血糖可以降多少',
+          id: 2,
+          updateTime: '2020-05-14'
+        },
+        {
+          title: '哪种水果糖分低？糖尿病友聪明控糖',
+          id: 3,
+          updateTime: '2019-09-24'
+        },
+        {
+          title: '四招预防糖尿病肾病',
+          id: 4,
+          updateTime: '2019-11-07'
+        },
+        {
+          title: '用知识点亮寒冬心灯用行动助力糖尿病之友',
+          id: 5,
+          updateTime: '2021-01-11'
+        },
+        {
+          title: '18年坚守磨一剑科普创新洞见未来',
+          id: 6,
+          updateTime: '2021-04-01'
+        },
+        {
+          title: '这些危险因素让糖尿病“找上门”',
+          id: 7,
+          updateTime: '2018-12-03'
+        }
+      ]
     }
   },
   mounted() {
@@ -32,22 +77,36 @@ export default {
   methods: {
     getText() {
       var id = this.$route.params.id
-      if (id == 1) {
-        this.title = '糖尿病患者空腹血糖升高的8种常见原因及对策，糖友必学技能'
-        this.updateTime = '2020-01-01'
-      } else if (id == 2) {
-        this.title =
-          '糖友朋友们，今天按这个顺序吃饭，看看你的餐后血糖可以降多少'
-        this.updateTime = '2020-05-14'
-      } else if (id == 3) {
-        this.title = '哪种水果糖分低？糖尿病友聪明控糖'
-        this.updateTime = '2019-09-24'
-      } else if (id == 4) {
-        this.title = '四招预防糖尿病肾病'
-        this.updateTime = '2019-11-07'
-      } else if (id == 5) {
-        this.title = '用知识点亮寒冬心灯用行动助力糖尿病之友'
-        this.updateTime = '2021-01-11'
+      // if (id == 1) {
+      //   this.title = '糖尿病患者空腹血糖升高的8种常见原因及对策，糖友必学技能'
+      //   this.updateTime = '2020-01-01'
+      // } else if (id == 2) {
+      //   this.title ='糖友朋友们，今天按这个顺序吃饭，看看你的餐后血糖可以降多少'
+      //   this.updateTime = '2020-05-14'
+      // } else if (id == 3) {
+      //   this.title = '哪种水果糖分低？糖尿病友聪明控糖'
+      //   this.updateTime = '2019-09-24'
+      // } else if (id == 4) {
+      //   this.title = '四招预防糖尿病肾病'
+      //   this.updateTime = '2019-11-07'
+      // } else if (id == 5) {
+      //   this.title = '用知识点亮寒冬心灯用行动助力糖尿病之友'
+      //   this.updateTime = '2021-01-11'
+      // } else if (id == 6) {
+      //   this.title = '18年坚守磨一剑科普创新洞见未来'
+      //   this.updateTime='2021-04-01'
+      // }
+      if (id > this.titleList.length) {
+        this.$router.push({
+          name: '404'
+        })
+      }
+      for (var i = 0; i < this.titleList.length; i++) {
+        if (id == this.titleList[i].id) {
+          this.title = this.titleList[i].title
+          this.updateTime = this.titleList[i].updateTime
+          break
+        }
       }
       id = String(id)
       let xhr = new XMLHttpRequest()
@@ -55,6 +114,15 @@ export default {
       xhr.overrideMimeType('text/html;charset=utf-8')
       xhr.send(null)
       this.content = xhr.responseText
+    },
+    jumpToArticle(id) {
+      this.$router.push({
+        name: 'article',
+        params: {
+          id: id
+        }
+      })
+      window.location.reload()
     }
   }
 }
@@ -63,9 +131,11 @@ export default {
 <style scoped>
 .main_div {
   position: relative;
-  margin-left: 10%;
-  margin-right: 10%;
-  background-color: #cfcfcf;
+  margin-left: 7%;
+  margin-right: 30%;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
   border-radius: 0.5rem;
   overflow: hidden;
 }
@@ -86,5 +156,25 @@ export default {
   table-layout: fixed;
   word-break: break-all;
   white-space: pre-wrap;
+}
+.article_list {
+  border-style: solid;
+  border-width: 3px;
+  border-color: aqua;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  color: #36a3f7;
+  position: absolute;
+  width: 20%;
+  height: auto;
+  right: 5%;
+  top: 10%;
+  font-size: 20px;
+}
+li {
+  padding-top: 10px;
+}
+li:hover {
+  background-color: rgb(241, 195, 109);
 }
 </style>

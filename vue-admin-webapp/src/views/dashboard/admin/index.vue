@@ -33,7 +33,7 @@
           </ul>
         </div>
         <div
-          style="text-align:left;position: absolute;top:300px;left:0px;background: rgba(10,10,10,0.5);"
+          style="text-align:left;position: absolute;top:300px;left:0px;background: rgba(0,0,0,0.3);font-size: 18px;color:aqua;"
         >
           {{ title }}
         </div>
@@ -218,6 +218,14 @@ export default {
         {
           title: '用知识点亮寒冬心灯用行动助力糖尿病之友',
           id: 5
+        },
+        {
+          title: '18年坚守磨一剑科普创新洞见未来',
+          id: 6
+        },
+        {
+          title: '这些危险因素让糖尿病“找上门”',
+          id: 7
         }
       ]
     }
