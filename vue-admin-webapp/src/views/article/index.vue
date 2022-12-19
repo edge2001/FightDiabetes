@@ -65,32 +65,32 @@ export default {
           updateTime: '2018-12-03'
         },
         {
-          title:'给小糖友的“运动处方”',
+          title: '给小糖友的“运动处方”',
           id: 8,
           updateTime: '2019-04-16'
         },
         {
-          title:'哪些人容易得糖尿病',
+          title: '哪些人容易得糖尿病',
           id: 9,
-          updateTime:'2019-03-05'
+          updateTime: '2019-03-05'
         },
         {
-          title:'Diabetes Care：糖尿病会遗传吗？“糖二代”怎样饮食预防？',
+          title: 'Diabetes Care：糖尿病会遗传吗？“糖二代”怎样饮食预防？',
           id: 10,
-          updateTime:'2022-03-17'
+          updateTime: '2022-03-17'
         },
         {
-          title:'3种食物是“升糖王”，得了糖尿病不忌口，打再多胰岛素也没用',
+          title: '3种食物是“升糖王”，得了糖尿病不忌口，打再多胰岛素也没用',
           id: 11,
-          updateTime:'2022-11-17'
+          updateTime: '2022-11-17'
         },
         {
-          title:'糖友如何运动才不伤身？',
+          title: '糖友如何运动才不伤身？',
           id: 12,
-          updateTime:'2020-03-12'
-        },
+          updateTime: '2020-03-12'
+        }
       ],
-      showTitleList:[]
+      showTitleList: []
     }
   },
   mounted() {
@@ -129,7 +129,7 @@ export default {
           name: '404'
         })
       }
-      var i=0
+      var i = 0
       for (; i < this.titleList.length; i++) {
         if (id == this.titleList[i].id) {
           this.title = this.titleList[i].title
@@ -143,14 +143,14 @@ export default {
       xhr.overrideMimeType('text/html;charset=utf-8')
       xhr.send(null)
       this.content = xhr.responseText
-      i=0
-      var idList=[]
-      while(i<6) {
-        var j=parseInt(Math.random()*this.titleList.length,10)+1
-        if(!idList.includes(j)){
+      i = 0
+      var idList = []
+      while (i < 6) {
+        var j = parseInt(Math.random() * this.titleList.length, 10) + 1
+        if (!idList.includes(j)) {
           idList.push(j)
           console.log(j)
-          this.showTitleList.push(this.titleList[j-1])
+          this.showTitleList.push(this.titleList[j - 1])
           i++
         }
       }
