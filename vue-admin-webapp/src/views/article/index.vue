@@ -1,19 +1,21 @@
 <template>
   <div>
-    <div class="main_div">
-      <article>
-        <h1 class="title">{{ title }}</h1>
-        <div class="meta">上传时间：{{ updateTime }}</div>
-        <div class="content">{{ content }}</div>
-      </article>
-    </div>
-    <div class="article_list">
-      <h3 style="font-size:28px;text-align: center;">其他文章</h3>
-      <ul>
-        <li v-for="title in titleList" @click="jumpToArticle(title.id)">
-          {{ title.title }}
-        </li>
-      </ul>
+    <div class="111">
+      <div class="main_div">
+        <article>
+          <h1 class="title">{{ title }}</h1>
+          <div class="meta">上传时间：{{ updateTime }}</div>
+          <div class="content">{{ content }}</div>
+        </article>
+      </div>
+      <div class="article_list">
+        <h3 style="font-size:28px;text-align: center;">其他文章</h3>
+        <ul>
+          <li v-for="title in showTitleList" @click="jumpToArticle(title.id)">
+            {{ title.title }}
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -61,8 +63,34 @@ export default {
           title: '这些危险因素让糖尿病“找上门”',
           id: 7,
           updateTime: '2018-12-03'
-        }
-      ]
+        },
+        {
+          title:'给小糖友的“运动处方”',
+          id: 8,
+          updateTime: '2019-04-16'
+        },
+        {
+          title:'哪些人容易得糖尿病',
+          id: 9,
+          updateTime:'2019-03-05'
+        },
+        {
+          title:'Diabetes Care：糖尿病会遗传吗？“糖二代”怎样饮食预防？',
+          id: 10,
+          updateTime:'2022-03-17'
+        },
+        {
+          title:'3种食物是“升糖王”，得了糖尿病不忌口，打再多胰岛素也没用',
+          id: 11,
+          updateTime:'2022-11-17'
+        },
+        {
+          title:'糖友如何运动才不伤身？',
+          id: 12,
+          updateTime:'2020-03-12'
+        },
+      ],
+      showTitleList:[]
     }
   },
   mounted() {
@@ -101,7 +129,8 @@ export default {
           name: '404'
         })
       }
-      for (var i = 0; i < this.titleList.length; i++) {
+      var i=0
+      for (; i < this.titleList.length; i++) {
         if (id == this.titleList[i].id) {
           this.title = this.titleList[i].title
           this.updateTime = this.titleList[i].updateTime
@@ -114,6 +143,17 @@ export default {
       xhr.overrideMimeType('text/html;charset=utf-8')
       xhr.send(null)
       this.content = xhr.responseText
+      i=0
+      var idList=[]
+      while(i<6) {
+        var j=parseInt(Math.random()*this.titleList.length,10)+1
+        if(!idList.includes(j)){
+          idList.push(j)
+          console.log(j)
+          this.showTitleList.push(this.titleList[j-1])
+          i++
+        }
+      }
     },
     jumpToArticle(id) {
       this.$router.push({
@@ -132,12 +172,14 @@ export default {
 .main_div {
   position: relative;
   margin-left: 7%;
-  margin-right: 30%;
+  width: 65%;
+  margin-right: 3%;
   border-style: solid;
   border-width: 1px;
   border-color: black;
   border-radius: 0.5rem;
   overflow: hidden;
+  display: inline-block;
 }
 .title {
   font-size: 3em;
@@ -158,17 +200,17 @@ export default {
   white-space: pre-wrap;
 }
 .article_list {
+  display: inline-block;
+  vertical-align: top;
   border-style: solid;
   border-width: 3px;
   border-color: aqua;
   border-radius: 0.5rem;
   overflow: hidden;
   color: #36a3f7;
-  position: absolute;
-  width: 20%;
+  position: relative;
+  width: 24%;
   height: auto;
-  right: 5%;
-  top: 10%;
   font-size: 20px;
 }
 li {
