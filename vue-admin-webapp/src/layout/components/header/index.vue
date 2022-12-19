@@ -13,8 +13,13 @@
       <div class="headr_d2">
         <ul class="headrUl clearFixed">
           <li id="domMessage">
-            <el-badge id="reddot" :hidden = "hiddens" is-dot  @click.native="toggleMsgShow">
-              <i class="el-icon-message-solid iconFont" ></i>
+            <el-badge
+              id="reddot"
+              :hidden="hiddens"
+              is-dot
+              @click.native="toggleMsgShow"
+            >
+              <i class="el-icon-message-solid iconFont"></i>
             </el-badge>
           </li>
           <li id="domFullScreen">
@@ -35,9 +40,9 @@ import BreadCrumb from '@/components/BreadCrumb'
 import UserDropdown from '@/components/UserDropdown'
 import FullScreen from '@/components/FullScreen'
 export default {
-   data() {
+  data() {
     return {
-      hiddens : true,
+      hiddens: true
     }
   },
   components: {
@@ -48,17 +53,16 @@ export default {
   },
   methods: {
     toggleMsgShow() {
-      this.hiddens = this.hiddens;
+      this.hiddens = this.hiddens
       this.$store.commit('app/SET_MSGISOPEN')
     },
-    red(){
-      this.hiddens = false;
+    red() {
+      this.hiddens = false
       var e = document.createEvent('MouseEvents')
       e.initEvent('click', true, true)
       document.getElementById('reddot').dispatchEvent(e)
-    },
+    }
   }
 }
 </script>
-<style>
-</style>
+<style></style>

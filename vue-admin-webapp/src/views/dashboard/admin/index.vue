@@ -225,7 +225,7 @@ export default {
         },
         {
           title: '这些危险因素让糖尿病“找上门”',
-          id: 7,
+          id: 7
         }
       ]
     }
@@ -905,7 +905,8 @@ export default {
       if (id == 1) {
         this.title = '糖尿病患者空腹血糖升高的8种常见原因及对策，糖友必学技能'
       } else if (id == 2) {
-        this.title ='糖友朋友们，今天按这个顺序吃饭，看看你的餐后血糖可以降多少'
+        this.title =
+          '糖友朋友们，今天按这个顺序吃饭，看看你的餐后血糖可以降多少'
       } else if (id == 3) {
         this.title = '哪种水果糖分低？糖尿病友聪明控糖'
       } else if (id == 4) {

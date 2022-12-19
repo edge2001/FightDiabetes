@@ -337,7 +337,7 @@ export default {
           }
         })
     },
-    send_data_register: function () {
+    send_data_register: function() {
       var self = this
       var dataobj = {
         username: this.ruleForm.register_username,
@@ -357,7 +357,10 @@ export default {
         )
         return
       }
-      if (this.ruleForm.register_password !== this.ruleForm.register_confirm_password) {
+      if (
+        this.ruleForm.register_password !==
+        this.ruleForm.register_confirm_password
+      ) {
         self.$message.error('两次输入的密码不匹配！请检查')
         return
       }

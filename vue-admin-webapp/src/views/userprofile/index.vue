@@ -43,7 +43,12 @@
           </li>
           <!-- <a href="#" class="icon ticker"> </a> -->
           <div class="clear"></div>
-          <el-button type="primary" @click="modify()" text="modifyOrSave" class="modifyButton">
+          <el-button
+            type="primary"
+            @click="modify()"
+            text="modifyOrSave"
+            class="modifyButton"
+          >
             {{ this.modifyOrSave }}</el-button
           >
           <div class="clear"></div>
@@ -134,7 +139,7 @@ export default {
 }
 #birthday {
   text-align: center;
-  width:100%;
+  width: 100%;
 }
 html,
 body,
