@@ -35,8 +35,8 @@ urlpatterns = [
     re_path('^active/(?P<active_code>.*)/$', account.ActiveUserView.as_view(), name='active_code'),  # 注册激活链接
 
     # sports data
-    path('add_record/', sports.add_record, name = 'add_record'),
-
+    path('add_sports_record/', sports.add_sports_record, name = 'add_sports_record'),
+    path('get_sports_data/', sports.get_sports_data, name = 'get_sports_data'),
 
     # check database
     path('show/', account.show_list, name = 'show'),

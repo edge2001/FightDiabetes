@@ -1,5 +1,5 @@
 from django.db import models
-
+import datetime
 # Create your models here.
 
 
@@ -61,7 +61,7 @@ class Sports_record(models.Model):
     notes = models.CharField(verbose_name='备注', null=True, max_length=64)
     user = models.ForeignKey(
         UserInfo, related_name='user_sports_record', on_delete=models.CASCADE)
-
+    datetime = models.DateTimeField(verbose_name='日期时间', default=datetime.datetime.now())
 
 # 邮箱验证
 class EmailPro(models.Model):
