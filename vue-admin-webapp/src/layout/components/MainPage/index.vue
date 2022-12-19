@@ -14,7 +14,7 @@
         ><i class="el-icon-user"></i>用户信息</el-menu-item
       >
       <el-menu-item index="/dashbord/sports"
-        ><i class="el-icon-basketball"></i>运动</el-menu-item
+        ><i class="el-icon-s-claim"></i>打卡</el-menu-item
       >
       <el-menu-item index="/dashbord/health"
         ><i class="el-icon-check"></i>健康数据录入</el-menu-item
