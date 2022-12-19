@@ -16,7 +16,7 @@ Including another URLconf
 
 from django.urls import path,re_path
 
-from user.views import account, health, sports
+from user.views import account, health, sports, medicine
 urlpatterns = [
     path('register/', account.register, name= 'register'),
     path('login/', account.login, name = 'login'),
@@ -39,9 +39,10 @@ urlpatterns = [
     path('add_sports_record/', sports.add_sports_record, name = 'add_sports_record'),
     path('get_sports_data/', sports.get_sports_data, name = 'get_sports_data'),
 
-    # path('add_record/', sports.add_record, name = 'add_record'),
-    path('getMedicineTime/',sports.getMedicineTime,name='getMedicineTime'),
-
+    # medicine data
+    path('add_medicine_record/', medicine.add_medicine_record, name = 'add_medicine_record'),
+    path('get_medicine_data/', medicine.get_medicine_data, name = 'get_medicine_data'),
+    path('getMedicineTime/',medicine.getMedicineTime,name='getMedicineTime'),
 
     # check database
     path('show/', account.show_list, name = 'show'),

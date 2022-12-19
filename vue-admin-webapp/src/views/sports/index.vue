@@ -9,7 +9,7 @@
           class="filter-item"
           style="margin-left: 10px;"
           type="primary"
-          icon="el-icon-edit"
+          icon="el-icon-basketball"
           @click="handleCreateSports"
           >运动打卡</el-button>
         <el-dialog :visible.sync="dialogFormVisible1">
@@ -53,14 +53,57 @@
       </div>
       <div class="space1"></div>
       <div class="button1">
-        <div class="block">
-<!--          <div class="demonstration">用药打卡</div>-->
-<!--          <el-date-picker-->
-<!--            v-model="value1"-->
-<!--            type="datetime"-->
-<!--            placeholder="选择日期时间">-->
-<!--          </el-date-picker>-->
-        </div>
+        <el-button
+          class="filter-item"
+          style="margin-left: 10px;"
+          type="primary"
+          icon="el-icon-coffee-cup"
+          @click="handleCreateMedicine"
+          >用药打卡</el-button>
+        <el-dialog :visible.sync="dialogFormVisible2">
+      <el-form
+        :model="questionFormMedicine"
+        ref="dataForm"
+        label-position="left"
+        label-width="90px"
+        style="width: 400px; margin-left:50px;"
+      >
+        <el-form-item label="用药种类" prop="medicine_type" required="true">
+          <el-input
+            type="textarea"
+            :rows="1"
+            v-model="questionFormMedicine.medicine_type"
+            placeholder="胰岛素"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="用量(mg)" prop="quantity" required="true">
+          <el-input
+            type="textarea"
+            :rows="1"
+            v-model="questionFormMedicine.quantity"
+            placeholder="20"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="备注" prop="notes" required="true">
+          <el-input
+            type="textarea"
+            v-model="questionFormMedicine.notes"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="时间" prop="datetime" required="true">
+          <el-date-picker
+            v-model="questionFormMedicine.datetime"
+            type="datetime"
+            placeholder="选择日期时间">
+          </el-date-picker>
+        </el-form-item>
+
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible2 = false">取消</el-button>
+        <el-button type="primary" @click="createMedicineData">确定</el-button>
+      </div>
+    </el-dialog>
       </div>
     </div>
     <div class="vertical-space"></div>
@@ -73,7 +116,7 @@
       </div>
       <Calendar
         v-on:choseDay="clickDay"
-        :markDate="date_arr"
+        :markDate="date_arr1"
         v-on:changeMonth="changeDate"
         v-on:isToday="clickToday"
       ></Calendar>
@@ -86,6 +129,7 @@
       </div>
       <Calendar
         v-on:choseDay="clickDay"
+        :markDate="date_arr2"
         v-on:changeMonth="changeDate"
         v-on:isToday="clickToday"
       ></Calendar>
@@ -107,13 +151,20 @@ export default {
     return {
       date: "",
       week: "",
-      date_arr:["2022/12/16"],
+      date_arr1:["2022/12/16"],
+      date_arr2:["2022/12/17"],
       dialogFormVisible1 : false,
-      // dialogFormVisible2 : false,
+      dialogFormVisible2 : false,
       questionFormSport : {
         sport_type: '',
         notes: '',
         datetime: ''
+      },
+      questionFormMedicine : {
+        medicine_type: '',
+        notes: '',
+        quantity: '',
+        datetime: '',
       }
     };
   },
@@ -142,6 +193,16 @@ export default {
       }
       this.dialogFormVisible1 = true
     },
+    handleCreateMedicine() {
+      this.questionFormMedicine = {
+        medicine_type: '',
+        notes: '',
+        quantity: '',
+        datetime: '',
+      }
+      this.dialogFormVisible2 = true
+    },
+
     async createSportsData() {
       var dataobj = {
         sport_type: this.questionFormSport.sport_type,
@@ -172,6 +233,41 @@ export default {
           }
         })
       this.dialogFormVisible1 = false
+      // alert(params['glucose'])
+
+    },
+
+    async createMedicineData() {
+      var dataobj = {
+        medicine_type: this.questionFormMedicine.medicine_type,
+        notes: this.questionFormMedicine.notes,
+        datetime: this.questionFormMedicine.datetime,
+        quantity: this.questionFormMedicine.quantity
+      }
+      const path = 'http://127.0.0.1:8000/add_medicine_record/'
+      var configGet = {
+        method: 'POST',
+        url: path,
+        headers: {
+          'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
+          'Content-Type': 'application/json'
+        },
+        data: dataobj
+      }
+      axios(configGet)
+        .then(function(response) {
+          console.log(JSON.stringify(response.data))
+          if (response.status === 200) {
+            alert('success')
+          }
+        })
+        .catch(function(error) {
+          console.log(error)
+          if (error.response.status === 401) {
+            window.alert('wrong!')
+          }
+        })
+      this.dialogFormVisible2 = false
       // alert(params['glucose'])
 
     },
