@@ -10,7 +10,11 @@
       </div>
       <ul class="conUl">
         <li v-for="item in msgList" :key="item.id">
-          <router-link :to="item.link" @click.native="showMsg(item.time)" class="conUl_link">
+          <router-link
+            :to="item.link"
+            @click.native="showMsg(item.time)"
+            class="conUl_link"
+          >
             <span class="conUl_sp0">{{ item.content }}</span>
             <span class="conUl_sp1">{{ item.time }}</span>
           </router-link>
@@ -21,68 +25,60 @@
 </template>
 
 <script>
-import index from "../../../src/layout/components/header/index"
+import index from '../../../src/layout/components/header/index'
 import axios from 'axios'
 export default {
   data() {
     return {
-      msgList: [
-      ],
-      msgNum:0,
-      medicineTime:[
-      ]
+      msgList: [],
+      msgNum: 0,
+      medicineTime: []
     }
   },
 
   mounted() {
     axios
-    .get("http://127.0.0.1:8000/getMedicineTime/")
-    .then(response => {
-      this.medicineTime = response.data['list'];
-      console.log(this.medicineTime);
-    })
-    .catch(error => {
-      console.log(error)
-    }),
-    this.$nextTick(() => {
-      setInterval(this.checkMedicineTime, 540000);
-    });
+      .get('http://127.0.0.1:8000/getMedicineTime/')
+      .then(response => {
+        this.medicineTime = response.data['list']
+        console.log(this.medicineTime)
+      })
+      .catch(error => {
+        console.log(error)
+      }),
+      this.$nextTick(() => {
+        setInterval(this.checkMedicineTime, 540000)
+      })
   },
 
-
-  methods:{
-    checkMedicineTime(){
-      let now=new Date();
+  methods: {
+    checkMedicineTime() {
+      let now = new Date()
       let nowhours = now.getHours()
       let nowmin = now.getMinutes()
-      for(var i = 0, len = this.medicineTime.length; i < len; i++)
-      {
-        if(nowhours == this.medicineTime[i]['hour'])
-        {
-          console.log("时");
-          if(Math.abs(this.medicineTime[i]['minute'] - nowmin) < 5)
-          {
-            this.msgNum = this.msgNum + 1;
-            console.log("提醒吃药");
-            this.msgList.push(
-                      {
-                        id: this.msgNum,
-                        content: '提醒您按时吃药！',
-                        link: '',
-                        time:nowhours + "时" + nowmin + "分",
-                      },
-            );
-            index.methods.red();  
+      for (var i = 0, len = this.medicineTime.length; i < len; i++) {
+        if (nowhours == this.medicineTime[i]['hour']) {
+          console.log('时')
+          if (Math.abs(this.medicineTime[i]['minute'] - nowmin) < 5) {
+            this.msgNum = this.msgNum + 1
+            console.log('提醒吃药')
+            this.msgList.push({
+              id: this.msgNum,
+              content: '提醒您按时吃药！',
+              link: '',
+              time: nowhours + '时' + nowmin + '分'
+            })
+            index.methods.red()
           }
         }
       }
     },
-    showMsg(time){
+    showMsg(time) {
       this.$alert('我已经按时服药', '服药提醒', {
-          confirmButtonText: '确定',
-        });
+        confirmButtonText: '确定'
+      })
     }
-  },
+  }
 }
 </script>
 <style lang="scss">
