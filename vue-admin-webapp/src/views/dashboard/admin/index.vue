@@ -1016,12 +1016,28 @@ li {
 .articleBar {
   overflow: hidden;
   color: #36a3f7;
-  width: auto;
+  width: 30%;
   height: 100% auto;
   overflow: hidden;
   display: inline-block;
   vertical-align: top;
   margin-bottom: 100px;
+  border-width: 3px;
+  border-radius: 0.5em;
+  border-style: solid;
+  border-color: aqua;
+}
+@media (max-width: 1400px) {
+  .articleBar {
+    overflow: hidden;
+    color: #36a3f7;
+    width: auto;
+    height: 100% auto;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: top;
+    margin-bottom: 100px;
+  }
 }
 .articleTitles {
   font-size: 16px;
