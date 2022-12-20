@@ -303,7 +303,6 @@ export default {
         })
     },
     handleCreate() {
-      alert(this.lineChartData['inPrice'])
       this.lineChartData['inPrice'] = [4, 5, 6]
       this.questionForm = {
         glucose: '',

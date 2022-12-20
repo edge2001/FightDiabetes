@@ -2,9 +2,6 @@
   <div>
     <div class="button-area">
       <div class="button1">
-        <!--        <div class="block">-->
-        <!--          <div class="demonstration">运动打卡</div>-->
-
         <el-button
           class="filter-item"
           style="margin-left: 10px;"
@@ -22,14 +19,13 @@
             style="width: 400px; margin-left:50px;"
           >
             <el-form-item label="运动种类" prop="sport_type" required="true">
-              <el-input
-                type="textarea"
-                :rows="1"
+              <el-cascader
                 v-model="questionFormSport.sport_type"
-                placeholder="篮球"
-              ></el-input>
+                :options="options"
+                @change="handleChange"
+              ></el-cascader>
             </el-form-item>
-            <el-form-item label="备注" prop="notes" required="true">
+            <el-form-item label="备注" prop="notes">
               <el-input
                 type="textarea"
                 v-model="questionFormSport.notes"
@@ -71,12 +67,11 @@
             style="width: 400px; margin-left:50px;"
           >
             <el-form-item label="用药种类" prop="medicine_type" required="true">
-              <el-input
-                type="textarea"
-                :rows="1"
+              <el-cascader
                 v-model="questionFormMedicine.medicine_type"
-                placeholder="胰岛素"
-              ></el-input>
+                :options="options"
+                @change="handleChange"
+              ></el-cascader>
             </el-form-item>
             <el-form-item label="用量(mg)" prop="quantity" required="true">
               <el-input
@@ -84,9 +79,10 @@
                 :rows="1"
                 v-model="questionFormMedicine.quantity"
                 placeholder="20"
+                oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
               ></el-input>
             </el-form-item>
-            <el-form-item label="备注" prop="notes" required="true">
+            <el-form-item label="备注" prop="notes">
               <el-input
                 type="textarea"
                 v-model="questionFormMedicine.notes"
@@ -152,6 +148,43 @@ export default {
   },
   data() {
     return {
+      value: [],
+      options: [{
+        value: 'mouth',
+        label: '口服',
+        children: [
+          {
+            value: 'type1',
+            label: '双胍类'
+          }, {
+            value: 'type2',
+            label: '促胰岛素分泌剂'
+          }, {
+            value: 'type3',
+            label: '胰岛素增敏剂'
+          },
+          {
+            value: 'others',
+            label: '其他'
+          },
+        ]
+      },
+      {
+        value: 'injection',
+        label: '注射',
+        children: [
+          {
+            value: 'type1',
+            label: '胰岛素'
+          },
+          {
+            value: 'others',
+            label: '其他注射剂'
+          }
+        ]
+      }
+
+      ],
       date: "",
       week: "",
       date_arr1:[],
@@ -348,13 +381,13 @@ export default {
   margin: auto;
 }
 .vertical-space {
-  height: 300px;
+  height: 100px;
 }
 .space {
   width: 20%
 }
 .space1 {
-  width: 25%
+  width: 250px
 }
 .calendar1 {
   display: inline-block;
