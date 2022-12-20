@@ -2,8 +2,8 @@
   <div>
     <div class="button-area">
       <div class="button1">
-<!--        <div class="block">-->
-<!--          <div class="demonstration">运动打卡</div>-->
+        <!--        <div class="block">-->
+        <!--          <div class="demonstration">运动打卡</div>-->
 
         <el-button
           class="filter-item"
@@ -11,45 +11,46 @@
           type="primary"
           icon="el-icon-basketball"
           @click="handleCreateSports"
-          >运动打卡</el-button>
+          >运动打卡</el-button
+        >
         <el-dialog :visible.sync="dialogFormVisible1">
-      <el-form
-        :model="questionFormSport"
-        ref="dataForm"
-        label-position="left"
-        label-width="90px"
-        style="width: 400px; margin-left:50px;"
-      >
-        <el-form-item label="运动种类" prop="sport_type" required="true">
-          <el-input
-            type="textarea"
-            :rows="1"
-            v-model="questionFormSport.sport_type"
-            placeholder="篮球"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="备注" prop="notes" required="true">
-          <el-input
-            type="textarea"
-            v-model="questionFormSport.notes"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="时间" prop="datetime" required="true">
-          <el-date-picker
-            v-model="questionFormSport.datetime"
-            type="datetime"
-            placeholder="选择日期时间">
-          </el-date-picker>
-        </el-form-item>
-
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible1 = false">取消</el-button>
-        <el-button type="primary" @click="createSportsData()">确定</el-button>
-      </div>
-    </el-dialog>
-
-
+          <el-form
+            :model="questionFormSport"
+            ref="dataForm"
+            label-position="left"
+            label-width="90px"
+            style="width: 400px; margin-left:50px;"
+          >
+            <el-form-item label="运动种类" prop="sport_type" required="true">
+              <el-input
+                type="textarea"
+                :rows="1"
+                v-model="questionFormSport.sport_type"
+                placeholder="篮球"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="备注" prop="notes" required="true">
+              <el-input
+                type="textarea"
+                v-model="questionFormSport.notes"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="时间" prop="datetime" required="true">
+              <el-date-picker
+                v-model="questionFormSport.datetime"
+                type="datetime"
+                placeholder="选择日期时间"
+              >
+              </el-date-picker>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible1 = false">取消</el-button>
+            <el-button type="primary" @click="createSportsData()"
+              >确定</el-button
+            >
+          </div>
+        </el-dialog>
       </div>
       <div class="space1"></div>
       <div class="button1">
@@ -59,86 +60,88 @@
           type="primary"
           icon="el-icon-coffee-cup"
           @click="handleCreateMedicine"
-          >用药打卡</el-button>
+          >用药打卡</el-button
+        >
         <el-dialog :visible.sync="dialogFormVisible2">
-      <el-form
-        :model="questionFormMedicine"
-        ref="dataForm"
-        label-position="left"
-        label-width="90px"
-        style="width: 400px; margin-left:50px;"
-      >
-        <el-form-item label="用药种类" prop="medicine_type" required="true">
-          <el-input
-            type="textarea"
-            :rows="1"
-            v-model="questionFormMedicine.medicine_type"
-            placeholder="胰岛素"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="用量(mg)" prop="quantity" required="true">
-          <el-input
-            type="textarea"
-            :rows="1"
-            v-model="questionFormMedicine.quantity"
-            placeholder="20"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="备注" prop="notes" required="true">
-          <el-input
-            type="textarea"
-            v-model="questionFormMedicine.notes"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="时间" prop="datetime" required="true">
-          <el-date-picker
-            v-model="questionFormMedicine.datetime"
-            type="datetime"
-            placeholder="选择日期时间">
-          </el-date-picker>
-        </el-form-item>
-
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible2 = false">取消</el-button>
-        <el-button type="primary" @click="createMedicineData">确定</el-button>
-      </div>
-    </el-dialog>
+          <el-form
+            :model="questionFormMedicine"
+            ref="dataForm"
+            label-position="left"
+            label-width="90px"
+            style="width: 400px; margin-left:50px;"
+          >
+            <el-form-item label="用药种类" prop="medicine_type" required="true">
+              <el-input
+                type="textarea"
+                :rows="1"
+                v-model="questionFormMedicine.medicine_type"
+                placeholder="胰岛素"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="用量(mg)" prop="quantity" required="true">
+              <el-input
+                type="textarea"
+                :rows="1"
+                v-model="questionFormMedicine.quantity"
+                placeholder="20"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="备注" prop="notes" required="true">
+              <el-input
+                type="textarea"
+                v-model="questionFormMedicine.notes"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="时间" prop="datetime" required="true">
+              <el-date-picker
+                v-model="questionFormMedicine.datetime"
+                type="datetime"
+                placeholder="选择日期时间"
+              >
+              </el-date-picker>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible2 = false">取消</el-button>
+            <el-button type="primary" @click="createMedicineData"
+              >确定</el-button
+            >
+          </div>
+        </el-dialog>
       </div>
     </div>
     <div class="vertical-space"></div>
 
     <div class="con">
-    <div class="calendar1">
-      <div class="now-data-myself">
-        <div class="now-data-myself-time">{{ date }}</div>
-        <div class="now-data-myself-week">{{ week }}</div>
+      <div class="calendar1">
+        <div class="now-data-myself">
+          <div class="now-data-myself-time">{{ date }}</div>
+          <div class="now-data-myself-week">{{ week }}</div>
+        </div>
+        <Calendar
+          v-on:choseDay="clickDay"
+          :markDate="date_arr1"
+          v-on:changeMonth="changeDate"
+          v-on:isToday="clickToday"
+        ></Calendar>
       </div>
-      <Calendar
-        v-on:choseDay="clickDay"
-        :markDate="date_arr1"
-        v-on:changeMonth="changeDate"
-        v-on:isToday="clickToday"
-      ></Calendar>
-    </div>
-    <div class="space"></div>
-    <div class="calendar1">
-      <div class="now-data-myself">
-        <div class="now-data-myself-time">{{ date }}</div>
-        <div class="now-data-myself-week">{{ week }}</div>
+      <div class="space"></div>
+      <div class="calendar1">
+        <div class="now-data-myself">
+          <div class="now-data-myself-time">{{ date }}</div>
+          <div class="now-data-myself-week">{{ week }}</div>
+        </div>
+        <Calendar
+          v-on:choseDay="clickDay"
+          :markDate="date_arr2"
+          v-on:changeMonth="changeDate"
+          v-on:isToday="clickToday"
+        ></Calendar>
       </div>
-      <Calendar
-        v-on:choseDay="clickDay"
-        :markDate="date_arr2"
-        v-on:changeMonth="changeDate"
-        v-on:isToday="clickToday"
-      ></Calendar>
     </div>
   </div>
-  </div>
-
 </template>
- 
+
 <script>
 /* eslint-disable */
 import Calendar from 'vue-calendar-component';

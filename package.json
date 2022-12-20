@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "docx-preview": "^0.1.14"
+    "docx-preview": "^0.1.14",
+    "vue-calendar-component": "^2.8.2"
   }
 }
