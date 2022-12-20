@@ -45,6 +45,15 @@
             oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
           ></el-input>
         </el-form-item>
+        <el-form-item label="血压(收缩压)" prop="ketone">
+          <el-input
+            type="textarea"
+            :rows="1"
+            v-model="questionForm.pressure"
+            placeholder="mmHg"
+            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+          ></el-input>
+        </el-form-item>
         <el-form-item label="备注" prop="note">
           <el-input
             type="textarea"
@@ -172,6 +181,7 @@ export default {
         glucose: '',
         weight: '',
         ketone: '',
+        pressure: '',
         note: '',
         time_tag: '',
         measureTime: [],
@@ -354,6 +364,13 @@ export default {
               }
               cnt2++
             }
+            for (var ii = 0; ii < self.xAxisData.length / 2; ii++) {
+              var tmp = self.xAxisData[ii]
+              // eslint-disable-next-line prettier/prettier
+              self.xAxisData[ii] =
+                self.xAxisData[self.xAxisData.length - 1 - ii]
+              self.xAxisData[self.xAxisData.length - 1 - ii] = tmp
+            }
             if (prop == 'glucose') {
               for (var k = 0; k < response.data[prop].length; k++) {
                 self.lineChartData.emptyGlucose.push(response.data[prop][k][2])
@@ -386,13 +403,6 @@ export default {
               self._setOption(self.lineChartData.weight)
               // this._setOption([1, 2, 3], this.lineChartData.pressureStandard)
             }
-            for (var ii = 0; ii < self.xAxisData.length / 2; ii++) {
-              var tmp = self.xAxisData[ii]
-              // eslint-disable-next-line prettier/prettier
-              self.xAxisData[ii] =
-                self.xAxisData[self.xAxisData.length - 1 - ii]
-              self.xAxisData[self.xAxisData.length - 1 - ii] = tmp
-            }
           }
         })
         .catch(function(error) {
@@ -421,7 +431,8 @@ export default {
         time_tag: this.questionForm.measureTime[0],
         weight: this.questionForm.weight,
         ketone: this.questionForm.ketone,
-        notes: this.questionForm.note
+        notes: this.questionForm.note,
+        pressure: this.questionForm.pressure
       }
       const path = 'http://127.0.0.1:8000/add_datum/'
       var configGet = {

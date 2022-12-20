@@ -26,10 +26,13 @@ def add_datum(request):
         ketone = content['ketone']
         if (ketone == ''):
             ketone = 0
+        pressure = content['pressure']
+        if (pressure == ''):
+            pressure = 0
         time_tag = content['time_tag']
         notes = content['notes']
         newdatum = datum(blood_glucose=blood_glucose, weight=weight,
-                         ketone=ketone, time_tag=time_tag, notes=notes)
+                         ketone=ketone, time_tag=time_tag, notes=notes, blood_pressure=pressure)
         token = request.META.get('HTTP_TOKEN')
         username = get_username(token)
         user = UserInfo.objects.get(username=username)
