@@ -154,8 +154,8 @@ export default {
     return {
       date: "",
       week: "",
-      date_arr1:["2022/12/16"],
-      date_arr2:["2022/12/17"],
+      date_arr1:[],
+      date_arr2:[],
       dialogFormVisible1 : false,
       dialogFormVisible2 : false,
       questionFormSport : {
@@ -170,6 +170,10 @@ export default {
         datetime: '',
       }
     };
+  },
+  mounted() {
+    this.getMedicineData()
+    this.getSportsData()
   },
   created() {
     var now = new Date();
@@ -226,7 +230,7 @@ export default {
         .then(function(response) {
           console.log(JSON.stringify(response.data))
           if (response.status === 200) {
-            alert('success')
+            // alert('success')
           }
         })
         .catch(function(error) {
@@ -237,7 +241,7 @@ export default {
         })
       this.dialogFormVisible1 = false
       // alert(params['glucose'])
-
+      location.reload()
     },
 
     async createMedicineData() {
@@ -261,7 +265,7 @@ export default {
         .then(function(response) {
           console.log(JSON.stringify(response.data))
           if (response.status === 200) {
-            alert('success')
+            // alert('success')
           }
         })
         .catch(function(error) {
@@ -272,8 +276,52 @@ export default {
         })
       this.dialogFormVisible2 = false
       // alert(params['glucose'])
-
+      location.reload()
     },
+    getSportsData : function() {
+      var path = 'http://127.0.0.1:8000/get_sports_data/'
+      var configGet = {
+        method: 'GET',
+        url: path,
+        headers: {
+          'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
+          'Content-Type': 'application/json'
+        },
+      }
+      var self = this
+      axios(configGet)
+        .then(function(response) {
+          if(response.status ===200) {
+            self.date_arr1 = response.data['dates']
+          }
+        })
+        .catch(function(error) {
+          console.log(error)
+          window.alert('error!')
+        })
+    },
+    getMedicineData : function() {
+      var path = 'http://127.0.0.1:8000/get_medicine_data/'
+      var configGet = {
+        method: 'GET',
+        url: path,
+        headers: {
+          'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
+          'Content-Type': 'application/json'
+        },
+      }
+      var self = this
+      axios(configGet)
+        .then(function(response) {
+          if(response.status ===200) {
+            self.date_arr2 = response.data['dates']
+          }
+        })
+        .catch(function(error) {
+          console.log(error)
+          window.alert('error!')
+        })
+    }
   }
 }
 </script>
