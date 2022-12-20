@@ -12,8 +12,8 @@ from rest_framework.response import Response
 import json
 from user.models import UserInfo, Sports_record
 from user.utils.token import get_username
-
-
+import pytz
+LOCAL_TIME_ZONE=pytz.timezone('Asia/Shanghai')
 # add a sports record
 def add_sports_record(request):
     if request.method == 'POST':
@@ -45,7 +45,7 @@ def get_sports_data(request):
         }
         records = user.user_sports_record.filter()
         for i in range(len(records)):
-            new_date = records[i].datetime
+            new_date = records[i].datetime.astimezone(LOCAL_TIME_ZONE)
             new_date = new_date.strftime('%Y/%m/%d')
             print(new_date)
             if new_date in params['dates']:
