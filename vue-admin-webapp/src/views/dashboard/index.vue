@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import adminComponent from './admin'
+import adminComponent from '../sports'
 import userComponent from './user'
 import { mapGetters } from 'vuex'
 export default {
