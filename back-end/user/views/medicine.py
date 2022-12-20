@@ -6,13 +6,14 @@ from django.urls import reverse
 from django.template import loader
 
 import datetime
+import pytz
 import threading
 from rest_framework import status
 from rest_framework.response import Response
 import json
 from user.models import UserInfo, Sports_record, Medicine_record
 from user.utils.token import get_username
-
+LOCAL_TIME_ZONE=pytz.timezone('Asia/Shanghai')
 
 # add a sports record
 def add_medicine_record(request):
@@ -46,7 +47,7 @@ def get_medicine_data(request):
         }
         records = user.user_medicine_record.filter()
         for i in range(len(records)):
-            new_date = records[i].datetime
+            new_date = records[i].datetime.astimezone(LOCAL_TIME_ZONE)
             new_date = new_date.strftime('%Y/%m/%d')
             print(new_date)
             if new_date in params['dates']:
