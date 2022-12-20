@@ -1,13 +1,15 @@
 <template>
   <div class="tab-container">
-    <el-button
-      class="filter-item"
-      style="margin-left: 10px;"
-      type="primary"
-      icon="el-icon-edit"
-      @click="handleCreate"
-      >添加</el-button
-    >
+    <div class="button_area">
+      <el-button
+        class="filter-item"
+        style="margin-left: 10px;"
+        type="primary"
+        icon="el-icon-edit"
+        @click="handleCreate"
+        >添加健康数据记录</el-button
+      >
+    </div>
     <el-dialog :visible.sync="dialogFormVisible">
       <el-form
         :model="questionForm"
@@ -72,11 +74,45 @@
         <el-button type="primary" @click="createData()">确定</el-button>
       </div>
     </el-dialog>
+    <el-select v-model="value" placeholder="请选择展示时间">
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      >
+      </el-option>
+    </el-select>
+    <el-radio-group v-model="radio1" class="radio_class">
+      <el-radio-button label="空腹血糖"></el-radio-button>
+      <el-radio-button label="血酮"></el-radio-button>
+      <el-radio-button label="血压"></el-radio-button>
+      <el-radio-button label="体重"></el-radio-button>
+    </el-radio-group>
     <div
       class="lineCharts"
       :style="{ width: width, height: height }"
       ref="myCharts"
     ></div>
+    <div class="dashbord">
+      <!-- <button @click="testfunc()"></button> -->
+      <div>
+        <el-row class="tableChart">
+          <el-col :span="12">
+            <div
+              ref="PieCharts"
+              :style="{ width: width, height: height }"
+            ></div>
+          </el-col>
+          <el-col :span="12">
+            <div
+              ref="Barcharts"
+              :style="{ width: width, height: height }"
+            ></div>
+          </el-col>
+        </el-row>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -99,16 +135,30 @@ export default {
   },
   data() {
     return {
+      options: [
+        {
+          value: '7Days',
+          label: '7days'
+        },
+        {
+          value: '30Days',
+          label: '30days'
+        }
+      ],
+      value: '',
+      radio1: '空腹血糖',
       timeTag: 1,
       xAxisData: ['1', '2', '3'],
       lineChartData: {
-        inPrice: [1, 2, 3],
-        outPrice: [1, 2, 4],
         emptyGlucose: [],
-        emptyGlucoseStandard: [6.1, 6.1, 6.1, 6.1, 6.1, 6.1, 6.1]
+        emptyGlucoseStandard: [6.1, 6.1, 6.1, 6.1, 6.1, 6.1, 6.1],
+        ketone: [],
+        ketoneStandard: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+        pressure: [],
+        pressureStandard: [140, 140, 140, 140, 140, 140, 140],
+        weight: []
       },
       mycharts: null,
-      subjectList: ['黄金', '白银', '钻石'],
       input: '',
       tabMapOptions: [
         { label: '空腹', key: '1' },
@@ -134,27 +184,64 @@ export default {
     lineChartData: {
       deep: true,
       handler(val) {
-        this._setOption(val.emptyGlucose, val.emptyGlucoseStandard)
+        if (this.radio1 == '空腹血糖') {
+          this._setOption(val.emptyGlucose, val.emptyGlucoseStandard)
+        }
+      }
+    },
+    radio1: {
+      deep: true,
+      handler(val) {
+        if (this.radio1 == '空腹血糖') {
+          this.lineChartData.emptyGlucose = []
+          this.getData('glucose')
+          this._setOption(
+            this.lineChartData.emptyGlucose,
+            this.lineChartData.emptyGlucoseStandard
+          )
+        } else if (this.radio1 == '血酮') {
+          // this.lineChartData.ketone = []
+          this.getData('ketone')
+          this._setOption(
+            this.lineChartData.ketone,
+            this.lineChartData.ketoneStandard
+          )
+        } else if (this.radio1 == '血压') {
+          this.lineChartData.pressure = []
+          this.getData('pressure')
+          this._setOption(
+            this.lineChartData.pressure,
+            this.lineChartData.pressureStandard
+          )
+          this.getPressureData()
+        } else if (this.radio1 == '体重') {
+          this.lineChartData.weight = []
+          this.getData('weight')
+          this._setOption(this.lineChartData.weight)
+        }
       }
     }
   },
   mounted() {
     this.initEcharts()
-    this.get7DaysData()
+    this.getData('glucose')
+    this.getData('ketone')
+    this.getData('pressure')
+    this.getData('weight')
   },
   methods: {
     initEcharts() {
       this.mycharts = echarts.init(this.$refs.myCharts, 'macarons')
       this._setOption(
         this.lineChartData.emptyGlucose,
-        this.lineChartData.outPrice
+        this.lineChartData.emptyGlucoseStandard
       )
     },
     // eslint-disable-next-line no-unused-vars
     _setOption(inprice = [], outprice = []) {
       this.mycharts.setOption({
         title: {
-          text: '近期血糖数据',
+          text: '近期健康数据',
           left: '16'
         },
         tooltip: {
@@ -227,24 +314,7 @@ export default {
         ]
       })
     },
-    set7DaysAxis() {
-      // var year = date.getFullYear() //返回指定日期的年份
-      let oneDay = 24 * 60 * 60 * 1000
-      // alert(new Date(Date.now() - oneDay))
-      // var month = date.getMonth() + 1
-      // var day = date.getDate()
-      // day = day - 6
-      this.xAxisData = []
-      for (var i = 0; i < 7; i++) {
-        var cur_datetime = new Date(Date.now() - oneDay * (6 - i))
-        var month = cur_datetime.getMonth() + 1
-        var day = cur_datetime.getDate()
-        var cur_datetime_str = month + '.' + day
-        this.xAxisData.push(cur_datetime_str)
-      }
-    },
-    get7DaysData() {
-      // this.set7DaysAxis()
+    getData(prop) {
       var dataobj = {
         time_tag: this.timeTag
       }
@@ -266,18 +336,15 @@ export default {
             self.xAxisData = []
             var cnt2 = 0
             var cntdays = 0
-            var m_glucose_data = response.data['glucose']
+            var m_data = response.data[prop]
             while (cnt2 < 90 && cntdays < 7) {
               var cur_datetime = new Date(Date.now() - oneDay * cnt2)
               var month = cur_datetime.getMonth() + 1
               var day = cur_datetime.getDate()
               var cur_datetime_str = month + '.' + day
               var isSelected = 0
-              for (var j = 0; j < m_glucose_data.length; j++) {
-                if (
-                  m_glucose_data[j][0] == month &&
-                  m_glucose_data[j][1] == day
-                ) {
+              for (var j = 0; j < m_data.length; j++) {
+                if (m_data[j][0] == month && m_data[j][1] == day) {
                   self.xAxisData.push(cur_datetime_str)
                   isSelected = 1
                 }
@@ -287,11 +354,44 @@ export default {
               }
               cnt2++
             }
-            console.log(response.data)
-            for (var k = 0; k < response.data['glucose'].length; k++) {
-              self.lineChartData.emptyGlucose.push(
-                response.data['glucose'][k][2]
+            if (prop == 'glucose') {
+              for (var k = 0; k < response.data[prop].length; k++) {
+                self.lineChartData.emptyGlucose.push(response.data[prop][k][2])
+              }
+            }
+            if (prop == 'ketone') {
+              for (var kk = 0; kk < response.data[prop].length; kk++) {
+                self.lineChartData.ketone.push(response.data[prop][kk][2])
+              }
+              this._setOption(
+                this.lineChartData.ketone,
+                this.lineChartData.ketoneStandard
               )
+            }
+            if (prop == 'pressure') {
+              for (var l = 0; l < response.data[prop].length; l++) {
+                self.lineChartData.pressure.push(response.data[prop][l][2])
+              }
+              self._setOption(
+                self.lineChartData.pressure,
+                self.lineChartData.pressureStandard
+              )
+              // this._setOption([1, 2, 3], this.lineChartData.pressureStandard)
+            }
+            if (prop == 'weight') {
+              console.log(response.data)
+              for (var ll = 0; ll < response.data[prop].length; ll++) {
+                self.lineChartData.weight.push(response.data[prop][ll][2])
+              }
+              self._setOption(self.lineChartData.weight)
+              // this._setOption([1, 2, 3], this.lineChartData.pressureStandard)
+            }
+            for (var ii = 0; ii < self.xAxisData.length / 2; ii++) {
+              var tmp = self.xAxisData[ii]
+              // eslint-disable-next-line prettier/prettier
+              self.xAxisData[ii] =
+                self.xAxisData[self.xAxisData.length - 1 - ii]
+              self.xAxisData[self.xAxisData.length - 1 - ii] = tmp
             }
           }
         })
@@ -303,7 +403,6 @@ export default {
         })
     },
     handleCreate() {
-      this.lineChartData['inPrice'] = [4, 5, 6]
       this.questionForm = {
         glucose: '',
         weight: '',
@@ -317,7 +416,6 @@ export default {
     },
     // post data
     async createData() {
-      alert(this.questionForm.measureTime[0])
       var dataobj = {
         blood_glucose: this.questionForm.glucose,
         time_tag: this.questionForm.measureTime[0],
@@ -356,6 +454,13 @@ export default {
 </script>
 <style scoped>
 .lineCharts {
-  margin-top: 100px;
+  margin-top: 10px;
+}
+.button_area {
+  margin-bottom: 50px;
+}
+.radio_class {
+  position: absolute;
+  left: 45%;
 }
 </style>

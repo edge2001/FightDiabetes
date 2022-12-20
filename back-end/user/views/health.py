@@ -93,6 +93,9 @@ def get_week_glucose(request):
         content = json.loads(body)
         time_tag = content['time_tag']
         glucose = []
+        ketone = []
+        pressure = []
+        weight = []
         dates = []
         today = datetime.date.today()
         for i in range(6, 0, -1):
@@ -104,14 +107,21 @@ def get_week_glucose(request):
             for datum in data:  # data is the set of this date
                 if (time_tag != datum.time_tag):  # we want to find proper glucose tag
                     continue
-                print(datum)
                 blood_glucose = datum.blood_glucose
                 glucose.append([date.month, date.day, blood_glucose])
-        print(glucose)
+                m_ketone = datum.ketone
+                ketone.append([date.month, date.day, m_ketone])
+                m_pressure = datum.blood_pressure
+                pressure.append([date.month, date.day, m_pressure])
+                m_weight = datum.weight
+                weight.append([date.month, date.day, m_weight])
 
         # 初始化要返回的dict
         dict = {
             'glucose': glucose,
+            'ketone': ketone,
+            'pressure': pressure,
+            'weight': weight
         }
         return HttpResponse(json.dumps(dict), status=status.HTTP_200_OK)
 

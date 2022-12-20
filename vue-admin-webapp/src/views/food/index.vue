@@ -136,25 +136,22 @@ export default {
           // console.log(response.data['data']['name'])
           // console.log(response.data['data']['calory'])
           // console.log(response.data['data']['sugar'] == '')
-          var p = { };
+          var p = {}
           if (
             response.data['data']['sugar'] == '' ||
             response.data['data']['sugar'] == 0.0
-          ) 
-          {
-              p = {
+          ) {
+            p = {
               name: response.data['data']['name'],
               calory: response.data['data']['calory'],
-              sugar: "暂无数据",
-            };
-          }
-          else
-          {
-              p = {
+              sugar: '暂无数据'
+            }
+          } else {
+            p = {
               name: response.data['data']['name'],
               calory: response.data['data']['calory'],
               sugar: response.data['data']['sugar']
-            };
+            }
           }
           var repeated = 0
           for (var i = 0; i < this.tableData.length; i++) {
