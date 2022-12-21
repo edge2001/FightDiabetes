@@ -135,19 +135,54 @@
         ></Calendar>
       </div>
     </div>
+    <div class="charts">
+      <el-row class="tableChart">
+        <el-col :span="12">
+          <!-- <bar-charts class="barCharts" :barData="barData"></bar-charts> -->
+          <div ref="Barcharts" :style="{ width: width, height: height }"></div>
+        </el-col>
+        <el-col :span="12">
+          <!-- <pie-charts class="pieCharts"></pie-charts> -->
+          <div ref="PieCharts" :style="{ width: width, height: height }"></div>
+        </el-col>
+        <!-- <el-col :span="16">
+                <bar-charts class="barCharts" :barData="barData"></bar-charts>
+              </el-col> -->
+      </el-row>
+    </div>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
 import Calendar from 'vue-calendar-component';
+import PieCharts from '../dashboard/admin/components/PieCharts'
+import BarCharts from '../dashboard/admin/components/BarCharts'
+import echarts from 'echarts'
+import resize from '../../mixins/resize'
+require('echarts/theme/macarons') // echarts theme
 import axios from "axios";
+import { stringify } from 'zrender/lib/tool/color';
 export default {
+  mixins: [resize],
+  props: {
+    width: {
+      type: String,
+      default: '100%'
+    },
+    height: {
+      type: String,
+      default: '350px'
+    }
+  },
   components: {
-    Calendar
+    Calendar,
+    PieCharts,
   },
   data() {
     return {
+      PieCharts: null,
+      Barcharts: null,
       value: [],
       options: [{
         value: 'mouth',
@@ -207,6 +242,8 @@ export default {
   mounted() {
     this.getMedicineData()
     this.getSportsData()
+    this.initEcharts()
+    this.initBarChart()
   },
   created() {
     var now = new Date();
@@ -216,6 +253,117 @@ export default {
     this.week = arr_week[day];
   },
   methods: {
+    initBarChart() {
+      this.Barcharts = echarts.init(this.$refs.Barcharts, 'macarons')
+      this._setBarOption()
+    },
+    _setBarOption() {
+      this.Barcharts.setOption({
+        title: {
+          text: '运动统计',
+          left: '16'
+        },
+        legend: {
+          data: ['']
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        grid: {
+          left: '20',
+          right: '20',
+          bottom: '3',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'category',
+          data: [
+            '本周运动次数',
+            '上周运动次数',
+          ]
+        },
+        yAxis: {},
+        // Declare several bar series, each will be mapped
+        // to a column of dataset.source by default.
+        series: [
+          {
+            type: 'bar',
+            name: 'mmol/L',
+            data: [
+              this.max_glucose,
+              this.min_glucose,
+              this.emp_glucose,
+              this.before_glucose,
+              this.after_glucose
+              // this.sleep_glucose
+            ],
+            itemStyle: {
+              normal: {
+                //这里是重点
+                color: function (params) {
+                  //注意，如果颜色太少的话，后面颜色不会自动循环，最好多定义几个颜色
+                  var colorList = [
+                    '#c23531',
+                    '#2f4554',
+                    '#61a0a8',
+                    '#d48265',
+                    '#91c7ae',
+                    '#749f83',
+                    '#ca8622'
+                  ]
+                  return colorList[params.dataIndex]
+                }
+              }
+            }
+          }
+        ]
+      })
+    },
+    initEcharts() {
+      this.PieCharts = echarts.init(this.$refs.PieCharts, 'macarons')
+      this._setOption()
+    },
+    _setOption() {
+      this.PieCharts.setOption({
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        legend: {
+          left: 'center',
+          bottom: '10',
+          data: ['Vue', 'js', 'html', 'css', 'webpack', 'node']
+        },
+        series: [
+          {
+            name: '统计数据',
+            type: 'pie',
+            roseType: 'radius',
+            radius: [15, 120],
+            center: ['50%', '42%'],
+            data: [
+              { value: this.above_time, name: '偏高天数' },
+              { value: this.below_time, name: '偏低天数' },
+              { value: this.normal_time, name: '正常天数' },
+              {
+                value:
+                  this.showDays -
+                  this.above_time -
+                  this.below_time -
+                  this.normal_time,
+                name: '未测天数'
+              }
+            ],
+            animationEasing: 'cubicInOut',
+            animationDuration: 2600
+          }
+        ]
+      })
+    },
     clickDay(data) {
       console.log(data); //选中某天
     },
@@ -311,7 +459,7 @@ export default {
       // alert(params['glucose'])
       location.reload()
     },
-    getSportsData : function() {
+    getSportsData: function () {
       var path = 'http://127.0.0.1:8000/get_sports_data/'
       var configGet = {
         method: 'GET',
@@ -324,8 +472,22 @@ export default {
       var self = this
       axios(configGet)
         .then(function(response) {
-          if(response.status ===200) {
+          if (response.status === 200) {
             self.date_arr1 = response.data['dates']
+            for (var i = 0; i < self.date_arr1.length; i++) { // for each date string
+              var j = 0
+              var cnt = 0
+              while (cnt < 1) {
+                if (self.date_arr1[i][j] === '/') {
+                  cnt++
+                }
+                j++
+              }
+              var yearnum = ''
+              for (var k = j; k < self.date_arr1[i].length; k++) {
+                datenum += self.date_arr1[i][k]
+              }
+            }
           }
         })
         .catch(function(error) {
