@@ -1,6 +1,5 @@
 <template>
   <div>
-    <p>您可以在这里查询想摄入的食物</p>
     <div class="item">
       <input
         type="text"
@@ -37,9 +36,9 @@
     </el-select>
     <el-table :data="tableData">
       <el-table-column prop="name" label="食物" width="180"> </el-table-column>
-      <el-table-column prop="calory" label="热量" width="180">
+      <el-table-column prop="calory" label="热量（千卡）" width="180">
       </el-table-column>
-      <el-table-column prop="sugar" label="糖分"> </el-table-column>
+      <el-table-column prop="sugar" label="糖分（克）"> </el-table-column>
     </el-table>
     <!-- <el-select v-model="test" value-key="foodId">
       <el-option
