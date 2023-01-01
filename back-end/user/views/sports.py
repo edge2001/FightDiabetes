@@ -1,20 +1,21 @@
-from django.shortcuts import render
 
+import json
+
+import pytz
 # Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
+from django.shortcuts import render
 from django.template import loader
-
-import datetime
-import threading
+from django.urls import reverse
 from rest_framework import status
 from rest_framework.response import Response
-import json
-from user.models import UserInfo, Sports_record
+from user.models import Sports_record, UserInfo
 from user.utils.token import get_username
-import pytz
-LOCAL_TIME_ZONE=pytz.timezone('Asia/Shanghai')
+
+LOCAL_TIME_ZONE = pytz.timezone('Asia/Shanghai')
 # add a sports record
+
+
 def add_sports_record(request):
     if request.method == 'POST':
         body = request.body.decode('UTF-8')
