@@ -1,8 +1,11 @@
 # FightDiabetes
-12.11
-+ todolist
-mainpage 正确显示barcharts的分类血糖数据 sfy
-health 在页面显示数据等 sfy
-mainpage 加入文字链接跳转到文章 美化文章显示zzw
-userinfo 为localstorage增添变量 szx
-
+## TEST
+###代码风格测试
+* 已经完成，最终提交前在flake8配置文件中删去提交前在flake8里删去F401,并将未用的import全部删除
+* 运行代码（需要安装flake8，autoflake, autopep8, isort）：
+```
+chmod +x lint.sh
+./lint.sh
+```
+###单元测试
+* todo
