@@ -3,9 +3,10 @@ from django.core import signing
 import hashlib
 
 HEADER = {'typ': 'JWP', 'alg': 'default'}
+
+
 KEY = "songzixuan"
 SALT = "zxzxzxzx"
-
 
 def encrypt(obj):
     """加密：signing 加密 and Base64 编码"""
@@ -13,13 +14,11 @@ def encrypt(obj):
     value = signing.b64_encode(value.encode()).decode()
     return value
 
-
 def decrypt(src):
     """解密：Base64 解码 and signing 解密"""
     src = signing.b64_decode(src.encode()).decode()
     raw = signing.loads(src, key=KEY, salt=SALT)
     return raw
-
 
 def create_token(username):
     """生成token信息"""
@@ -35,6 +34,11 @@ def create_token(username):
     signature = md5.hexdigest()
     token = "%s.%s.%s" % (header, payload, signature)
     return token
+
+def get_username(token):
+    """解析 token 获取 username"""
+    payload = get_payload(token)
+    return payload['username']
 
 
 def get_payload(token):
