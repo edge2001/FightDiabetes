@@ -320,6 +320,7 @@ export default {
             localStorage.setItem('token', response.data['token'])
 
             window.location.href = '/#/dashbord'
+            window.location.reload
             self.$message({
               message: '登录成功',
               type: 'success'

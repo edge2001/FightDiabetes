@@ -1,58 +1,81 @@
 <template>
   <div>
     <h1 class="mfont">welcome to fightDiabetes!</h1>
+    <h1 class="mfont_2">在这里，我们可以帮助您对抗糖尿病</h1>
+    <HR
+      style="FILTER: alpha(opacity=100,finishopacity=0,style=3)"
+      width="100%"
+      color="#987cb9"
+      SIZE="3"
+      class="mline"
+    ></HR>
     <div>
-      <div class="showImg">
-        <img
-          @mouseover="changeInterval(true)"
-          @mouseleave="changeInterval(false)"
-          @click="jumpToArticle(null)"
-          v-for="item in imgArr"
-          :key="item.id"
-          :src="item.url"
-          alt="暂无图片"
-          v-show="item.id === currentIndex"
-        />
-
-        <div @click="clickIcon('up')" class="iconDiv icon-left">
-          <i class="el-icon-caret-left"></i>
-        </div>
-
-        <div @click="clickIcon('down')" class="iconDiv icon-right">
-          <i class="el-icon-caret-right"></i>
-        </div>
-
-        <div class="banner-circle">
-          <ul>
-            <li
-              @click="changeImg(item.id)"
+      <el-row class="showarea">
+        <h1 class="line"></h1>
+        <el-col :span="16">
+          <div class="showImg">
+            <img
+              @mouseover="changeInterval(true)"
+              @mouseleave="changeInterval(false)"
+              @click="jumpToArticle(null)"
               v-for="item in imgArr"
               :key="item.id"
-              :class="item.id === currentIndex ? 'active' : ''"
-            ></li>
-          </ul>
-        </div>
-        <div
-          style="text-align:left;position: absolute;top:300px;left:0px;background: rgba(0,0,0,0.3);font-size: 18px;color:aqua;"
-        >
-          {{ title }}
-        </div>
-      </div>
-      <div class="articleBar">
-        <h4 style="font-size:28px">其他文章</h4>
-        <ul>
-          <li
-            class="articleTitles"
-            v-for="titles in titleList"
-            @click="jumpToArticle(titles.id)"
-          >
-            {{ titles.title }}
-          </li>
-        </ul>
-      </div>
-    </div>
+              :src="item.url"
+              alt="暂无图片"
+              v-show="item.id === currentIndex"
+            />
 
-    <h1 class="showWord">近期血糖数据</h1>
+            <div @click="clickIcon('up')" class="iconDiv icon-left">
+              <i class="el-icon-caret-left"></i>
+            </div>
+
+            <div @click="clickIcon('down')" class="iconDiv icon-right">
+              <i class="el-icon-caret-right"></i>
+            </div>
+
+            <div class="banner-circle">
+              <ul>
+                <li
+                  @click="changeImg(item.id)"
+                  v-for="item in imgArr"
+                  :key="item.id"
+                  :class="item.id === currentIndex ? 'active' : ''"
+                ></li>
+              </ul>
+            </div>
+            <div
+              style="text-align:center;position: absolute;top:300px;left: 30%;background: rgba(0,0,0,0.3);font-size: 18px;color:mediumseagreen;"
+            >
+              {{ title }}
+            </div>
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <div class="articleBar">
+            <h4 style="font-size:28px">其他文章</h4>
+            <ul>
+              <li
+                class="articleTitles"
+                v-for="titles in titleList"
+                @click="jumpToArticle(titles.id)"
+              >
+                {{ titles.title }}
+              </li>
+            </ul>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+    <HR
+      style="FILTER: alpha(opacity=100,finishopacity=0,style=3)"
+      width="100%"
+      color="#987cb9"
+      SIZE="3"
+      class="mline"
+    >
+    </HR>
+
+    <h1 class="mfont">您的近期血糖数据</h1>
     <div class="dashbord">
       <!-- <button @click="testfunc()"></button> -->
       <el-select v-model="value" placeholder="请选择展示时间">
@@ -179,6 +202,7 @@ export default {
           label: '30days'
         }
       ],
+      isReloaded: 0,
       max_glucose: 0,
       min_glucose: 0,
       emp_glucose: 0,
@@ -1016,16 +1040,18 @@ li {
 .articleBar {
   overflow: hidden;
   color: #36a3f7;
-  width: 30%;
+  width: 100%;
   height: 100% auto;
   overflow: hidden;
   display: inline-block;
   vertical-align: top;
+  margin-left: -30px;
+  margin-top: 120px;
   margin-bottom: 100px;
   border-width: 3px;
   border-radius: 0.5em;
   border-style: solid;
-  border-color: aqua;
+  border-color: darkorchid;
 }
 @media (max-width: 1400px) {
   .articleBar {
@@ -1097,22 +1123,42 @@ li {
 }
 
 .mfont {
-  font-size: large;
-  // font-family: Tahoma, sans-serif;
-  font-family: 'DynaPuff', cursive;
-  font-size: 1.6rem;
-  letter-spacing: 0.2rem;
-  // position: absolute;
-  // top: 50%;
-  // left: 50%;
-  // transform: translate(-50%, -50%);
-  text-shadow: 7px 7px orange;
-  -webkit-text-fill-color: transparent;
-  // -webkit-text-stroke-width: 4px;
-  // -webkit-text-stroke-color: white;
+  width: auto;
+  margin-top: 12px;
+  text-align: center;
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+
+  font-size: 30px;
+
   color: #36a3f7;
+
+  line-height: 25px;
+
+  letter-spacing: 1px;
+}
+.mfont_2 {
+  width: auto;
+  margin-top: 12px;
+  text-align: center;
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+
+  font-size: 25px;
+
+  color: mediumblue;
+
+  line-height: 25px;
+
+  letter-spacing: 1px;
+}
+.mline {
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
+.showarea {
+  margin-top: -50px;
+  margin-bottom: -50px;
+}
 .showWord {
   font-family: 'Roboto', sans-serif;
 }

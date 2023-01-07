@@ -263,6 +263,8 @@ def get_week_statistics(request):
             av5 = av5 / num5
         if (num6 != 0):
             av6 = av6 / num6
+        if (min == 10000):
+            min = 0
         dict = {
             'min': min,
             'max': max,

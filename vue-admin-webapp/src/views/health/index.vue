@@ -83,7 +83,7 @@
         <el-button type="primary" @click="createData()">确定</el-button>
       </div>
     </el-dialog>
-    <el-select v-model="value" placeholder="请选择展示时间">
+    <el-select v-model="value" placeholder="请选择展示时间" show="false">
       <el-option
         v-for="item in options"
         :key="item.value"

@@ -4,7 +4,7 @@
       <div class="button1">
         <el-button
           class="filter-item"
-          style="margin-left: 10px;"
+          style="margin-left: -30px;"
           type="primary"
           icon="el-icon-basketball"
           @click="handleCreateSports"
@@ -21,7 +21,7 @@
             <el-form-item label="运动种类" prop="sport_type" required="true">
               <el-cascader
                 v-model="questionFormSport.sport_type"
-                :options="options"
+                :options="options2"
                 @change="handleChange"
               ></el-cascader>
             </el-form-item>
@@ -106,6 +106,13 @@
         </el-dialog>
       </div>
     </div>
+    <HR
+      style="FILTER: alpha(opacity=100,finishopacity=0,style=3)"
+      width="100%"
+      SIZE="1"
+      class="mline"
+    >
+    </HR>
     <div class="vertical-space"></div>
 
     <div class="con">
@@ -135,21 +142,16 @@
         ></Calendar>
       </div>
     </div>
-    <div class="charts">
+    <!-- <div class="charts">
       <el-row class="tableChart">
         <el-col :span="12">
-          <!-- <bar-charts class="barCharts" :barData="barData"></bar-charts> -->
           <div ref="Barcharts" :style="{ width: width, height: height }"></div>
         </el-col>
         <el-col :span="12">
-          <!-- <pie-charts class="pieCharts"></pie-charts> -->
           <div ref="PieCharts" :style="{ width: width, height: height }"></div>
         </el-col>
-        <!-- <el-col :span="16">
-                <bar-charts class="barCharts" :barData="barData"></bar-charts>
-              </el-col> -->
       </el-row>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -183,6 +185,8 @@ export default {
     return {
       PieCharts: null,
       Barcharts: null,
+      thisweekexercise: 0,
+      lastweekexercise: 0,
       value: [],
       options: [{
         value: 'mouth',
@@ -215,6 +219,42 @@ export default {
           {
             value: 'others',
             label: '其他注射剂'
+          }
+        ]
+      }
+
+      ],
+      options2: [{
+        value: 'aerobic',
+        label: '有氧运动',
+        children: [
+          {
+            value: 'type1',
+            label: '慢跑'
+          }, {
+            value: 'type2',
+            label: '游泳'
+          }, {
+            value: 'type3',
+            label: '瑜伽'
+          },
+          {
+            value: 'others',
+            label: '其他'
+          },
+        ]
+      },
+      {
+        value: 'non-aerobics',
+        label: '无氧运动',
+        children: [
+          {
+            value: 'type1',
+            label: '健身'
+          },
+          {
+            value: 'others',
+            label: '其他'
           }
         ]
       }
@@ -292,14 +332,10 @@ export default {
         series: [
           {
             type: 'bar',
-            name: 'mmol/L',
+            name: '天数',
             data: [
-              this.max_glucose,
-              this.min_glucose,
-              this.emp_glucose,
-              this.before_glucose,
-              this.after_glucose
-              // this.sleep_glucose
+              3,1,
+              this.lastweekexercise
             ],
             itemStyle: {
               normal: {
@@ -446,7 +482,7 @@ export default {
         .then(function(response) {
           console.log(JSON.stringify(response.data))
           if (response.status === 200) {
-            // alert('success')
+
           }
         })
         .catch(function(error) {
@@ -456,7 +492,7 @@ export default {
           }
         })
       this.dialogFormVisible2 = false
-      // alert(params['glucose'])
+      
       location.reload()
     },
     getSportsData: function () {
@@ -474,25 +510,87 @@ export default {
         .then(function(response) {
           if (response.status === 200) {
             self.date_arr1 = response.data['dates']
+            // alert(self.date_arr1)
+            var yeararr = []
+            var montharr = []
+            var datearr = []
             for (var i = 0; i < self.date_arr1.length; i++) { // for each date string
-              var j = 0
-              var cnt = 0
-              while (cnt < 1) {
-                if (self.date_arr1[i][j] === '/') {
-                  cnt++
+              var YMsplit = 0
+              var MDsplit = 0
+              for (var j = 0; j < self.date_arr1[i].length; j++) {
+                if (YMsplit === 1 && MDsplit === 1) {
+                  break
                 }
-                j++
+                if (self.date_arr1[i][j] === '/' && YMsplit === 0) {
+                  YMsplit = j
+                }
+                if (self.date_arr1[i][j] === '/' && YMsplit !== 0) {
+                  MDsplit = j
+                }
               }
               var yearnum = ''
-              for (var k = j; k < self.date_arr1[i].length; k++) {
-                datenum += self.date_arr1[i][k]
+              var monthnum = ''
+              var datenum = ''
+              for (var a = 0; a < YMsplit; a++) {
+                yearnum += self.date_arr1[i][a]
+              }
+              for (var b = YMsplit + 1; b < MDsplit; b++) {
+                monthnum += self.date_arr1[i][b]
+              }
+              for (var c = MDsplit + 1; c < self.date_arr1[i].length; c++) {
+                datenum += self.date_arr1[i][c]
+              }
+              yeararr.push(yearnum)
+              montharr.push(monthnum)
+              datearr.push(datenum)
+            }
+            // alert(yeararr)
+            // alert(montharr)
+            // alert(datearr)
+            let oneDay = 24 * 60 * 60 * 1000
+            var thisweek = 0
+            var lastweek = 0
+            for (var ii = 0; ii < 7; ii++) {
+              var cur_datetime = new Date(Date.now() - oneDay * ii)
+              var cur_month = cur_datetime.getMonth() + 1
+              var cur_day = cur_datetime.getDate()
+              var cur_year = cur_datetime.getFullYear()
+              cur_year = String(cur_year)
+              cur_month = String(cur_month)
+              cur_day = String(cur_day)
+              for (var k = 0; k < yeararr.length; k++) {
+                if (yeararr[k] === cur_year && montharr[k] === cur_month && datearr[k] === cur_day) {
+                  thisweek++
+                  alert(cur_day)
+                  break
+                }
               }
             }
+            for (var ij = 7; ij < 14; ij++) {
+              var cur_datetime = new Date(Date.now() - oneDay * ij)
+              var cur_month = cur_datetime.getMonth() + 1
+              var cur_day = cur_datetime.getDate()
+              var cur_year = cur_datetime.getFullYear()
+              cur_year = String(cur_year)
+              cur_month = String(cur_month)
+              cur_day = String(cur_day)
+              for (var k = 0; k < yeararr.length; k++) {
+                if (yeararr[k] === cur_year && montharr[k] === cur_month && datearr[k] === cur_day) {
+                  lastweek++
+                  // alert(cur_day)
+                  break
+                }
+              }
+            }
+            // alert(thisweek)
+            // alert(lastweek)
+            self.thisweekexercise = thisweek
+            self.lastweekexercise = lastweek
           }
         })
         .catch(function(error) {
           console.log(error)
-          window.alert('error!')
+          window.alert('error!!')
         })
     },
     getMedicineData : function() {
@@ -533,7 +631,7 @@ export default {
   display:flex;
   justify-content:center;
   /*max-width: 280px;*/
-  margin: auto;
+  margin-top: -30px;
 }
 .button-area {
   position: relative;

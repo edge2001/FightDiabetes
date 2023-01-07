@@ -23,6 +23,10 @@ import getTitle from '@/utils/getTitle'
 /*通用routers*/
 export const currencyRoutes = [
   {
+    path: '/',
+    redirect: '/login'
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('@/views/login'),
@@ -37,6 +41,7 @@ export const currencyRoutes = [
   },
   {
     path: '/dashbord',
+    redirect: '/dashbord/admin',
     name: 'Home',
     component: Layout,
     children: [
