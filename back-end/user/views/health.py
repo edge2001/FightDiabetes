@@ -1,17 +1,15 @@
-from django.shortcuts import render
+import datetime
+import json
 
 # Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
+from django.shortcuts import render
 from django.template import loader
-
-import datetime
-import threading
+from django.urls import reverse
 from rest_framework import status
 from rest_framework.response import Response
-from user.utils.token import get_username
 from user.models import UserInfo, datum
-import json
+from user.utils.token import get_username
 
 
 # 添加单条健康数据
@@ -107,16 +105,16 @@ def get_week_glucose(request):
         dates.append(today)
         for date in dates:
             data = user.user_data.filter(date=date)
-            for datum in data:  # data is the set of this date
-                if (time_tag != datum.time_tag):  # we want to find proper glucose tag
+            for tdatum in data:  # data is the set of this date
+                if (time_tag != tdatum.time_tag):  # we want to find proper glucose tag
                     continue
-                blood_glucose = datum.blood_glucose
+                blood_glucose = tdatum.blood_glucose
                 glucose.append([date.month, date.day, blood_glucose])
-                m_ketone = datum.ketone
+                m_ketone = tdatum.ketone
                 ketone.append([date.month, date.day, m_ketone])
-                m_pressure = datum.blood_pressure
+                m_pressure = tdatum.blood_pressure
                 pressure.append([date.month, date.day, m_pressure])
-                m_weight = datum.weight
+                m_weight = tdatum.weight
                 weight.append([date.month, date.day, m_weight])
 
         # 初始化要返回的dict
@@ -145,12 +143,12 @@ def get_month_glucose(request):
             glucose[i] = 0
         today = datetime.date.today()
         for i in range(0, 29):
-            date = today - datetime.timedelta(days=(29-i))
+            date = today - datetime.timedelta(days=(29 - i))
             try:
                 datum = user.user_data.get(date=date, time_tag=time_tag)
                 glu = datum.blood_glucose
                 glucose[i] = glu
-            except:
+            except BaseException:
                 pass
             continue
 
@@ -200,14 +198,14 @@ def get_week_statistics(request):
         for date in dates:
             data = user.user_data.filter(date=date)
             date_used_tag = []
-            for datum in data:
-                blood_glucose = datum.blood_glucose
+            for tdatum in data:
+                blood_glucose = tdatum.blood_glucose
                 if blood_glucose > max:
                     max = blood_glucose
                 if blood_glucose < min:
                     min = blood_glucose
-                t = datum.time_tag
-                m_time = datum.date
+                t = tdatum.time_tag
+                m_time = tdatum.date
                 for element in date_used_tag:
                     if element == [m_time, t]:
                         pass
@@ -322,13 +320,13 @@ def get_month_statistics(request):
         num6 = 0
         for date in dates:
             data = user.user_data.filter(date=date)
-            for datum in data:
-                blood_glucose = datum.blood_glucose
+            for tdatum in data:
+                blood_glucose = tdatum.blood_glucose
                 if blood_glucose > max:
                     max = blood_glucose
                 if blood_glucose < min:
                     min = blood_glucose
-                t = datum.time_tag
+                t = tdatum.time_tag
                 if t == 1:  # currently all t are 1
                     av1 += blood_glucose
                     num1 += 1

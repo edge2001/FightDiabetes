@@ -1,0 +1,4 @@
+[flake8]
+exclude = .git, __pycache__, venv, node_modules
+extend-ignore = E203,E501,F401
+

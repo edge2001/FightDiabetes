@@ -1,5 +1,7 @@
-from django.db import models
 import datetime
+
+from django.db import models
+
 # Create your models here.
 
 
@@ -30,7 +32,11 @@ class PatientInfo(models.Model):
     )
     disease_type = models.SmallIntegerField(
         verbose_name='糖尿病类型', choices=disease_types, default=1)
-    userinfo = models.OneToOneField('UserInfo', on_delete=models.CASCADE, to_field='id', null=True)
+    userinfo = models.OneToOneField(
+        'UserInfo',
+        on_delete=models.CASCADE,
+        to_field='id',
+        null=True)
 
 
 class datum(models.Model):
@@ -61,7 +67,10 @@ class Sports_record(models.Model):
     notes = models.CharField(verbose_name='备注', null=True, max_length=64)
     user = models.ForeignKey(
         UserInfo, related_name='user_sports_record', on_delete=models.CASCADE)
-    datetime = models.DateTimeField(verbose_name='日期时间', default=datetime.datetime.now())
+    datetime = models.DateTimeField(
+        verbose_name='日期时间',
+        default=datetime.datetime.now())
+
 
 class Medicine_record(models.Model):
     date = models.DateField(verbose_name='日期', auto_now_add=True)
@@ -71,9 +80,13 @@ class Medicine_record(models.Model):
     quantity = models.FloatField(verbose_name='数量', null=True)
     user = models.ForeignKey(
         UserInfo, related_name='user_medicine_record', on_delete=models.CASCADE)
-    datetime = models.DateTimeField(verbose_name='日期时间', default=datetime.datetime.now())
+    datetime = models.DateTimeField(
+        verbose_name='日期时间',
+        default=datetime.datetime.now())
 
 # 邮箱验证
+
+
 class EmailPro(models.Model):
     code = models.CharField(max_length=20, verbose_name='验证码')
     email = models.EmailField(max_length=50, verbose_name='邮箱')

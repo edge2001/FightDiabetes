@@ -1,8 +1,11 @@
-import time
-from django.core import signing
 import hashlib
+import time
+
+from django.core import signing
 
 HEADER = {'typ': 'JWP', 'alg': 'default'}
+
+
 KEY = "songzixuan"
 SALT = "zxzxzxzx"
 
@@ -27,7 +30,7 @@ def create_token(username):
     header = encrypt(HEADER)
     # 2. 构造Payload(有效期14天)
     payload = {"username": username, "iat": time.time(),
-               "exp": time.time()+1209600.0}
+               "exp": time.time() + 1209600.0}
     payload = encrypt(payload)
     # 3. MD5 生成签名
     md5 = hashlib.md5()
@@ -37,17 +40,17 @@ def create_token(username):
     return token
 
 
+def get_username(token):
+    """解析 token 获取 username"""
+    payload = get_payload(token)
+    return payload['username']
+
+
 def get_payload(token):
     """解析 token 获取 payload 数据"""
     payload = str(token).split('.')[1]
     payload = decrypt(payload)
     return payload
-
-
-def get_username(token):
-    """解析 token 获取 username"""
-    payload = get_payload(token)
-    return payload['username']
 
 
 def get_exp_time(token):
@@ -58,4 +61,5 @@ def get_exp_time(token):
 
 def check_token(username, token):
     """验证 token：检查 username 和 token 是否一致且未过期"""
-    return get_username(token) == username and get_exp_time(token) > time.time()
+    return get_username(token) == username and get_exp_time(
+        token) > time.time()

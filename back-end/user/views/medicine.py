@@ -1,17 +1,15 @@
-from django.shortcuts import render
 
+import json
+
+import pytz
 # Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
+from django.shortcuts import render
 from django.template import loader
-
-import datetime
-import pytz
-import threading
+from django.urls import reverse
 from rest_framework import status
 from rest_framework.response import Response
-import json
-from user.models import UserInfo, Sports_record, Medicine_record
+from user.models import Medicine_record, Sports_record, UserInfo
 from user.utils.token import get_username
 LOCAL_TIME_ZONE = pytz.timezone('Asia/Shanghai')
 
@@ -30,7 +28,11 @@ def add_medicine_record(request):
         username = get_username(token)
         user = UserInfo.objects.get(username=username)
         new_record = Medicine_record(
-            medicine_type=medicine_type, notes=notes, quantity=quantity, user=user, datetime=datetime)
+            medicine_type=medicine_type,
+            notes=notes,
+            quantity=quantity,
+            user=user,
+            datetime=datetime)
         new_record.save()
         params = {}
         return HttpResponse(json.dumps(params), status=status.HTTP_200_OK)
