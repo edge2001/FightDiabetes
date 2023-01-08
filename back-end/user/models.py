@@ -12,6 +12,11 @@ class UserInfo(models.Model):
     password = models.CharField(verbose_name='密码', max_length=64)
     email = models.CharField(verbose_name='Email', max_length=64)
     isActive = models.BooleanField(verbose_name='激活', default=False)
+    # patientinfo = models.OneToOneField(
+    #     to='UserInfo',
+    #     on_delete=models.CASCADE,
+    #     to_field='id',
+    #     null=True)
 
     class Meta:
         ordering = ['-create_date', ]
@@ -19,6 +24,8 @@ class UserInfo(models.Model):
 
 class PatientInfo(models.Model):
     name = models.CharField(verbose_name='姓名', max_length=16)
+    birthday = models.DateTimeField(
+        verbose_name='出生日期', default=datetime.datetime.now())
     age = models.IntegerField(verbose_name='年龄')
     gender_choices = (
         (1, '男'),
@@ -32,11 +39,9 @@ class PatientInfo(models.Model):
     )
     disease_type = models.SmallIntegerField(
         verbose_name='糖尿病类型', choices=disease_types, default=1)
-    userinfo = models.OneToOneField(
-        'UserInfo',
-        on_delete=models.CASCADE,
-        to_field='id',
-        null=True)
+    userinfo = models.OneToOneField(UserInfo, on_delete=models.CASCADE)
+    nickname = models.CharField(
+        verbose_name='nickname', max_length=64, default='Alice')
 
 
 class datum(models.Model):

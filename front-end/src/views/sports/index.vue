@@ -590,7 +590,7 @@ export default {
         })
         .catch(function(error) {
           console.log(error)
-          window.alert('error!!')
+          // window.alert('error!!')
         })
     },
     getMedicineData : function() {
@@ -612,7 +612,7 @@ export default {
         })
         .catch(function(error) {
           console.log(error)
-          window.alert('error!')
+          // window.alert('error!')
         })
     }
   }

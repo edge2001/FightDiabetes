@@ -8,13 +8,13 @@
       <form>
         <ul class="left-form">
           <h2>个人基本信息:</h2>
-          <h3>用户名</h3>
+          <h3>姓名</h3>
           <li>
             <input
               :disabled="profile"
               type="text"
               placeholder="Username"
-              v-model="username"
+              v-model="name"
               required
             />
             <!-- <a href="#" class="icon ticker"> </a> -->
@@ -65,6 +65,7 @@
               style="zoom:1.5"
               name="gender"
               value="man"
+              v-model="gender"
             />男&nbsp;&nbsp;
             <input
               :disabled="profile"
@@ -72,6 +73,7 @@
               type="radio"
               name="gender"
               value="woman"
+              v-model="gender"
             />女
             <div class="clear"></div>
           </li>
@@ -96,6 +98,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data() {
     return {
@@ -109,24 +112,100 @@ export default {
       email: null,
       nickname: null,
       modifyOrSave: '修改',
+      gender: 'man',
+      name: '',
       profile: true
     }
   },
   name: 'index.vue',
   computed: {},
   methods: {
+    getAllInfo() {
+      var self = this
+      var dataobj = {
+        name: '',
+        email: '',
+        nickname: '',
+        gender: '',
+        birth: ''
+      }
+      var config = {
+        method: 'GET',
+        url: 'http://127.0.0.1:8000/saveinfo/',
+        headers: {
+          'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
+          'Content-Type': 'application/json'
+        },
+        data: dataobj
+      }
+      axios(config)
+        .then(function(response) {
+          console.log(JSON.stringify(response.data))
+          if (response.status === 200) {
+            console.log(response.data['name'])
+            self.name = response.data['name']
+            self.email = response.data['email']
+            if (response.data['gender'] == '1') {
+              self.gender = 'man'
+            } else if (response.data['gender'] == '2') {
+              self.gender = 'woman'
+            }
+            self.nickname = response.data['nickname']
+            var myear = ''
+            var mmonth = ''
+            for (var i = 0; i < 4; i++) {
+              myear += response.data['birthday'][i]
+            }
+            for (var j = 4; j < 6; j++) {
+              mmonth += response.data['birthday'][j]
+            }
+            self.birth = new Date(myear, mmonth)
+          }
+        })
+        .catch(function(error) {
+          console.log(error)
+        })
+    },
     modify() {
       if (this.modifyOrSave == '修改') {
         this.modifyOrSave = '保存'
         this.profile = false
       } else {
+        console.log(this.birth.getFullYear())
         this.modifyOrSave = '修改'
         this.profile = true
         //TODO:axios() 后端修改
+        var dataobj = {
+          name: this.name,
+          email: this.email,
+          nickname: this.nickname,
+          gender: this.gender,
+          birth: this.birth
+        }
+        var config = {
+          method: 'post',
+          url: 'http://127.0.0.1:8000/saveinfo/',
+          headers: {
+            'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
+            'Content-Type': 'application/json'
+          },
+          data: dataobj
+        }
+        axios(config)
+          .then(function(response) {
+            console.log(JSON.stringify(response.data))
+            if (response.status === 200) {
+              
+            }
+          })
+          .catch(function(error) {
+            console.log(error)
+          })
       }
     }
   },
   mounted() {
+    this.getAllInfo()
     this.username = localStorage.getItem('username')
     this.email = localStorage.getItem('email')
   }

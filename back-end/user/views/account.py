@@ -1,6 +1,6 @@
 import json
 from random import Random
-
+import datetime
 from django.core.mail import send_mail
 # Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
@@ -13,7 +13,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import status
 from rest_framework.response import Response
 from server.settings import EMAIL_FROM
-from user.models import EmailPro, UserInfo, datum
+from user.models import EmailPro, UserInfo, datum, PatientInfo
 from user.utils.encrypt import md5
 from user.utils.token import create_token, get_username
 
@@ -52,6 +52,10 @@ def register(request):
             'password': pwd,
             'email': email
         }
+        patientinfo = PatientInfo(
+            name=username, age=0, gender=1, disease_type=1, userinfo=newuser)
+        patientinfo.save()
+        print(patientinfo)
         return HttpResponse(json.dumps(params), status=status.HTTP_200_OK)
     else:
         params = {'username': '', 'password': ''}
@@ -111,6 +115,10 @@ def login(request):
             newuser = UserInfo(username=username, password=pwd,
                                email=email, isActive=False)
             newuser.save()
+            patientinfo = PatientInfo(
+                name=username, age=0, gender=1, disease_type=1, userinfo=newuser)
+            patientinfo.save()
+            print(patientinfo)
             print('要注册了')
             send_register_email(email, 'register')
             params = {
@@ -187,19 +195,62 @@ def send_register_email(email, send_type='register'):  # 类型为注册
 
 
 def save_user_info(request):
+    if request.method == 'POST':
+        token = request.META.get('HTTP_TOKEN')
+        username = get_username(token)
+        body = request.body.decode('UTF-8')
+        content = json.loads(body)
+        email = content['email']
+        birth = content['birth']
+        gender = content['gender']
+        name = content['name']
+        nickname = content['nickname']
+        user = UserInfo.objects.get(username=username)
+        user.patientinfo.name = name
+        print(gender)
+        if (gender == 'woman'):
+            user.patientinfo.gender = 2
+        if (gender == 'man'):
+            user.patientinfo.gender = 1
+        user.email = email
+        user.patientinfo.nickname = nickname
+        if (birth != None):
+            m_year = int(birth[0:4])
+            m_month = int(birth[5:7])
+            m_day = int(birth[8:10])
+            if (m_month == 12):
+                m_month = 1
+                m_year = m_year + 1
+            else:
+                m_month = m_month + 1
+            m_birthday = datetime.date(
+                m_year, m_month, 1)
+            user.patientinfo.birthday = m_birthday
+
+        # user.patientinfo.birthday = birth[0:3]
+        # user.patientinfo.age = age
+        # print(birth)
+
+        # print(user.patientinfo.name)
+        user.patientinfo.save()
+        user.email = email
+        user.save()
+        print(user.patientinfo.birthday)
+        return HttpResponse(status=status.HTTP_200_OK)
     if request.method == 'GET':
         token = request.META.get('HTTP_TOKEN')
         username = get_username(token)
-
         user = UserInfo.objects.get(username=username)
+        print(user)
         params = {
             'name': user.patientinfo.name,
-            'age': user.patientinfo.age,
             'gender': user.patientinfo.gender,
             'disease_type': user.patientinfo.disease_type,
+            'birthday': datetime.datetime.strftime(user.patientinfo.birthday,  "%Y%m%d"),
             # 'create_date' : user.create_date,
             'username': user.username,
             'email': user.email,
+            'nickname': user.patientinfo.nickname
         }
         print(params)
     return HttpResponse(json.dumps(params), status=status.HTTP_200_OK)

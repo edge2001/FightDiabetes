@@ -11,6 +11,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from user.models import Medicine_record, Sports_record, UserInfo
 from user.utils.token import get_username
+
 LOCAL_TIME_ZONE = pytz.timezone('Asia/Shanghai')
 
 # add a sports record
