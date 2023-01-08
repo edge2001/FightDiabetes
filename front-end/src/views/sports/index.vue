@@ -1,10 +1,49 @@
 <template>
   <div>
     <div class="button-area">
+      <div class="buttonreminder">
+        <el-button
+          type="success"
+          round
+          style="margin-left: -270px;"
+          @click="handlereminder"
+          >设置服药提醒时间</el-button
+        >
+        <el-dialog :visible.sync="dialogFormVisible0">
+          <el-form
+            :model="questionFormReminder"
+            ref="dataForm"
+            label-position="left"
+            label-width="90px"
+            style="width: 400px; margin-left:50px;"
+          >
+            <el-form-item label="时间">
+              <el-time-select
+                v-model="remindertime"
+                :picker-options="{
+                  start: '00:00',
+                  step: '00:15',
+                  end: '23:45'
+                }"
+                placeholder="选择时间"
+              >
+              </el-time-select>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible0 = false">取消</el-button>
+            <el-button type="primary" @click="createReminderTime()"
+              >确定</el-button
+            >
+          </div>
+        </el-dialog>
+      </div>
+
+      <div class="space1"></div>
       <div class="button1">
         <el-button
           class="filter-item"
-          style="margin-left: -30px;"
+          style="margin-left: -230px;"
           type="primary"
           icon="el-icon-basketball"
           @click="handleCreateSports"
@@ -183,6 +222,7 @@ export default {
   },
   data() {
     return {
+      remindertime: '',
       PieCharts: null,
       Barcharts: null,
       thisweekexercise: 0,
@@ -263,7 +303,8 @@ export default {
       date: "",
       week: "",
       date_arr1:[],
-      date_arr2:[],
+      date_arr2: [],
+      dialogFormVisible0: false,
       dialogFormVisible1 : false,
       dialogFormVisible2 : false,
       questionFormSport : {
@@ -276,6 +317,10 @@ export default {
         notes: '',
         quantity: '',
         datetime: '',
+      },
+      questionFormReminder: {
+        hour: 0,
+        minute: 0
       }
     };
   },
@@ -409,6 +454,9 @@ export default {
     clickToday(data) {
       console.log(data); // 跳到了本月
     },
+    handlereminder() {
+      this.dialogFormVisible0 = true
+    },
     handleCreateSports() {
       this.questionFormSport = {
         sport_type: '',
@@ -425,6 +473,40 @@ export default {
         datetime: '',
       }
       this.dialogFormVisible2 = true
+    },
+
+    async createReminderTime() {
+      var m_hour = this.remindertime.substring(0, 2)
+      var m_minute = this.remindertime.substring(3, 5)
+      alert(m_minute)
+      var dataobj = {
+        hour: this.hour,
+        minute: this.minute
+      }
+      const path = 'http://127.0.0.1:8000/add_sports_record/'
+      var configGet = {
+        method: 'POST',
+        url: path,
+        headers: {
+          'User-Agent': 'Apifox/1.0.0 (https://www.apifox.cn)',
+          'Content-Type': 'application/json'
+        },
+        data: dataobj
+      }
+      axios(configGet)
+        .then(function (response) {
+          console.log(JSON.stringify(response.data))
+          if (response.status === 200) {
+            // alert('success')
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+          if (error.response.status === 401) {
+            window.alert('wrong!')
+          }
+        })
+      this.dialogFormVisible0 = false
     },
 
     async createSportsData() {
