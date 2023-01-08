@@ -64,6 +64,11 @@ class datum(models.Model):
     user = models.ForeignKey(
         UserInfo, related_name='user_data', on_delete=models.CASCADE)
 
+class MedicineTime(models.Model):
+    hour = models.IntegerField()
+    minute = models.IntegerField()
+    user = models.ForeignKey(
+        UserInfo, related_name='user_medicinetime', on_delete=models.CASCADE)
 
 class Sports_record(models.Model):
     date = models.DateField(verbose_name='日期', auto_now_add=True)
