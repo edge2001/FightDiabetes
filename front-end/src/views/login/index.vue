@@ -112,8 +112,15 @@ export default {
         register_username: '',
         register_password: '',
         register_confirm_password: '',
-        email: ''
+        email: '',
+        renewed: 0
       }
+    }
+  },
+  created() {
+    if (this.renewed === 0) {
+      location.reload()
+      this.renewed = 1
     }
   },
   methods: {
