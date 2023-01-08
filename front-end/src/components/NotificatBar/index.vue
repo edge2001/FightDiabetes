@@ -41,6 +41,7 @@ export default {
       .get('http://127.0.0.1:8000/getMedicineTime/')
       .then(response => {
         this.medicineTime = response.data['list']
+        alert(this.medicineTime)
         console.log(this.medicineTime)
       })
       .catch(error => {

@@ -68,7 +68,7 @@ urlpatterns = [
         medicine.get_medicine_data,
         name='get_medicine_data'),
     path('getMedicineTime/', medicine.getMedicineTime, name='getMedicineTime'),
-    path('setMedicineTime/', medicine.getMedicineTime, name='getMedicineTime'),
+    path('setMedicineTime/', medicine.setMedicineTime, name='setMedicineTime'),
 
     # check database
     path('show/', account.show_list, name='show'),

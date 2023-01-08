@@ -321,10 +321,13 @@ export default {
       questionFormReminder: {
         hour: 0,
         minute: 0
-      }
+      },
+      reminderHour: 0,
+      reminderMinute: 0
     };
   },
   mounted() {
+    // this.getMedicineData()
     this.getMedicineData()
     this.getSportsData()
     this.initEcharts()
@@ -476,14 +479,14 @@ export default {
     },
 
     async createReminderTime() {
-      var m_hour = this.remindertime.substring(0, 2)
-      var m_minute = this.remindertime.substring(3, 5)
-      alert(m_minute)
+      var self = this
+      var m_hour = self.remindertime.substring(0, 2)
+      var m_minute = self.remindertime.substring(3, 5)
       var dataobj = {
-        hour: this.hour,
-        minute: this.minute
+        'hour': m_hour,
+        'minute': m_minute
       }
-      const path = 'http://127.0.0.1:8000/add_sports_record/'
+      const path = 'http://127.0.0.1:8000/setMedicineTime/'
       var configGet = {
         method: 'POST',
         url: path,
@@ -688,8 +691,8 @@ export default {
       var self = this
       axios(configGet)
         .then(function(response) {
-          if(response.status ===200) {
-            self.date_arr2 = response.data['dates']
+          if(response.status === 200) {
+            
           }
         })
         .catch(function(error) {
