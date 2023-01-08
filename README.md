@@ -7,5 +7,5 @@
 chmod +x lint.sh
 ./lint.sh
 ```
-###单元测试
-* todo
+###功能测试
+* 已经完成
