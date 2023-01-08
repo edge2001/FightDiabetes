@@ -9,7 +9,7 @@ from django.template import loader
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.response import Response
-from user.models import Medicine_record, Sports_record, UserInfo
+from user.models import Medicine_record, Sports_record, UserInfo,MedicineTime
 from user.utils.token import get_username
 
 LOCAL_TIME_ZONE = pytz.timezone('Asia/Shanghai')
@@ -64,20 +64,41 @@ def get_medicine_data(request):
 
         return HttpResponse(json.dumps(params), status=status.HTTP_200_OK)
 
+def setMedicineTime(request):
+    if request.method == 'POST':
+        body = request.body.decode('UTF-8')
+        content = json.loads(body)
+        hour = content['hour']
+        minute = content['minute']
+        token = request.META.get('HTTP_TOKEN')
+        username = get_username(token)
+        user = UserInfo.objects.get(username=username)
+
+        new_time = MedicineTime(
+            hour=hour,
+            minute=minute)
+        new_time.save()
+        params = {}
+        return HttpResponse(json.dumps(params), status=status.HTTP_200_OK)
+
 
 # 获取吃药时间
 def getMedicineTime(request):
     if request.method == 'GET':
+        token = request.META.get('HTTP_TOKEN')
+        username = get_username(token)
+        user = UserInfo.objects.get(username=username)
+        times = user.user_medicinetime.filter()
+        timeList = []
+        for i in range(len(times)):
+            hour = times[i].hour
+            minute = times[i].minute
+            js = {
+                "hour" : hour,
+                "minute" : minute
+            }
+            timeList.append(js)
         dict = {
-            'list': [
-                {
-                    'hour': '12',
-                    'minute': '12'
-                },
-                {
-                    'hour': '20',
-                    'minute': '47'
-                }
-            ]
+            'list': timeList,
         }
         return HttpResponse(json.dumps(dict), status=status.HTTP_200_OK)
